@@ -39,7 +39,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stddef.h>
-#include "platform.h"
+#include "platform-vixl.h"
 
 #ifdef __ANDROID__
 #ifndef LOG_TAG
