@@ -76,7 +76,7 @@ Simulator::Simulator(Decoder* decoder, FILE* stream) {
   //  - There's a protection region at both ends of the stack.
   tos -= stack_protection_size_;
   //  - The stack pointer must be 16-byte aligned.
-  tos &= ~0xfUL;
+  tos &= ~UINT64_C(0xf);
   set_sp(tos);
 
   stream_ = stream;
@@ -102,7 +102,7 @@ void Simulator::ResetState() {
   }
   for (unsigned i = 0; i < kNumberOfFPRegisters; i++) {
     // Set FP registers to a value that is NaN in both 32-bit and 64-bit FP.
-    set_dreg_bits(i, 0x7ff000007f800001UL);
+    set_dreg_bits(i, UINT64_C(0x7ff000007f800001));
   }
   // Returning to address 0 exits the Simulator.
   set_lr(kEndOfSimAddress);
@@ -286,7 +286,7 @@ int64_t Simulator::ShiftOperand(unsigned reg_size,
         value &= kWRegMask;
       }
       return (static_cast<uint64_t>(value) >> amount) |
-             ((value & ((1L << amount) - 1L)) << (reg_size - amount));
+             ((value & ((INT64_C(1) << amount) - INT64_C(1))) << (reg_size - amount));
     }
     default:
       UNIMPLEMENTED();
@@ -532,7 +532,7 @@ void Simulator::VisitUnconditionalBranchToRegister(Instruction* instr) {
 void Simulator::VisitTestBranch(Instruction* instr) {
   unsigned bit_pos = (instr->ImmTestBranchBit5() << 5) |
                      instr->ImmTestBranchBit40();
-  bool take_branch = ((xreg(instr->Rt()) & (1UL << bit_pos)) == 0);
+  bool take_branch = ((xreg(instr->Rt()) & (UINT64_C(1) << bit_pos)) == 0);
   switch (instr->Mask(TestBranchMask)) {
     case TBZ: break;
     case TBNZ: take_branch = !take_branch; break;
@@ -895,7 +895,7 @@ uint8_t* Simulator::AddressModeHelper(unsigned addr_reg,
                                       AddrMode addrmode) {
   uint64_t address = xreg(addr_reg, Reg31IsStackPointer);
   ASSERT((sizeof(uintptr_t) == kXRegSizeInBytes) ||
-         (address < 0x100000000UL));
+         (address < UINT64_C(0x100000000)));
   if ((addr_reg == 31) && ((address % 16) != 0)) {
     // When the base register is SP the stack pointer is required to be
     // quadword aligned prior to the address calculation and write-backs.
@@ -1009,7 +1009,7 @@ void Simulator::VisitMoveWideImmediate(Instruction* instr) {
         unsigned reg_code = instr->Rd();
         int64_t prev_xn_val = is_64_bits ? xreg(reg_code)
                                          : wreg(reg_code);
-        new_xn_val = (prev_xn_val & ~(0xffffL << shift)) | shifted_imm16;
+        new_xn_val = (prev_xn_val & ~(INT64_C(0xffff) << shift)) | shifted_imm16;
       break;
     }
     case MOVZ_w:
@@ -1090,7 +1090,7 @@ uint64_t Simulator::ReverseBytes(uint64_t value, ReverseByteMode mode) {
   // Split the 64-bit value into an 8-bit array, where b[0] is the least
   // significant byte, and b[7] is the most significant.
   uint8_t bytes[8];
-  uint64_t mask = 0xff00000000000000UL;
+  uint64_t mask = UINT64_C(0xff00000000000000);
   for (int i = 7; i >= 0; i--) {
     bytes[i] = (value & mask) >> (i * 8);
     mask >>= 8;
@@ -1196,14 +1196,14 @@ static int64_t MultiplyHighSigned(int64_t u, int64_t v) {
   uint64_t u0, v0, w0;
   int64_t u1, v1, w1, w2, t;
 
-  u0 = u & 0xffffffffL;
+  u0 = u & INT64_C(0xffffffff);
   u1 = u >> 32;
-  v0 = v & 0xffffffffL;
+  v0 = v & INT64_C(0xffffffff);
   v1 = v >> 32;
 
   w0 = u0 * v0;
   t = u1 * v0 + (w0 >> 32);
-  w1 = t & 0xffffffffL;
+  w1 = t & INT64_C(0xffffffff);
   w2 = t >> 32;
   w1 = u0 * v1 + w1;
 
@@ -1250,10 +1250,10 @@ void Simulator::VisitBitfield(Instruction* instr) {
   int64_t diff = S - R;
   int64_t mask;
   if (diff >= 0) {
-    mask = diff < reg_size - 1 ? (1L << (diff + 1)) - 1
+    mask = diff < reg_size - 1 ? (INT64_C(1) << (diff + 1)) - 1
                                : reg_mask;
   } else {
-    mask = ((1L << (S + 1)) - 1);
+    mask = ((INT64_C(1) << (S + 1)) - 1);
     mask = (static_cast<uint64_t>(mask) >> R) | (mask << (reg_size - R));
     diff += reg_size;
   }
@@ -1285,7 +1285,7 @@ void Simulator::VisitBitfield(Instruction* instr) {
   // Rotate source bitfield into place.
   int64_t result = (static_cast<uint64_t>(src) >> R) | (src << (reg_size - R));
   // Determine the sign extension.
-  int64_t topbits = ((1L << (reg_size - diff - 1)) - 1) << (diff + 1);
+  int64_t topbits = ((INT64_C(1) << (reg_size - diff - 1)) - 1) << (diff + 1);
   int64_t signbits = extend && ((src >> S) & 1) ? topbits : 0;
 
   // Merge sign extension, dest/zero and bitfield.
@@ -1707,7 +1707,7 @@ static T FPRound(int64_t sign, int64_t exponent, uint64_t mantissa,
   } else {
     // Clear the topmost mantissa bit, since this is not encoded in IEEE-754
     // normal values.
-    mantissa &= ~(1UL << highest_significant_bit);
+    mantissa &= ~(UINT64_C(1) << highest_significant_bit);
   }
 
   if (shift > 0) {
@@ -1877,7 +1877,7 @@ double Simulator::FPToDouble(float value) {
       uint64_t exponent = (1 << 11) - 1;
       uint64_t payload = unsigned_bitextract_64(21, 0, raw);
       payload <<= (52 - 23);  // The unused low-order bits should be 0.
-      payload |= (1L << 51);  // Force a quiet NaN.
+      payload |= (INT64_C(1) << 51);  // Force a quiet NaN.
 
       return rawbits_to_double((sign << 63) | (exponent << 52) | payload);
     }
@@ -1939,7 +1939,7 @@ float Simulator::FPToFloat(double value, FPRounding round_mode) {
       // Extract the mantissa and add the implicit '1' bit.
       uint64_t mantissa = unsigned_bitextract_64(51, 0, raw);
       if (fpclassify(value) == FP_NORMAL) {
-        mantissa |= (1UL << 52);
+        mantissa |= (UINT64_C(1) << 52);
       }
       return FPRoundToFloat(sign, exponent, mantissa, round_mode);
     }

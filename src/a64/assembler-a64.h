@@ -323,8 +323,8 @@ class CPURegList {
            ((type == CPURegister::kFPRegister) &&
             (last_reg < kNumberOfFPRegisters)));
     ASSERT(last_reg >= first_reg);
-    list_ = (1UL << (last_reg + 1)) - 1;
-    list_ &= ~((1UL << first_reg) - 1);
+    list_ = (UINT64_C(1) << (last_reg + 1)) - 1;
+    list_ &= ~((UINT64_C(1) << first_reg) - 1);
     ASSERT(IsValid());
   }
 
@@ -371,13 +371,13 @@ class CPURegList {
   inline void Combine(int code) {
     ASSERT(IsValid());
     ASSERT(CPURegister(code, size_, type_).IsValid());
-    list_ |= (1UL << code);
+    list_ |= (UINT64_C(1) << code);
   }
 
   inline void Remove(int code) {
     ASSERT(IsValid());
     ASSERT(CPURegister(code, size_, type_).IsValid());
-    list_ &= ~(1UL << code);
+    list_ &= ~(UINT64_C(1) << code);
   }
 
   inline RegList list() const {

@@ -132,8 +132,8 @@ void MacroAssembler::LogicalMacro(const Register& rd,
         default:
           UNREACHABLE();
       }
-    } else if ((rd.Is64Bits() && (immediate == -1L)) ||
-               (rd.Is32Bits() && (immediate == 0xffffffffL))) {
+    } else if ((rd.Is64Bits() && (immediate == -INT64_C(1))) ||
+               (rd.Is32Bits() && (immediate == INT64_C(0xffffffff)))) {
       switch (op) {
         case AND:
           Mov(rd, rn);
@@ -288,7 +288,7 @@ void MacroAssembler::Mov(const Register& rd, uint64_t imm) {
     // halfwords, it's more efficient to use move-inverted.
     if (CountClearHalfWords(~imm, reg_size) >
         CountClearHalfWords(imm, reg_size)) {
-      ignored_halfword = 0xffffL;
+      ignored_halfword = INT64_C(0xffff);
       invert_move = true;
     }
 
@@ -301,11 +301,11 @@ void MacroAssembler::Mov(const Register& rd, uint64_t imm) {
     ASSERT((reg_size % 16) == 0);
     bool first_mov_done = false;
     for (unsigned i = 0; i < (temp.size() / 16); i++) {
-      uint64_t imm16 = (imm >> (16 * i)) & 0xffffL;
+      uint64_t imm16 = (imm >> (16 * i)) & INT64_C(0xffff);
       if (imm16 != ignored_halfword) {
         if (!first_mov_done) {
           if (invert_move) {
-            movn(temp, (~imm16) & 0xffffL, 16 * i);
+            movn(temp, (~imm16) & INT64_C(0xffff), 16 * i);
           } else {
             movz(temp, imm16, 16 * i);
           }

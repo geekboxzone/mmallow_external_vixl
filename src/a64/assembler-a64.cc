@@ -359,11 +359,13 @@ bool MemOperand::IsPostIndex() const {
 Assembler::Assembler(byte* buffer, unsigned buffer_size)
     : buffer_size_(buffer_size), literal_pool_monitor_(0) {
   // Assert that this is an LP64 system.
+#ifdef __LP64__
   ASSERT(sizeof(int) == sizeof(int32_t));     // NOLINT(runtime/sizeof)
   ASSERT(sizeof(long) == sizeof(int64_t));    // NOLINT(runtime/int)
   ASSERT(sizeof(void *) == sizeof(int64_t));  // NOLINT(runtime/sizeof)
   ASSERT(sizeof(1) == sizeof(int32_t));       // NOLINT(runtime/sizeof)
-  ASSERT(sizeof(1L) == sizeof(int64_t));      // NOLINT(runtime/sizeof)
+  ASSERT(sizeof(INT64_C(1)) == sizeof(int64_t));      // NOLINT(runtime/sizeof)
+#endif
 
   buffer_ = reinterpret_cast<Instruction*>(buffer);
   pc_ = buffer_;
@@ -1553,16 +1555,16 @@ void Assembler::MoveWide(const Register& rd,
     // Calculate a new immediate and shift combination to encode the immediate
     // argument.
     shift = 0;
-    if ((imm & ~0xffffUL) == 0) {
+    if ((imm & ~UINT64_C(0xffff)) == 0) {
       // Nothing to do.
-    } else if ((imm & ~(0xffffUL << 16)) == 0) {
+    } else if ((imm & ~(UINT64_C(0xffff) << 16)) == 0) {
       imm >>= 16;
       shift = 1;
-    } else if ((imm & ~(0xffffUL << 32)) == 0) {
+    } else if ((imm & ~(UINT64_C(0xffff) << 32)) == 0) {
       ASSERT(rd.Is64Bits());
       imm >>= 32;
       shift = 2;
-    } else if ((imm & ~(0xffffUL << 48)) == 0) {
+    } else if ((imm & ~(UINT64_C(0xffff) << 48)) == 0) {
       ASSERT(rd.Is64Bits());
       imm >>= 48;
       shift = 3;
@@ -1942,7 +1944,7 @@ bool Assembler::IsImmLogical(uint64_t value,
   // are an encodable logical immediate.
 
   // 1. If the value has all set or all clear bits, it can't be encoded.
-  if ((value == 0) || (value == 0xffffffffffffffffUL) ||
+  if ((value == 0) || (value == UINT64_C(0xffffffffffffffff)) ||
       ((width == kWRegSize) && (value == 0xffffffff))) {
     return false;
   }
@@ -1992,7 +1994,7 @@ bool Assembler::IsImmLogical(uint64_t value,
     // 5. If the most-significant half of the bitwise value is equal to the
     //    least-significant half, return to step 2 using the least-significant
     //    half of the value.
-    uint64_t mask = (1UL << (width >> 1)) - 1;
+    uint64_t mask = (UINT64_C(1) << (width >> 1)) - 1;
     if ((value & mask) == ((value >> (width >> 1)) & mask)) {
       width >>= 1;
       set_bits >>= 1;
@@ -2040,7 +2042,7 @@ bool Assembler::IsImmFP64(double imm) {
   // 0000.0000.0000.0000.0000.0000.0000.0000
   uint64_t bits = double_to_rawbits(imm);
   // bits[47..0] are cleared.
-  if ((bits & 0xffffffffffffL) != 0) {
+  if ((bits & INT64_C(0xffffffffffff)) != 0) {
     return false;
   }
 
@@ -2051,7 +2053,7 @@ bool Assembler::IsImmFP64(double imm) {
   }
 
   // bit[62] and bit[61] are opposite.
-  if (((bits ^ (bits << 1)) & 0x4000000000000000L) == 0) {
+  if (((bits ^ (bits << 1)) & INT64_C(0x4000000000000000)) == 0) {
     return false;
   }
 

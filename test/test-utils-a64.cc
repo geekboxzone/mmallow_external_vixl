@@ -99,7 +99,7 @@ bool Equal32(uint32_t expected, const RegisterDump* core, const Register& reg) {
   // Retrieve the corresponding X register so we can check that the upper part
   // was properly cleared.
   int64_t result_x = core->xreg(reg.code());
-  if ((result_x & 0xffffffff00000000L) != 0) {
+  if ((result_x & INT64_C(0xffffffff00000000)) != 0) {
     printf("Expected 0x%08" PRIx32 "\t Found 0x%016" PRIx64 "\n",
            expected, result_x);
     return false;
@@ -125,7 +125,7 @@ bool EqualFP32(float expected,
   // Retrieve the corresponding D register so we can check that the upper part
   // was properly cleared.
   uint64_t result_64 = core->dreg_bits(fpreg.code());
-  if ((result_64 & 0xffffffff00000000L) != 0) {
+  if ((result_64 & INT64_C(0xffffffff00000000)) != 0) {
     printf("Expected 0x%08" PRIx32 " (%f)\t Found 0x%016" PRIx64 "\n",
            float_to_rawbits(expected), expected, result_64);
     return false;
@@ -215,7 +215,7 @@ RegList PopulateRegisterArray(Register* w, Register* x, Register* r,
   RegList list = 0;
   int i = 0;
   for (unsigned n = 0; (n < kNumberOfRegisters) && (i < reg_count); n++) {
-    if (((1UL << n) & allowed) != 0) {
+    if (((UINT64_C(1) << n) & allowed) != 0) {
       // Only assign allowed registers.
       if (r) {
         r[i] = Register(n, reg_size);
@@ -226,7 +226,7 @@ RegList PopulateRegisterArray(Register* w, Register* x, Register* r,
       if (w) {
         w[i] = Register(n, kWRegSize);
       }
-      list |= (1UL << n);
+      list |= (UINT64_C(1) << n);
       i++;
     }
   }
@@ -242,7 +242,7 @@ RegList PopulateFPRegisterArray(FPRegister* s, FPRegister* d, FPRegister* v,
   RegList list = 0;
   int i = 0;
   for (unsigned n = 0; (n < kNumberOfFPRegisters) && (i < reg_count); n++) {
-    if (((1UL << n) & allowed) != 0) {
+    if (((UINT64_C(1) << n) & allowed) != 0) {
       // Only assigned allowed registers.
       if (v) {
         v[i] = FPRegister(n, reg_size);
@@ -253,7 +253,7 @@ RegList PopulateFPRegisterArray(FPRegister* s, FPRegister* d, FPRegister* v,
       if (s) {
         s[i] = FPRegister(n, kSRegSize);
       }
-      list |= (1UL << n);
+      list |= (UINT64_C(1) << n);
       i++;
     }
   }
@@ -267,7 +267,7 @@ RegList PopulateFPRegisterArray(FPRegister* s, FPRegister* d, FPRegister* v,
 void Clobber(MacroAssembler* masm, RegList reg_list, uint64_t const value) {
   Register first = NoReg;
   for (unsigned i = 0; i < kNumberOfRegisters; i++) {
-    if (reg_list & (1UL << i)) {
+    if (reg_list & (UINT64_C(1) << i)) {
       Register xn(i, kXRegSize);
       // We should never write into sp here.
       ASSERT(!xn.Is(sp));
@@ -290,7 +290,7 @@ void Clobber(MacroAssembler* masm, RegList reg_list, uint64_t const value) {
 void ClobberFP(MacroAssembler* masm, RegList reg_list, double const value) {
   FPRegister first = NoFPReg;
   for (unsigned i = 0; i < kNumberOfFPRegisters; i++) {
-    if (reg_list & (1UL << i)) {
+    if (reg_list & (UINT64_C(1) << i)) {
       FPRegister dn(i, kDRegSize);
       if (!first.IsValid()) {
         // This is the first register we've hit, so construct the literal.

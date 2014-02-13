@@ -273,7 +273,7 @@ class Simulator : public DecoderVisitor {
 
   template<typename T>
   inline void set_sp(T value) {
-    set_reg(31, value, Reg31IsStackPointer);
+    set_reg(sizeof(value) * 8, 31, value, Reg31IsStackPointer);
   }
 
   // Return 'size' bits of the value of a floating-point register, as the

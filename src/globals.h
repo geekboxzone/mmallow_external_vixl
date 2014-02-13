@@ -27,6 +27,10 @@
 #ifndef VIXL_GLOBALS_H
 #define VIXL_GLOBALS_H
 
+#ifndef __STDC_CONSTANT_MACROS
+#define __STDC_CONSTANT_MACROS
+#endif
+#include <stdint.h>
 #include <inttypes.h>
 
 #include <assert.h>

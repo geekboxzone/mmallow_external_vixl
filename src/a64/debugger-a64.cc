@@ -1150,7 +1150,8 @@ Token* FormatToken::Tokenize(const char* arg) {
 
 template<typename T>
 void Format<T>::Print(FILE* out) const {
-  fprintf(out, "[Format %c%lu - %s]", type_code_, sizeof(T) * 8, fmt_);
+  fprintf(out, "[Format %c%u - %s]", type_code_,
+          (unsigned) (sizeof(T) * 8), fmt_);
 }
 
 
