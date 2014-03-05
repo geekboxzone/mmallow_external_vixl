@@ -553,7 +553,7 @@ TEST(logical_immediate) {
   }
 
   // 32-bit patterns.
-  value = 0x00003fff00003fffL;
+  value = INT64_C(0x00003fff00003fff);
   for (int i = 0; i < 32; i++) {
     snprintf(result, RESULT_SIZE, "and x0, x0, #0x%" PRIx64, value);
     COMPARE(and_(x0, x0, Operand(value)), result);
@@ -561,7 +561,7 @@ TEST(logical_immediate) {
   }
 
   // 16-bit patterns.
-  value = 0x001f001f001f001fL;
+  value = INT64_C(0x001f001f001f001f);
   for (int i = 0; i < 16; i++) {
     snprintf(result, RESULT_SIZE, "and x0, x0, #0x%" PRIx64, value);
     COMPARE(and_(x0, x0, Operand(value)), result);
@@ -569,7 +569,7 @@ TEST(logical_immediate) {
   }
 
   // 8-bit patterns.
-  value = 0x0e0e0e0e0e0e0e0eL;
+  value = INT64_C(0x0e0e0e0e0e0e0e0e);
   for (int i = 0; i < 8; i++) {
     snprintf(result, RESULT_SIZE, "and x0, x0, #0x%" PRIx64, value);
     COMPARE(and_(x0, x0, Operand(value)), result);
@@ -577,7 +577,7 @@ TEST(logical_immediate) {
   }
 
   // 4-bit patterns.
-  value = 0x6666666666666666L;
+  value = INT64_C(0x6666666666666666);
   for (int i = 0; i < 4; i++) {
     snprintf(result, RESULT_SIZE, "and x0, x0, #0x%" PRIx64, value);
     COMPARE(and_(x0, x0, Operand(value)), result);
@@ -585,9 +585,9 @@ TEST(logical_immediate) {
   }
 
   // 2-bit patterns.
-  COMPARE(and_(x0, x0, Operand(0x5555555555555555L)),
+  COMPARE(and_(x0, x0, Operand(INT64_C(0x5555555555555555))),
           "and x0, x0, #0x5555555555555555");
-  COMPARE(and_(x0, x0, Operand(0xaaaaaaaaaaaaaaaaL)),
+  COMPARE(and_(x0, x0, Operand(INT64_C(0xaaaaaaaaaaaaaaaa))),
           "and x0, x0, #0xaaaaaaaaaaaaaaaa");
 
   // Test immediate encoding - 32-bit destination.
@@ -605,35 +605,35 @@ TEST(logical_immediate) {
   // Test other instructions.
   COMPARE(tst(w1, Operand(0x11111111)),
           "tst w1, #0x11111111");
-  COMPARE(tst(x2, Operand(0x8888888888888888L)),
+  COMPARE(tst(x2, Operand(INT64_C(0x8888888888888888))),
           "tst x2, #0x8888888888888888");
   COMPARE(orr(w7, w8, Operand(0xaaaaaaaa)),
           "orr w7, w8, #0xaaaaaaaa");
-  COMPARE(orr(x9, x10, Operand(0x5555555555555555L)),
+  COMPARE(orr(x9, x10, Operand(INT64_C(0x5555555555555555))),
           "orr x9, x10, #0x5555555555555555");
   COMPARE(eor(w15, w16, Operand(0x00000001)),
           "eor w15, w16, #0x1");
-  COMPARE(eor(x17, x18, Operand(0x0000000000000003L)),
+  COMPARE(eor(x17, x18, Operand(INT64_C(0x0000000000000003))),
           "eor x17, x18, #0x3");
   COMPARE(ands(w23, w24, Operand(0x0000000f)), "ands w23, w24, #0xf");
-  COMPARE(ands(x25, x26, Operand(0x800000000000000fL)),
+  COMPARE(ands(x25, x26, Operand(INT64_C(0x800000000000000f))),
           "ands x25, x26, #0x800000000000000f");
 
   // Test inverse.
   COMPARE(bic(w3, w4, Operand(0x20202020)),
           "and w3, w4, #0xdfdfdfdf");
-  COMPARE(bic(x5, x6, Operand(0x4040404040404040L)),
+  COMPARE(bic(x5, x6, Operand(INT64_C(0x4040404040404040))),
           "and x5, x6, #0xbfbfbfbfbfbfbfbf");
   COMPARE(orn(w11, w12, Operand(0x40004000)),
           "orr w11, w12, #0xbfffbfff");
-  COMPARE(orn(x13, x14, Operand(0x8181818181818181L)),
+  COMPARE(orn(x13, x14, Operand(INT64_C(0x8181818181818181))),
           "orr x13, x14, #0x7e7e7e7e7e7e7e7e");
   COMPARE(eon(w19, w20, Operand(0x80000001)),
           "eor w19, w20, #0x7ffffffe");
-  COMPARE(eon(x21, x22, Operand(0xc000000000000003L)),
+  COMPARE(eon(x21, x22, Operand(INT64_C(0xc000000000000003))),
           "eor x21, x22, #0x3ffffffffffffffc");
   COMPARE(bics(w27, w28, Operand(0xfffffff7)), "ands w27, w28, #0x8");
-  COMPARE(bics(x29, x0, Operand(0xfffffffeffffffffL)),
+  COMPARE(bics(x29, x0, Operand(INT64_C(0xfffffffeffffffff))),
           "ands x29, x0, #0x100000000");
 
   // Test stack pointer.
@@ -648,15 +648,15 @@ TEST(logical_immediate) {
   COMPARE(orr(w2, wzr, Operand(0x00078000)), "mov w2, #0x78000");
   COMPARE(orr(w3, wzr, Operand(0x00780000)), "orr w3, wzr, #0x780000");
   COMPARE(orr(w4, wzr, Operand(0x07800000)), "orr w4, wzr, #0x7800000");
-  COMPARE(orr(x5, xzr, Operand(0xffffffffffffc001UL)),
+  COMPARE(orr(x5, xzr, Operand(UINT64_C(0xffffffffffffc001))),
           "orr x5, xzr, #0xffffffffffffc001");
-  COMPARE(orr(x6, xzr, Operand(0xfffffffffffc001fUL)),
+  COMPARE(orr(x6, xzr, Operand(UINT64_C(0xfffffffffffc001f))),
           "mov x6, #0xfffffffffffc001f");
-  COMPARE(orr(x7, xzr, Operand(0xffffffffffc001ffUL)),
+  COMPARE(orr(x7, xzr, Operand(UINT64_C(0xffffffffffc001ff))),
           "mov x7, #0xffffffffffc001ff");
-  COMPARE(orr(x8, xzr, Operand(0xfffffffffc001fffUL)),
+  COMPARE(orr(x8, xzr, Operand(UINT64_C(0xfffffffffc001fff))),
           "mov x8, #0xfffffffffc001fff");
-  COMPARE(orr(x9, xzr, Operand(0xffffffffc001ffffUL)),
+  COMPARE(orr(x9, xzr, Operand(UINT64_C(0xffffffffc001ffff))),
           "orr x9, xzr, #0xffffffffc001ffff");
 
   CLEANUP();
@@ -1230,7 +1230,7 @@ TEST(load_store_pair_nontemp) {
 TEST(load_literal) {
   SETUP();
 
-  COMPARE_PREFIX(ldr(x10, 0x1234567890abcdefUL),  "ldr x10, pc+8");
+  COMPARE_PREFIX(ldr(x10, UINT64_C(0x1234567890abcdef)),  "ldr x10, pc+8");
   COMPARE_PREFIX(ldr(w20, 0xfedcba09),  "ldr w20, pc+8");
   COMPARE_PREFIX(ldr(d11, 1.234),  "ldr d11, pc+8");
   COMPARE_PREFIX(ldr(s22, 2.5),  "ldr s22, pc+8");
@@ -1556,7 +1556,7 @@ TEST(unreachable) {
   SETUP_CLASS(MacroAssembler);
 
 #ifdef USE_SIMULATOR
-  ASSERT(kUnreachableOpcode == 0xdeb0);
+  VIXL_ASSERT(kUnreachableOpcode == 0xdeb0);
   COMPARE(Unreachable(), "hlt #0xdeb0");
 #else
   COMPARE(Unreachable(), "blr xzr");
@@ -1570,7 +1570,7 @@ TEST(unreachable) {
 TEST(trace) {
   SETUP_CLASS(MacroAssembler);
 
-  ASSERT(kTraceOpcode == 0xdeb2);
+  VIXL_ASSERT(kTraceOpcode == 0xdeb2);
 
   // All Trace calls should produce the same instruction.
   COMPARE(Trace(LOG_ALL, TRACE_ENABLE), "hlt #0xdeb2");
@@ -1585,7 +1585,7 @@ TEST(trace) {
 TEST(log) {
   SETUP_CLASS(MacroAssembler);
 
-  ASSERT(kLogOpcode == 0xdeb3);
+  VIXL_ASSERT(kLogOpcode == 0xdeb3);
 
   // All Log calls should produce the same instruction.
   COMPARE(Log(LOG_ALL), "hlt #0xdeb3");

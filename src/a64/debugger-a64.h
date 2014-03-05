@@ -32,8 +32,8 @@
 #include <errno.h>
 #include <vector>
 
-#include "globals.h"
-#include "utils.h"
+#include "globals-vixl.h"
+#include "utils-vixl.h"
 #include "a64/constants-a64.h"
 #include "a64/simulator-a64.h"
 
@@ -137,7 +137,7 @@ class Debugger : public Simulator {
   // back control.
   inline int steps() { return steps_; }
   inline void set_steps(int value) {
-    ASSERT(value > 1);
+    VIXL_ASSERT(value > 1);
     steps_ = value;
   }
 

@@ -27,8 +27,8 @@
 #ifndef VIXL_A64_INSTRUCTIONS_A64_H_
 #define VIXL_A64_INSTRUCTIONS_A64_H_
 
-#include "globals.h"
-#include "utils.h"
+#include "globals-vixl.h"
+#include "utils-vixl.h"
 #include "a64/constants-a64.h"
 
 namespace vixl {
@@ -53,19 +53,19 @@ const unsigned kSRegSizeInBytes = kSRegSize / 8;
 const unsigned kDRegSize = 64;
 const unsigned kDRegSizeLog2 = 6;
 const unsigned kDRegSizeInBytes = kDRegSize / 8;
-const int64_t kWRegMask = 0x00000000ffffffffL;
-const int64_t kXRegMask = 0xffffffffffffffffL;
-const int64_t kSRegMask = 0x00000000ffffffffL;
-const int64_t kDRegMask = 0xffffffffffffffffL;
-const int64_t kXSignMask = 0x1L << 63;
-const int64_t kWSignMask = 0x1L << 31;
-const int64_t kByteMask = 0xffL;
-const int64_t kHalfWordMask = 0xffffL;
-const int64_t kWordMask = 0xffffffffL;
-const uint64_t kXMaxUInt = 0xffffffffffffffffUL;
-const uint64_t kWMaxUInt = 0xffffffffUL;
-const int64_t kXMaxInt = 0x7fffffffffffffffL;
-const int64_t kXMinInt = 0x8000000000000000L;
+const int64_t kWRegMask = INT64_C(0x00000000ffffffff);
+const int64_t kXRegMask = INT64_C(0xffffffffffffffff);
+const int64_t kSRegMask = INT64_C(0x00000000ffffffff);
+const int64_t kDRegMask = INT64_C(0xffffffffffffffff);
+const int64_t kXSignMask = INT64_C(0x1) << 63;
+const int64_t kWSignMask = INT64_C(0x1) << 31;
+const int64_t kByteMask = INT64_C(0xff);
+const int64_t kHalfWordMask = INT64_C(0xffff);
+const int64_t kWordMask = INT64_C(0xffffffff);
+const uint64_t kXMaxUInt = UINT64_C(0xffffffffffffffff);
+const uint64_t kWMaxUInt = UINT64_C(0xffffffff);
+const int64_t kXMaxInt = INT64_C(0x7fffffffffffffff);
+const int64_t kXMinInt = INT64_C(0x8000000000000000);
 const int32_t kWMaxInt = 0x7fffffff;
 const int32_t kWMinInt = 0x80000000;
 const unsigned kLinkRegCode = 30;
@@ -81,8 +81,8 @@ const unsigned kFloatExponentBits = 8;
 
 const float kFP32PositiveInfinity = rawbits_to_float(0x7f800000);
 const float kFP32NegativeInfinity = rawbits_to_float(0xff800000);
-const double kFP64PositiveInfinity = rawbits_to_double(0x7ff0000000000000UL);
-const double kFP64NegativeInfinity = rawbits_to_double(0xfff0000000000000UL);
+const double kFP64PositiveInfinity = rawbits_to_double(UINT64_C(0x7ff0000000000000));
+const double kFP64NegativeInfinity = rawbits_to_double(UINT64_C(0xfff0000000000000));
 
 // This value is a signalling NaN as both a double and as a float (taking the
 // least-significant word).
@@ -326,7 +326,7 @@ class Instruction {
   }
 
   inline Instruction* InstructionAtOffset(int64_t offset) {
-    ASSERT(IsWordAligned(this + offset));
+    VIXL_ASSERT(IsWordAligned(this + offset));
     return this + offset;
   }
 
