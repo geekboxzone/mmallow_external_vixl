@@ -89,6 +89,7 @@ LOCAL_MODULE := libvixlg
 include external/stlport/libstlport.mk
 include $(BUILD_SHARED_LIBRARY)
 
+ifeq ($(WITH_HOST_DALVIK),true)
 include $(CLEAR_VARS)
 LOCAL_CPP_EXTENSION := .cc
 LOCAL_CPPFLAGS := -O2 -Wall -Wextra
@@ -98,3 +99,4 @@ LOCAL_SHARED_LIBRARIES := liblog
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libvixl
 include $(BUILD_HOST_STATIC_LIBRARY)
+endif
