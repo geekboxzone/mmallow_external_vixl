@@ -938,17 +938,17 @@ void MacroAssembler::PushCalleeSavedRegisters() {
 
   MemOperand tos(sp, -2 * kXRegSizeInBytes, PreIndex);
 
-  stp(d14, d15, tos);
-  stp(d12, d13, tos);
-  stp(d10, d11, tos);
-  stp(d8, d9, tos);
-
   stp(x29, x30, tos);
   stp(x27, x28, tos);
   stp(x25, x26, tos);
   stp(x23, x24, tos);
   stp(x21, x22, tos);
   stp(x19, x20, tos);
+
+  stp(d14, d15, tos);
+  stp(d12, d13, tos);
+  stp(d10, d11, tos);
+  stp(d8, d9, tos);
 }
 
 
@@ -961,17 +961,17 @@ void MacroAssembler::PopCalleeSavedRegisters() {
 
   MemOperand tos(sp, 2 * kXRegSizeInBytes, PostIndex);
 
+  ldp(d8, d9, tos);
+  ldp(d10, d11, tos);
+  ldp(d12, d13, tos);
+  ldp(d14, d15, tos);
+
   ldp(x19, x20, tos);
   ldp(x21, x22, tos);
   ldp(x23, x24, tos);
   ldp(x25, x26, tos);
   ldp(x27, x28, tos);
   ldp(x29, x30, tos);
-
-  ldp(d8, d9, tos);
-  ldp(d10, d11, tos);
-  ldp(d12, d13, tos);
-  ldp(d14, d15, tos);
 }
 
 void MacroAssembler::BumpSystemStackPointer(const Operand& space) {
