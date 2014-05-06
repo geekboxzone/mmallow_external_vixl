@@ -1230,18 +1230,21 @@ class MacroAssembler : public Assembler {
 class InstructionAccurateScope {
  public:
   explicit InstructionAccurateScope(MacroAssembler* masm)
-      : masm_(masm), size_(0) {
+      : masm_(masm) {
     masm_->BlockLiteralPool();
 #ifdef DEBUG
+    size_ = 0;
     old_allow_macro_instructions_ = masm_->AllowMacroInstructions();
     masm_->SetAllowMacroInstructions(false);
 #endif
   }
 
   InstructionAccurateScope(MacroAssembler* masm, int count)
-      : masm_(masm), size_(count * kInstructionSize) {
+      : masm_(masm) {
+    USE(count);
     masm_->BlockLiteralPool();
 #ifdef DEBUG
+    size_ = count * kInstructionSize;
     masm_->bind(&start_);
     old_allow_macro_instructions_ = masm_->AllowMacroInstructions();
     masm_->SetAllowMacroInstructions(false);
@@ -1260,8 +1263,8 @@ class InstructionAccurateScope {
 
  private:
   MacroAssembler* masm_;
-  uint64_t size_;
 #ifdef DEBUG
+  uint64_t size_;
   Label start_;
   bool old_allow_macro_instructions_;
 #endif
