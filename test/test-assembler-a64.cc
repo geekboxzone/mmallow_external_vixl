@@ -227,11 +227,11 @@ TEST(stack_ops) {
   __ Mov(x3, sp);
 
   // Write wsp using a logical instruction.
-  __ Orr(wsp, wzr, Operand(INT64_C(0xfffffff8)));
+  __ Orr(wsp, wzr, Operand(0xfffffff8L));
   __ Mov(x4, sp);
 
   // Write sp, and read back wsp.
-  __ Orr(sp, xzr, Operand(INT64_C(0xfffffff8)));
+  __ Orr(sp, xzr, Operand(0xfffffff8L));
   __ Mov(w5, wsp);
 
   //  restore sp.
@@ -276,21 +276,21 @@ TEST(mvn) {
   RUN();
 
   ASSERT_EQUAL_64(0xfffff000, x0);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffffffff000), x1);
+  ASSERT_EQUAL_64(0xfffffffffffff000UL, x1);
   ASSERT_EQUAL_64(0x00001fff, x2);
-  ASSERT_EQUAL_64(UINT64_C(0x0000000000003fff), x3);
+  ASSERT_EQUAL_64(0x0000000000003fffUL, x3);
   ASSERT_EQUAL_64(0xe00001ff, x4);
-  ASSERT_EQUAL_64(UINT64_C(0xf0000000000000ff), x5);
+  ASSERT_EQUAL_64(0xf0000000000000ffUL, x5);
   ASSERT_EQUAL_64(0x00000001, x6);
   ASSERT_EQUAL_64(0x0, x7);
   ASSERT_EQUAL_64(0x7ff80000, x8);
-  ASSERT_EQUAL_64(UINT64_C(0x3ffc000000000000), x9);
+  ASSERT_EQUAL_64(0x3ffc000000000000UL, x9);
   ASSERT_EQUAL_64(0xffffff00, x10);
-  ASSERT_EQUAL_64(UINT64_C(0x0000000000000001), x11);
+  ASSERT_EQUAL_64(0x0000000000000001UL, x11);
   ASSERT_EQUAL_64(0xffff8003, x12);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffffffff0007), x13);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffffffe000f), x14);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffffffe000f), x15);
+  ASSERT_EQUAL_64(0xffffffffffff0007UL, x13);
+  ASSERT_EQUAL_64(0xfffffffffffe000fUL, x14);
+  ASSERT_EQUAL_64(0xfffffffffffe000fUL, x15);
 
   TEARDOWN();
 }
@@ -300,24 +300,24 @@ TEST(mov_imm_w) {
   SETUP();
 
   START();
-  __ Mov(w0, INT64_C(0xffffffff));
-  __ Mov(w1, INT64_C(0xffff1234));
-  __ Mov(w2, INT64_C(0x1234ffff));
-  __ Mov(w3, INT64_C(0x00000000));
-  __ Mov(w4, INT64_C(0x00001234));
-  __ Mov(w5, INT64_C(0x12340000));
-  __ Mov(w6, INT64_C(0x12345678));
+  __ Mov(w0, 0xffffffffL);
+  __ Mov(w1, 0xffff1234L);
+  __ Mov(w2, 0x1234ffffL);
+  __ Mov(w3, 0x00000000L);
+  __ Mov(w4, 0x00001234L);
+  __ Mov(w5, 0x12340000L);
+  __ Mov(w6, 0x12345678L);
   END();
 
   RUN();
 
-  ASSERT_EQUAL_64(INT64_C(0xffffffff), x0);
-  ASSERT_EQUAL_64(INT64_C(0xffff1234), x1);
-  ASSERT_EQUAL_64(INT64_C(0x1234ffff), x2);
-  ASSERT_EQUAL_64(INT64_C(0x00000000), x3);
-  ASSERT_EQUAL_64(INT64_C(0x00001234), x4);
-  ASSERT_EQUAL_64(INT64_C(0x12340000), x5);
-  ASSERT_EQUAL_64(INT64_C(0x12345678), x6);
+  ASSERT_EQUAL_64(0xffffffffL, x0);
+  ASSERT_EQUAL_64(0xffff1234L, x1);
+  ASSERT_EQUAL_64(0x1234ffffL, x2);
+  ASSERT_EQUAL_64(0x00000000L, x3);
+  ASSERT_EQUAL_64(0x00001234L, x4);
+  ASSERT_EQUAL_64(0x12340000L, x5);
+  ASSERT_EQUAL_64(0x12345678L, x6);
 
   TEARDOWN();
 }
@@ -327,63 +327,63 @@ TEST(mov_imm_x) {
   SETUP();
 
   START();
-  __ Mov(x0, INT64_C(0xffffffffffffffff));
-  __ Mov(x1, INT64_C(0xffffffffffff1234));
-  __ Mov(x2, INT64_C(0xffffffff12345678));
-  __ Mov(x3, INT64_C(0xffff1234ffff5678));
-  __ Mov(x4, INT64_C(0x1234ffffffff5678));
-  __ Mov(x5, INT64_C(0x1234ffff5678ffff));
-  __ Mov(x6, INT64_C(0x12345678ffffffff));
-  __ Mov(x7, INT64_C(0x1234ffffffffffff));
-  __ Mov(x8, INT64_C(0x123456789abcffff));
-  __ Mov(x9, INT64_C(0x12345678ffff9abc));
-  __ Mov(x10, INT64_C(0x1234ffff56789abc));
-  __ Mov(x11, INT64_C(0xffff123456789abc));
-  __ Mov(x12, INT64_C(0x0000000000000000));
-  __ Mov(x13, INT64_C(0x0000000000001234));
-  __ Mov(x14, INT64_C(0x0000000012345678));
-  __ Mov(x15, INT64_C(0x0000123400005678));
-  __ Mov(x18, INT64_C(0x1234000000005678));
-  __ Mov(x19, INT64_C(0x1234000056780000));
-  __ Mov(x20, INT64_C(0x1234567800000000));
-  __ Mov(x21, INT64_C(0x1234000000000000));
-  __ Mov(x22, INT64_C(0x123456789abc0000));
-  __ Mov(x23, INT64_C(0x1234567800009abc));
-  __ Mov(x24, INT64_C(0x1234000056789abc));
-  __ Mov(x25, INT64_C(0x0000123456789abc));
-  __ Mov(x26, INT64_C(0x123456789abcdef0));
-  __ Mov(x27, INT64_C(0xffff000000000001));
-  __ Mov(x28, INT64_C(0x8000ffff00000000));
+  __ Mov(x0, 0xffffffffffffffffL);
+  __ Mov(x1, 0xffffffffffff1234L);
+  __ Mov(x2, 0xffffffff12345678L);
+  __ Mov(x3, 0xffff1234ffff5678L);
+  __ Mov(x4, 0x1234ffffffff5678L);
+  __ Mov(x5, 0x1234ffff5678ffffL);
+  __ Mov(x6, 0x12345678ffffffffL);
+  __ Mov(x7, 0x1234ffffffffffffL);
+  __ Mov(x8, 0x123456789abcffffL);
+  __ Mov(x9, 0x12345678ffff9abcL);
+  __ Mov(x10, 0x1234ffff56789abcL);
+  __ Mov(x11, 0xffff123456789abcL);
+  __ Mov(x12, 0x0000000000000000L);
+  __ Mov(x13, 0x0000000000001234L);
+  __ Mov(x14, 0x0000000012345678L);
+  __ Mov(x15, 0x0000123400005678L);
+  __ Mov(x18, 0x1234000000005678L);
+  __ Mov(x19, 0x1234000056780000L);
+  __ Mov(x20, 0x1234567800000000L);
+  __ Mov(x21, 0x1234000000000000L);
+  __ Mov(x22, 0x123456789abc0000L);
+  __ Mov(x23, 0x1234567800009abcL);
+  __ Mov(x24, 0x1234000056789abcL);
+  __ Mov(x25, 0x0000123456789abcL);
+  __ Mov(x26, 0x123456789abcdef0L);
+  __ Mov(x27, 0xffff000000000001L);
+  __ Mov(x28, 0x8000ffff00000000L);
   END();
 
   RUN();
 
-  ASSERT_EQUAL_64(INT64_C(0xffffffffffff1234), x1);
-  ASSERT_EQUAL_64(INT64_C(0xffffffff12345678), x2);
-  ASSERT_EQUAL_64(INT64_C(0xffff1234ffff5678), x3);
-  ASSERT_EQUAL_64(INT64_C(0x1234ffffffff5678), x4);
-  ASSERT_EQUAL_64(INT64_C(0x1234ffff5678ffff), x5);
-  ASSERT_EQUAL_64(INT64_C(0x12345678ffffffff), x6);
-  ASSERT_EQUAL_64(INT64_C(0x1234ffffffffffff), x7);
-  ASSERT_EQUAL_64(INT64_C(0x123456789abcffff), x8);
-  ASSERT_EQUAL_64(INT64_C(0x12345678ffff9abc), x9);
-  ASSERT_EQUAL_64(INT64_C(0x1234ffff56789abc), x10);
-  ASSERT_EQUAL_64(INT64_C(0xffff123456789abc), x11);
-  ASSERT_EQUAL_64(INT64_C(0x0000000000000000), x12);
-  ASSERT_EQUAL_64(INT64_C(0x0000000000001234), x13);
-  ASSERT_EQUAL_64(INT64_C(0x0000000012345678), x14);
-  ASSERT_EQUAL_64(INT64_C(0x0000123400005678), x15);
-  ASSERT_EQUAL_64(INT64_C(0x1234000000005678), x18);
-  ASSERT_EQUAL_64(INT64_C(0x1234000056780000), x19);
-  ASSERT_EQUAL_64(INT64_C(0x1234567800000000), x20);
-  ASSERT_EQUAL_64(INT64_C(0x1234000000000000), x21);
-  ASSERT_EQUAL_64(INT64_C(0x123456789abc0000), x22);
-  ASSERT_EQUAL_64(INT64_C(0x1234567800009abc), x23);
-  ASSERT_EQUAL_64(INT64_C(0x1234000056789abc), x24);
-  ASSERT_EQUAL_64(INT64_C(0x0000123456789abc), x25);
-  ASSERT_EQUAL_64(INT64_C(0x123456789abcdef0), x26);
-  ASSERT_EQUAL_64(INT64_C(0xffff000000000001), x27);
-  ASSERT_EQUAL_64(INT64_C(0x8000ffff00000000), x28);
+  ASSERT_EQUAL_64(0xffffffffffff1234L, x1);
+  ASSERT_EQUAL_64(0xffffffff12345678L, x2);
+  ASSERT_EQUAL_64(0xffff1234ffff5678L, x3);
+  ASSERT_EQUAL_64(0x1234ffffffff5678L, x4);
+  ASSERT_EQUAL_64(0x1234ffff5678ffffL, x5);
+  ASSERT_EQUAL_64(0x12345678ffffffffL, x6);
+  ASSERT_EQUAL_64(0x1234ffffffffffffL, x7);
+  ASSERT_EQUAL_64(0x123456789abcffffL, x8);
+  ASSERT_EQUAL_64(0x12345678ffff9abcL, x9);
+  ASSERT_EQUAL_64(0x1234ffff56789abcL, x10);
+  ASSERT_EQUAL_64(0xffff123456789abcL, x11);
+  ASSERT_EQUAL_64(0x0000000000000000L, x12);
+  ASSERT_EQUAL_64(0x0000000000001234L, x13);
+  ASSERT_EQUAL_64(0x0000000012345678L, x14);
+  ASSERT_EQUAL_64(0x0000123400005678L, x15);
+  ASSERT_EQUAL_64(0x1234000000005678L, x18);
+  ASSERT_EQUAL_64(0x1234000056780000L, x19);
+  ASSERT_EQUAL_64(0x1234567800000000L, x20);
+  ASSERT_EQUAL_64(0x1234000000000000L, x21);
+  ASSERT_EQUAL_64(0x123456789abc0000L, x22);
+  ASSERT_EQUAL_64(0x1234567800009abcL, x23);
+  ASSERT_EQUAL_64(0x1234000056789abcL, x24);
+  ASSERT_EQUAL_64(0x0000123456789abcL, x25);
+  ASSERT_EQUAL_64(0x123456789abcdef0L, x26);
+  ASSERT_EQUAL_64(0xffff000000000001L, x27);
+  ASSERT_EQUAL_64(0x8000ffff00000000L, x28);
 
 
   TEARDOWN();
@@ -394,31 +394,31 @@ TEST(mov) {
   SETUP();
 
   START();
-  __ Mov(x0, INT64_C(0xffffffffffffffff));
-  __ Mov(x1, INT64_C(0xffffffffffffffff));
-  __ Mov(x2, INT64_C(0xffffffffffffffff));
-  __ Mov(x3, INT64_C(0xffffffffffffffff));
+  __ Mov(x0, 0xffffffffffffffffL);
+  __ Mov(x1, 0xffffffffffffffffL);
+  __ Mov(x2, 0xffffffffffffffffL);
+  __ Mov(x3, 0xffffffffffffffffL);
 
-  __ Mov(x0, INT64_C(0x0123456789abcdef));
+  __ Mov(x0, 0x0123456789abcdefL);
 
-  __ movz(x1, INT64_C(0xabcd) << 16);
-  __ movk(x2, INT64_C(0xabcd) << 32);
-  __ movn(x3, INT64_C(0xabcd) << 48);
+  __ movz(x1, 0xabcdL << 16);
+  __ movk(x2, 0xabcdL << 32);
+  __ movn(x3, 0xabcdL << 48);
 
-  __ Mov(x4, INT64_C(0x0123456789abcdef));
+  __ Mov(x4, 0x0123456789abcdefL);
   __ Mov(x5, x4);
 
   __ Mov(w6, -1);
 
   // Test that moves back to the same register have the desired effect. This
   // is a no-op for X registers, and a truncation for W registers.
-  __ Mov(x7, INT64_C(0x0123456789abcdef));
+  __ Mov(x7, 0x0123456789abcdefL);
   __ Mov(x7, x7);
-  __ Mov(x8, INT64_C(0x0123456789abcdef));
+  __ Mov(x8, 0x0123456789abcdefL);
   __ Mov(w8, w8);
-  __ Mov(x9, INT64_C(0x0123456789abcdef));
+  __ Mov(x9, 0x0123456789abcdefL);
   __ Mov(x9, Operand(x9));
-  __ Mov(x10, INT64_C(0x0123456789abcdef));
+  __ Mov(x10, 0x0123456789abcdefL);
   __ Mov(w10, Operand(w10));
 
   __ Mov(w11, 0xfff);
@@ -437,38 +437,38 @@ TEST(mov) {
   __ Mov(x26, Operand(x13, SXTH, 3));
   __ Mov(x27, Operand(w13, UXTW, 4));
 
-  __ Mov(x28, INT64_C(0x0123456789abcdef));
+  __ Mov(x28, 0x0123456789abcdefL);
   __ Mov(w28, w28, kDiscardForSameWReg);
   END();
 
   RUN();
 
-  ASSERT_EQUAL_64(INT64_C(0x0123456789abcdef), x0);
-  ASSERT_EQUAL_64(INT64_C(0x00000000abcd0000), x1);
-  ASSERT_EQUAL_64(INT64_C(0xffffabcdffffffff), x2);
-  ASSERT_EQUAL_64(INT64_C(0x5432ffffffffffff), x3);
+  ASSERT_EQUAL_64(0x0123456789abcdefL, x0);
+  ASSERT_EQUAL_64(0x00000000abcd0000L, x1);
+  ASSERT_EQUAL_64(0xffffabcdffffffffL, x2);
+  ASSERT_EQUAL_64(0x5432ffffffffffffL, x3);
   ASSERT_EQUAL_64(x4, x5);
   ASSERT_EQUAL_32(-1, w6);
-  ASSERT_EQUAL_64(INT64_C(0x0123456789abcdef), x7);
-  ASSERT_EQUAL_32(INT64_C(0x89abcdef), w8);
-  ASSERT_EQUAL_64(INT64_C(0x0123456789abcdef), x9);
-  ASSERT_EQUAL_32(INT64_C(0x89abcdef), w10);
+  ASSERT_EQUAL_64(0x0123456789abcdefL, x7);
+  ASSERT_EQUAL_32(0x89abcdefL, w8);
+  ASSERT_EQUAL_64(0x0123456789abcdefL, x9);
+  ASSERT_EQUAL_32(0x89abcdefL, w10);
   ASSERT_EQUAL_64(0x00000fff, x11);
-  ASSERT_EQUAL_64(UINT64_C(0x0000000000000fff), x12);
+  ASSERT_EQUAL_64(0x0000000000000fffUL, x12);
   ASSERT_EQUAL_64(0x00001ffe, x13);
-  ASSERT_EQUAL_64(UINT64_C(0x0000000000003ffc), x14);
+  ASSERT_EQUAL_64(0x0000000000003ffcUL, x14);
   ASSERT_EQUAL_64(0x000001ff, x15);
-  ASSERT_EQUAL_64(UINT64_C(0x00000000000000ff), x18);
+  ASSERT_EQUAL_64(0x00000000000000ffUL, x18);
   ASSERT_EQUAL_64(0x00000001, x19);
   ASSERT_EQUAL_64(0x0, x20);
   ASSERT_EQUAL_64(0x7ff80000, x21);
-  ASSERT_EQUAL_64(UINT64_C(0x3ffc000000000000), x22);
+  ASSERT_EQUAL_64(0x3ffc000000000000UL, x22);
   ASSERT_EQUAL_64(0x000000fe, x23);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffffffffffc), x24);
+  ASSERT_EQUAL_64(0xfffffffffffffffcUL, x24);
   ASSERT_EQUAL_64(0x00007ff8, x25);
-  ASSERT_EQUAL_64(UINT64_C(0x000000000000fff0), x26);
-  ASSERT_EQUAL_64(UINT64_C(0x000000000001ffe0), x27);
-  ASSERT_EQUAL_64(INT64_C(0x0123456789abcdef), x28);
+  ASSERT_EQUAL_64(0x000000000000fff0UL, x26);
+  ASSERT_EQUAL_64(0x000000000001ffe0UL, x27);
+  ASSERT_EQUAL_64(0x0123456789abcdefL, x28);
 
   TEARDOWN();
 }
@@ -490,21 +490,21 @@ TEST(orr) {
   __ Orr(w8, w0, Operand(w1, ROR, 12));
   __ Orr(x9, x0, Operand(x1, ROR, 12));
   __ Orr(w10, w0, Operand(0xf));
-  __ Orr(x11, x0, Operand(INT64_C(0xf0000000f0000000)));
+  __ Orr(x11, x0, Operand(0xf0000000f0000000L));
   END();
 
   RUN();
 
   ASSERT_EQUAL_64(0xf000f0ff, x2);
   ASSERT_EQUAL_64(0xf000f0f0, x3);
-  ASSERT_EQUAL_64(INT64_C(0xf00000ff0000f0f0), x4);
+  ASSERT_EQUAL_64(0xf00000ff0000f0f0L, x4);
   ASSERT_EQUAL_64(0x0f00f0ff, x5);
   ASSERT_EQUAL_64(0xff00f0ff, x6);
   ASSERT_EQUAL_64(0x0f00f0ff, x7);
   ASSERT_EQUAL_64(0x0ffff0f0, x8);
-  ASSERT_EQUAL_64(INT64_C(0x0ff00000000ff0f0), x9);
+  ASSERT_EQUAL_64(0x0ff00000000ff0f0L, x9);
   ASSERT_EQUAL_64(0xf0ff, x10);
-  ASSERT_EQUAL_64(INT64_C(0xf0000000f000f0f0), x11);
+  ASSERT_EQUAL_64(0xf0000000f000f0f0L, x11);
 
   TEARDOWN();
 }
@@ -515,7 +515,7 @@ TEST(orr_extend) {
 
   START();
   __ Mov(x0, 1);
-  __ Mov(x1, UINT64_C(0x8000000080008080));
+  __ Mov(x1, 0x8000000080008080UL);
   __ Orr(w6, w0, Operand(w1, UXTB));
   __ Orr(x7, x0, Operand(x1, UXTH, 1));
   __ Orr(w8, w0, Operand(w1, UXTW, 2));
@@ -531,11 +531,11 @@ TEST(orr_extend) {
   ASSERT_EQUAL_64(0x00000081, x6);
   ASSERT_EQUAL_64(0x00010101, x7);
   ASSERT_EQUAL_64(0x00020201, x8);
-  ASSERT_EQUAL_64(UINT64_C(0x0000000400040401), x9);
-  ASSERT_EQUAL_64(UINT64_C(0x00000000ffffff81), x10);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffffffff0101), x11);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffe00020201), x12);
-  ASSERT_EQUAL_64(UINT64_C(0x0000000400040401), x13);
+  ASSERT_EQUAL_64(0x0000000400040401UL, x9);
+  ASSERT_EQUAL_64(0x00000000ffffff81UL, x10);
+  ASSERT_EQUAL_64(0xffffffffffff0101UL, x11);
+  ASSERT_EQUAL_64(0xfffffffe00020201UL, x12);
+  ASSERT_EQUAL_64(0x0000000400040401UL, x13);
 
   TEARDOWN();
 }
@@ -546,18 +546,18 @@ TEST(bitwise_wide_imm) {
 
   START();
   __ Mov(x0, 0);
-  __ Mov(x1, UINT64_C(0xf0f0f0f0f0f0f0f0));
+  __ Mov(x1, 0xf0f0f0f0f0f0f0f0UL);
 
-  __ Orr(x10, x0, Operand(UINT64_C(0x1234567890abcdef)));
+  __ Orr(x10, x0, Operand(0x1234567890abcdefUL));
   __ Orr(w11, w1, Operand(0x90abcdef));
   END();
 
   RUN();
 
   ASSERT_EQUAL_64(0, x0);
-  ASSERT_EQUAL_64(UINT64_C(0xf0f0f0f0f0f0f0f0), x1);
-  ASSERT_EQUAL_64(UINT64_C(0x1234567890abcdef), x10);
-  ASSERT_EQUAL_64(UINT64_C(0xf0fbfdff), x11);
+  ASSERT_EQUAL_64(0xf0f0f0f0f0f0f0f0UL, x1);
+  ASSERT_EQUAL_64(0x1234567890abcdefUL, x10);
+  ASSERT_EQUAL_64(0xf0fbfdffUL, x11);
 
   TEARDOWN();
 }
@@ -579,21 +579,21 @@ TEST(orn) {
   __ Orn(w8, w0, Operand(w1, ROR, 16));
   __ Orn(x9, x0, Operand(x1, ROR, 16));
   __ Orn(w10, w0, Operand(0xffff));
-  __ Orn(x11, x0, Operand(INT64_C(0xffff0000ffff)));
+  __ Orn(x11, x0, Operand(0xffff0000ffffL));
   END();
 
   RUN();
 
-  ASSERT_EQUAL_64(INT64_C(0xffffffff0ffffff0), x2);
+  ASSERT_EQUAL_64(0xffffffff0ffffff0L, x2);
   ASSERT_EQUAL_64(0xfffff0ff, x3);
-  ASSERT_EQUAL_64(INT64_C(0xfffffff0fffff0ff), x4);
-  ASSERT_EQUAL_64(INT64_C(0xffffffff87fffff0), x5);
+  ASSERT_EQUAL_64(0xfffffff0fffff0ffL, x4);
+  ASSERT_EQUAL_64(0xffffffff87fffff0L, x5);
   ASSERT_EQUAL_64(0x07fffff0, x6);
-  ASSERT_EQUAL_64(INT64_C(0xffffffff87fffff0), x7);
+  ASSERT_EQUAL_64(0xffffffff87fffff0L, x7);
   ASSERT_EQUAL_64(0xff00ffff, x8);
-  ASSERT_EQUAL_64(INT64_C(0xff00ffffffffffff), x9);
+  ASSERT_EQUAL_64(0xff00ffffffffffffL, x9);
   ASSERT_EQUAL_64(0xfffff0f0, x10);
-  ASSERT_EQUAL_64(INT64_C(0xffff0000fffff0f0), x11);
+  ASSERT_EQUAL_64(0xffff0000fffff0f0L, x11);
 
   TEARDOWN();
 }
@@ -604,7 +604,7 @@ TEST(orn_extend) {
 
   START();
   __ Mov(x0, 1);
-  __ Mov(x1, UINT64_C(0x8000000080008081));
+  __ Mov(x1, 0x8000000080008081UL);
   __ Orn(w6, w0, Operand(w1, UXTB));
   __ Orn(x7, x0, Operand(x1, UXTH, 1));
   __ Orn(w8, w0, Operand(w1, UXTW, 2));
@@ -618,13 +618,13 @@ TEST(orn_extend) {
   RUN();
 
   ASSERT_EQUAL_64(0xffffff7f, x6);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffffffefefd), x7);
+  ASSERT_EQUAL_64(0xfffffffffffefefdUL, x7);
   ASSERT_EQUAL_64(0xfffdfdfb, x8);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffbfffbfbf7), x9);
+  ASSERT_EQUAL_64(0xfffffffbfffbfbf7UL, x9);
   ASSERT_EQUAL_64(0x0000007f, x10);
   ASSERT_EQUAL_64(0x0000fefd, x11);
-  ASSERT_EQUAL_64(UINT64_C(0x00000001fffdfdfb), x12);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffbfffbfbf7), x13);
+  ASSERT_EQUAL_64(0x00000001fffdfdfbUL, x12);
+  ASSERT_EQUAL_64(0xfffffffbfffbfbf7UL, x13);
 
   TEARDOWN();
 }
@@ -670,8 +670,8 @@ TEST(and_extend) {
   SETUP();
 
   START();
-  __ Mov(x0, UINT64_C(0xffffffffffffffff));
-  __ Mov(x1, UINT64_C(0x8000000080008081));
+  __ Mov(x0, 0xffffffffffffffffUL);
+  __ Mov(x1, 0x8000000080008081UL);
   __ And(w6, w0, Operand(w1, UXTB));
   __ And(x7, x0, Operand(x1, UXTH, 1));
   __ And(w8, w0, Operand(w1, UXTW, 2));
@@ -687,11 +687,11 @@ TEST(and_extend) {
   ASSERT_EQUAL_64(0x00000081, x6);
   ASSERT_EQUAL_64(0x00010102, x7);
   ASSERT_EQUAL_64(0x00020204, x8);
-  ASSERT_EQUAL_64(UINT64_C(0x0000000400040408), x9);
+  ASSERT_EQUAL_64(0x0000000400040408UL, x9);
   ASSERT_EQUAL_64(0xffffff81, x10);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffffffff0102), x11);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffe00020204), x12);
-  ASSERT_EQUAL_64(UINT64_C(0x0000000400040408), x13);
+  ASSERT_EQUAL_64(0xffffffffffff0102UL, x11);
+  ASSERT_EQUAL_64(0xfffffffe00020204UL, x12);
+  ASSERT_EQUAL_64(0x0000000400040408UL, x13);
 
   TEARDOWN();
 }
@@ -722,7 +722,7 @@ TEST(ands) {
   ASSERT_EQUAL_64(0x00000000, x0);
 
   START();
-  __ Mov(x0, INT64_C(0x8000000000000000));
+  __ Mov(x0, 0x8000000000000000L);
   __ Mov(x1, 0x00000001);
   __ Ands(x0, x0, Operand(x1, ROR, 1));
   END();
@@ -730,7 +730,7 @@ TEST(ands) {
   RUN();
 
   ASSERT_EQUAL_NZCV(NFlag);
-  ASSERT_EQUAL_64(INT64_C(0x8000000000000000), x0);
+  ASSERT_EQUAL_64(0x8000000000000000L, x0);
 
   START();
   __ Mov(x0, 0xfff0);
@@ -808,8 +808,8 @@ TEST(bic_extend) {
   SETUP();
 
   START();
-  __ Mov(x0, UINT64_C(0xffffffffffffffff));
-  __ Mov(x1, UINT64_C(0x8000000080008081));
+  __ Mov(x0, 0xffffffffffffffffUL);
+  __ Mov(x1, 0x8000000080008081UL);
   __ Bic(w6, w0, Operand(w1, UXTB));
   __ Bic(x7, x0, Operand(x1, UXTH, 1));
   __ Bic(w8, w0, Operand(w1, UXTW, 2));
@@ -823,13 +823,13 @@ TEST(bic_extend) {
   RUN();
 
   ASSERT_EQUAL_64(0xffffff7e, x6);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffffffefefd), x7);
+  ASSERT_EQUAL_64(0xfffffffffffefefdUL, x7);
   ASSERT_EQUAL_64(0xfffdfdfb, x8);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffbfffbfbf7), x9);
+  ASSERT_EQUAL_64(0xfffffffbfffbfbf7UL, x9);
   ASSERT_EQUAL_64(0x0000007e, x10);
   ASSERT_EQUAL_64(0x0000fefd, x11);
-  ASSERT_EQUAL_64(UINT64_C(0x00000001fffdfdfb), x12);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffbfffbfbf7), x13);
+  ASSERT_EQUAL_64(0x00000001fffdfdfbUL, x12);
+  ASSERT_EQUAL_64(0xfffffffbfffbfbf7UL, x13);
 
   TEARDOWN();
 }
@@ -859,7 +859,7 @@ TEST(bics) {
   ASSERT_EQUAL_64(0x80000000, x0);
 
   START();
-  __ Mov(x0, INT64_C(0x8000000000000000));
+  __ Mov(x0, 0x8000000000000000L);
   __ Mov(x1, 0x00000001);
   __ Bics(x0, x0, Operand(x1, ROR, 1));
   END();
@@ -870,14 +870,14 @@ TEST(bics) {
   ASSERT_EQUAL_64(0x00000000, x0);
 
   START();
-  __ Mov(x0, INT64_C(0xffffffffffffffff));
-  __ Bics(x0, x0, Operand(INT64_C(0x7fffffffffffffff)));
+  __ Mov(x0, 0xffffffffffffffffL);
+  __ Bics(x0, x0, Operand(0x7fffffffffffffffL));
   END();
 
   RUN();
 
   ASSERT_EQUAL_NZCV(NFlag);
-  ASSERT_EQUAL_64(INT64_C(0x8000000000000000), x0);
+  ASSERT_EQUAL_64(0x8000000000000000L, x0);
 
   START();
   __ Mov(w0, 0xffff0000);
@@ -909,21 +909,21 @@ TEST(eor) {
   __ Eor(w8, w0, Operand(w1, ROR, 28));
   __ Eor(x9, x0, Operand(x1, ROR, 28));
   __ Eor(w10, w0, Operand(0xff00ff00));
-  __ Eor(x11, x0, Operand(INT64_C(0xff00ff00ff00ff00)));
+  __ Eor(x11, x0, Operand(0xff00ff00ff00ff00L));
   END();
 
   RUN();
 
   ASSERT_EQUAL_64(0xf000ff0f, x2);
   ASSERT_EQUAL_64(0x0000f000, x3);
-  ASSERT_EQUAL_64(INT64_C(0x0000000f0000f000), x4);
+  ASSERT_EQUAL_64(0x0000000f0000f000L, x4);
   ASSERT_EQUAL_64(0x7800ff8f, x5);
   ASSERT_EQUAL_64(0xffff00f0, x6);
   ASSERT_EQUAL_64(0x0000f0f0, x7);
   ASSERT_EQUAL_64(0x0000f00f, x8);
-  ASSERT_EQUAL_64(INT64_C(0x00000ff00000ffff), x9);
+  ASSERT_EQUAL_64(0x00000ff00000ffffL, x9);
   ASSERT_EQUAL_64(0xff0000f0, x10);
-  ASSERT_EQUAL_64(INT64_C(0xff00ff00ff0000f0), x11);
+  ASSERT_EQUAL_64(0xff00ff00ff0000f0L, x11);
 
   TEARDOWN();
 }
@@ -932,8 +932,8 @@ TEST(eor_extend) {
   SETUP();
 
   START();
-  __ Mov(x0, UINT64_C(0x1111111111111111));
-  __ Mov(x1, UINT64_C(0x8000000080008081));
+  __ Mov(x0, 0x1111111111111111UL);
+  __ Mov(x1, 0x8000000080008081UL);
   __ Eor(w6, w0, Operand(w1, UXTB));
   __ Eor(x7, x0, Operand(x1, UXTH, 1));
   __ Eor(w8, w0, Operand(w1, UXTW, 2));
@@ -947,13 +947,13 @@ TEST(eor_extend) {
   RUN();
 
   ASSERT_EQUAL_64(0x11111190, x6);
-  ASSERT_EQUAL_64(UINT64_C(0x1111111111101013), x7);
+  ASSERT_EQUAL_64(0x1111111111101013UL, x7);
   ASSERT_EQUAL_64(0x11131315, x8);
-  ASSERT_EQUAL_64(UINT64_C(0x1111111511151519), x9);
+  ASSERT_EQUAL_64(0x1111111511151519UL, x9);
   ASSERT_EQUAL_64(0xeeeeee90, x10);
-  ASSERT_EQUAL_64(UINT64_C(0xeeeeeeeeeeee1013), x11);
-  ASSERT_EQUAL_64(UINT64_C(0xeeeeeeef11131315), x12);
-  ASSERT_EQUAL_64(UINT64_C(0x1111111511151519), x13);
+  ASSERT_EQUAL_64(0xeeeeeeeeeeee1013UL, x11);
+  ASSERT_EQUAL_64(0xeeeeeeef11131315UL, x12);
+  ASSERT_EQUAL_64(0x1111111511151519UL, x13);
 
   TEARDOWN();
 }
@@ -975,21 +975,21 @@ TEST(eon) {
   __ Eon(w8, w0, Operand(w1, ROR, 28));
   __ Eon(x9, x0, Operand(x1, ROR, 28));
   __ Eon(w10, w0, Operand(0x03c003c0));
-  __ Eon(x11, x0, Operand(INT64_C(0x0000100000001000)));
+  __ Eon(x11, x0, Operand(0x0000100000001000L));
   END();
 
   RUN();
 
-  ASSERT_EQUAL_64(INT64_C(0xffffffff0fff00f0), x2);
+  ASSERT_EQUAL_64(0xffffffff0fff00f0L, x2);
   ASSERT_EQUAL_64(0xffff0fff, x3);
-  ASSERT_EQUAL_64(INT64_C(0xfffffff0ffff0fff), x4);
-  ASSERT_EQUAL_64(INT64_C(0xffffffff87ff0070), x5);
+  ASSERT_EQUAL_64(0xfffffff0ffff0fffL, x4);
+  ASSERT_EQUAL_64(0xffffffff87ff0070L, x5);
   ASSERT_EQUAL_64(0x0000ff0f, x6);
-  ASSERT_EQUAL_64(INT64_C(0xffffffffffff0f0f), x7);
+  ASSERT_EQUAL_64(0xffffffffffff0f0fL, x7);
   ASSERT_EQUAL_64(0xffff0ff0, x8);
-  ASSERT_EQUAL_64(INT64_C(0xfffff00fffff0000), x9);
+  ASSERT_EQUAL_64(0xfffff00fffff0000L, x9);
   ASSERT_EQUAL_64(0xfc3f03cf, x10);
-  ASSERT_EQUAL_64(INT64_C(0xffffefffffff100f), x11);
+  ASSERT_EQUAL_64(0xffffefffffff100fL, x11);
 
   TEARDOWN();
 }
@@ -999,8 +999,8 @@ TEST(eon_extend) {
   SETUP();
 
   START();
-  __ Mov(x0, UINT64_C(0x1111111111111111));
-  __ Mov(x1, UINT64_C(0x8000000080008081));
+  __ Mov(x0, 0x1111111111111111UL);
+  __ Mov(x1, 0x8000000080008081UL);
   __ Eon(w6, w0, Operand(w1, UXTB));
   __ Eon(x7, x0, Operand(x1, UXTH, 1));
   __ Eon(w8, w0, Operand(w1, UXTW, 2));
@@ -1014,13 +1014,13 @@ TEST(eon_extend) {
   RUN();
 
   ASSERT_EQUAL_64(0xeeeeee6f, x6);
-  ASSERT_EQUAL_64(UINT64_C(0xeeeeeeeeeeefefec), x7);
+  ASSERT_EQUAL_64(0xeeeeeeeeeeefefecUL, x7);
   ASSERT_EQUAL_64(0xeeececea, x8);
-  ASSERT_EQUAL_64(UINT64_C(0xeeeeeeeaeeeaeae6), x9);
+  ASSERT_EQUAL_64(0xeeeeeeeaeeeaeae6UL, x9);
   ASSERT_EQUAL_64(0x1111116f, x10);
-  ASSERT_EQUAL_64(UINT64_C(0x111111111111efec), x11);
-  ASSERT_EQUAL_64(UINT64_C(0x11111110eeececea), x12);
-  ASSERT_EQUAL_64(UINT64_C(0xeeeeeeeaeeeaeae6), x13);
+  ASSERT_EQUAL_64(0x111111111111efecUL, x11);
+  ASSERT_EQUAL_64(0x11111110eeececeaUL, x12);
+  ASSERT_EQUAL_64(0xeeeeeeeaeeeaeae6UL, x13);
 
   TEARDOWN();
 }
@@ -1033,7 +1033,7 @@ TEST(mul) {
   __ Mov(x16, 0);
   __ Mov(x17, 1);
   __ Mov(x18, 0xffffffff);
-  __ Mov(x19, UINT64_C(0xffffffffffffffff));
+  __ Mov(x19, 0xffffffffffffffffUL);
 
   __ Mul(w0, w16, w16);
   __ Mul(w1, w16, w17);
@@ -1064,9 +1064,9 @@ TEST(mul) {
   ASSERT_EQUAL_64(1, x3);
   ASSERT_EQUAL_64(0, x4);
   ASSERT_EQUAL_64(0xffffffff, x5);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffff00000001), x6);
+  ASSERT_EQUAL_64(0xffffffff00000001UL, x6);
   ASSERT_EQUAL_64(1, x7);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffffffffffff), x8);
+  ASSERT_EQUAL_64(0xffffffffffffffffUL, x8);
   ASSERT_EQUAL_64(1, x9);
   ASSERT_EQUAL_64(1, x10);
   ASSERT_EQUAL_64(0, x11);
@@ -1074,9 +1074,9 @@ TEST(mul) {
   ASSERT_EQUAL_64(1, x13);
   ASSERT_EQUAL_64(0xffffffff, x14);
   ASSERT_EQUAL_64(0, x20);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffff00000001), x21);
+  ASSERT_EQUAL_64(0xffffffff00000001UL, x21);
   ASSERT_EQUAL_64(0xffffffff, x22);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffffffffffff), x23);
+  ASSERT_EQUAL_64(0xffffffffffffffffUL, x23);
 
   TEARDOWN();
 }
@@ -1112,7 +1112,7 @@ TEST(madd) {
   __ Mov(x16, 0);
   __ Mov(x17, 1);
   __ Mov(x18, 0xffffffff);
-  __ Mov(x19, UINT64_C(0xffffffffffffffff));
+  __ Mov(x19, 0xffffffffffffffffUL);
 
   __ Madd(w0, w16, w16, w16);
   __ Madd(w1, w16, w16, w17);
@@ -1162,11 +1162,11 @@ TEST(madd) {
   ASSERT_EQUAL_64(0xffffffff, x14);
   ASSERT_EQUAL_64(0xffffffffffffffff, x15);
   ASSERT_EQUAL_64(1, x20);
-  ASSERT_EQUAL_64(UINT64_C(0x100000000), x21);
+  ASSERT_EQUAL_64(0x100000000UL, x21);
   ASSERT_EQUAL_64(0, x22);
   ASSERT_EQUAL_64(0xffffffff, x23);
   ASSERT_EQUAL_64(0x1fffffffe, x24);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffe00000002), x25);
+  ASSERT_EQUAL_64(0xfffffffe00000002UL, x25);
   ASSERT_EQUAL_64(0, x26);
   ASSERT_EQUAL_64(0, x27);
 
@@ -1181,7 +1181,7 @@ TEST(msub) {
   __ Mov(x16, 0);
   __ Mov(x17, 1);
   __ Mov(x18, 0xffffffff);
-  __ Mov(x19, UINT64_C(0xffffffffffffffff));
+  __ Mov(x19, 0xffffffffffffffffUL);
 
   __ Msub(w0, w16, w16, w16);
   __ Msub(w1, w16, w16, w17);
@@ -1229,15 +1229,15 @@ TEST(msub) {
   ASSERT_EQUAL_64(0, x12);
   ASSERT_EQUAL_64(1, x13);
   ASSERT_EQUAL_64(0xffffffff, x14);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffffffffffff), x15);
+  ASSERT_EQUAL_64(0xffffffffffffffffUL, x15);
   ASSERT_EQUAL_64(1, x20);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffe), x21);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffffffffffe), x22);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffff00000001), x23);
+  ASSERT_EQUAL_64(0xfffffffeUL, x21);
+  ASSERT_EQUAL_64(0xfffffffffffffffeUL, x22);
+  ASSERT_EQUAL_64(0xffffffff00000001UL, x23);
   ASSERT_EQUAL_64(0, x24);
-  ASSERT_EQUAL_64(UINT64_C(0x200000000), x25);
-  ASSERT_EQUAL_64(UINT64_C(0x1fffffffe), x26);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffffffffffe), x27);
+  ASSERT_EQUAL_64(0x200000000UL, x25);
+  ASSERT_EQUAL_64(0x1fffffffeUL, x26);
+  ASSERT_EQUAL_64(0xfffffffffffffffeUL, x27);
 
   TEARDOWN();
 }
@@ -1249,14 +1249,14 @@ TEST(smulh) {
   START();
   __ Mov(x20, 0);
   __ Mov(x21, 1);
-  __ Mov(x22, INT64_C(0x0000000100000000));
+  __ Mov(x22, 0x0000000100000000L);
   __ Mov(x23, 0x12345678);
-  __ Mov(x24, INT64_C(0x0123456789abcdef));
-  __ Mov(x25, INT64_C(0x0000000200000000));
-  __ Mov(x26, UINT64_C(0x8000000000000000));
-  __ Mov(x27, UINT64_C(0xffffffffffffffff));
-  __ Mov(x28, UINT64_C(0x5555555555555555));
-  __ Mov(x29, UINT64_C(0xaaaaaaaaaaaaaaaa));
+  __ Mov(x24, 0x0123456789abcdefL);
+  __ Mov(x25, 0x0000000200000000L);
+  __ Mov(x26, 0x8000000000000000UL);
+  __ Mov(x27, 0xffffffffffffffffUL);
+  __ Mov(x28, 0x5555555555555555UL);
+  __ Mov(x29, 0xaaaaaaaaaaaaaaaaUL);
 
   __ Smulh(x0, x20, x24);
   __ Smulh(x1, x21, x24);
@@ -1279,13 +1279,13 @@ TEST(smulh) {
   ASSERT_EQUAL_64(0, x2);
   ASSERT_EQUAL_64(0x01234567, x3);
   ASSERT_EQUAL_64(0x02468acf, x4);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffffffffffff), x5);
-  ASSERT_EQUAL_64(UINT64_C(0x4000000000000000), x6);
+  ASSERT_EQUAL_64(0xffffffffffffffffUL, x5);
+  ASSERT_EQUAL_64(0x4000000000000000UL, x6);
   ASSERT_EQUAL_64(0, x7);
   ASSERT_EQUAL_64(0, x8);
-  ASSERT_EQUAL_64(UINT64_C(0x1c71c71c71c71c71), x9);
-  ASSERT_EQUAL_64(UINT64_C(0xe38e38e38e38e38e), x10);
-  ASSERT_EQUAL_64(UINT64_C(0x1c71c71c71c71c72), x11);
+  ASSERT_EQUAL_64(0x1c71c71c71c71c71UL, x9);
+  ASSERT_EQUAL_64(0xe38e38e38e38e38eUL, x10);
+  ASSERT_EQUAL_64(0x1c71c71c71c71c72UL, x11);
 
   TEARDOWN();
 }
@@ -1297,9 +1297,9 @@ TEST(smaddl_umaddl) {
   START();
   __ Mov(x17, 1);
   __ Mov(x18, 0xffffffff);
-  __ Mov(x19, UINT64_C(0xffffffffffffffff));
+  __ Mov(x19, 0xffffffffffffffffUL);
   __ Mov(x20, 4);
-  __ Mov(x21, UINT64_C(0x200000000));
+  __ Mov(x21, 0x200000000UL);
 
   __ Smaddl(x9, w17, w18, x20);
   __ Smaddl(x10, w18, w18, x20);
@@ -1316,10 +1316,10 @@ TEST(smaddl_umaddl) {
   ASSERT_EQUAL_64(3, x9);
   ASSERT_EQUAL_64(5, x10);
   ASSERT_EQUAL_64(5, x11);
-  ASSERT_EQUAL_64(UINT64_C(0x200000001), x12);
-  ASSERT_EQUAL_64(UINT64_C(0x100000003), x13);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffe00000005), x14);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffe00000005), x15);
+  ASSERT_EQUAL_64(0x200000001UL, x12);
+  ASSERT_EQUAL_64(0x100000003UL, x13);
+  ASSERT_EQUAL_64(0xfffffffe00000005UL, x14);
+  ASSERT_EQUAL_64(0xfffffffe00000005UL, x15);
   ASSERT_EQUAL_64(0x1, x22);
 
   TEARDOWN();
@@ -1332,9 +1332,9 @@ TEST(smsubl_umsubl) {
   START();
   __ Mov(x17, 1);
   __ Mov(x18, 0xffffffff);
-  __ Mov(x19, UINT64_C(0xffffffffffffffff));
+  __ Mov(x19, 0xffffffffffffffffUL);
   __ Mov(x20, 4);
-  __ Mov(x21, UINT64_C(0x200000000));
+  __ Mov(x21, 0x200000000UL);
 
   __ Smsubl(x9, w17, w18, x20);
   __ Smsubl(x10, w18, w18, x20);
@@ -1351,11 +1351,11 @@ TEST(smsubl_umsubl) {
   ASSERT_EQUAL_64(5, x9);
   ASSERT_EQUAL_64(3, x10);
   ASSERT_EQUAL_64(3, x11);
-  ASSERT_EQUAL_64(UINT64_C(0x1ffffffff), x12);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffff00000005), x13);
-  ASSERT_EQUAL_64(UINT64_C(0x200000003), x14);
-  ASSERT_EQUAL_64(UINT64_C(0x200000003), x15);
-  ASSERT_EQUAL_64(UINT64_C(0x3ffffffff), x22);
+  ASSERT_EQUAL_64(0x1ffffffffUL, x12);
+  ASSERT_EQUAL_64(0xffffffff00000005UL, x13);
+  ASSERT_EQUAL_64(0x200000003UL, x14);
+  ASSERT_EQUAL_64(0x200000003UL, x15);
+  ASSERT_EQUAL_64(0x3ffffffffUL, x22);
 
   TEARDOWN();
 }
@@ -1367,9 +1367,9 @@ TEST(div) {
   START();
   __ Mov(x16, 1);
   __ Mov(x17, 0xffffffff);
-  __ Mov(x18, UINT64_C(0xffffffffffffffff));
+  __ Mov(x18, 0xffffffffffffffffUL);
   __ Mov(x19, 0x80000000);
-  __ Mov(x20, UINT64_C(0x8000000000000000));
+  __ Mov(x20, 0x8000000000000000UL);
   __ Mov(x21, 2);
 
   __ Udiv(w0, w16, w16);
@@ -1419,20 +1419,20 @@ TEST(div) {
   ASSERT_EQUAL_64(0, x6);
   ASSERT_EQUAL_64(1, x7);
   ASSERT_EQUAL_64(0, x8);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffff00000001), x9);
+  ASSERT_EQUAL_64(0xffffffff00000001UL, x9);
   ASSERT_EQUAL_64(0x40000000, x10);
   ASSERT_EQUAL_64(0xC0000000, x11);
   ASSERT_EQUAL_64(0x40000000, x12);
   ASSERT_EQUAL_64(0x40000000, x13);
-  ASSERT_EQUAL_64(UINT64_C(0x4000000000000000), x14);
-  ASSERT_EQUAL_64(UINT64_C(0xC000000000000000), x15);
+  ASSERT_EQUAL_64(0x4000000000000000UL, x14);
+  ASSERT_EQUAL_64(0xC000000000000000UL, x15);
   ASSERT_EQUAL_64(0, x22);
   ASSERT_EQUAL_64(0x80000000, x23);
   ASSERT_EQUAL_64(0, x24);
-  ASSERT_EQUAL_64(UINT64_C(0x8000000000000000), x25);
+  ASSERT_EQUAL_64(0x8000000000000000UL, x25);
   ASSERT_EQUAL_64(0, x26);
   ASSERT_EQUAL_64(0, x27);
-  ASSERT_EQUAL_64(UINT64_C(0x7fffffffffffffff), x28);
+  ASSERT_EQUAL_64(0x7fffffffffffffffUL, x28);
   ASSERT_EQUAL_64(0, x29);
   ASSERT_EQUAL_64(0, x18);
   ASSERT_EQUAL_64(0, x19);
@@ -1447,7 +1447,7 @@ TEST(rbit_rev) {
   SETUP();
 
   START();
-  __ Mov(x24, UINT64_C(0xfedcba9876543210));
+  __ Mov(x24, 0xfedcba9876543210UL);
   __ Rbit(w0, w24);
   __ Rbit(x1, x24);
   __ Rev16(w2, w24);
@@ -1460,12 +1460,12 @@ TEST(rbit_rev) {
   RUN();
 
   ASSERT_EQUAL_64(0x084c2a6e, x0);
-  ASSERT_EQUAL_64(UINT64_C(0x084c2a6e195d3b7f), x1);
+  ASSERT_EQUAL_64(0x084c2a6e195d3b7fUL, x1);
   ASSERT_EQUAL_64(0x54761032, x2);
-  ASSERT_EQUAL_64(UINT64_C(0xdcfe98ba54761032), x3);
+  ASSERT_EQUAL_64(0xdcfe98ba54761032UL, x3);
   ASSERT_EQUAL_64(0x10325476, x4);
-  ASSERT_EQUAL_64(UINT64_C(0x98badcfe10325476), x5);
-  ASSERT_EQUAL_64(UINT64_C(0x1032547698badcfe), x6);
+  ASSERT_EQUAL_64(0x98badcfe10325476UL, x5);
+  ASSERT_EQUAL_64(0x1032547698badcfeUL, x6);
 
   TEARDOWN();
 }
@@ -1475,8 +1475,8 @@ TEST(clz_cls) {
   SETUP();
 
   START();
-  __ Mov(x24, UINT64_C(0x0008000000800000));
-  __ Mov(x25, UINT64_C(0xff800000fff80000));
+  __ Mov(x24, 0x0008000000800000UL);
+  __ Mov(x25, 0xff800000fff80000UL);
   __ Mov(x26, 0);
   __ Clz(w0, w24);
   __ Clz(x1, x24);
@@ -1602,7 +1602,7 @@ TEST(branch_cond) {
   START();
   __ Mov(x0, 0x1);
   __ Mov(x1, 0x1);
-  __ Mov(x2, INT64_C(0x8000000000000000));
+  __ Mov(x2, 0x8000000000000000L);
 
   // For each 'cmp' instruction below, condition codes other than the ones
   // following it would branch.
@@ -1772,7 +1772,7 @@ TEST(compare_branch) {
   __ Mov(x3, 1);
   __ Bind(&nzf_end);
 
-  __ Mov(x18, UINT64_C(0xffffffff00000000));
+  __ Mov(x18, 0xffffffff00000000UL);
 
   Label a, a_end;
   __ Cbz(w18, &a);
@@ -1811,7 +1811,7 @@ TEST(test_branch) {
   __ Mov(x1, 0);
   __ Mov(x2, 0);
   __ Mov(x3, 0);
-  __ Mov(x16, UINT64_C(0xaaaaaaaaaaaaaaaa));
+  __ Mov(x16, 0xaaaaaaaaaaaaaaaaUL);
 
   Label bz, bz_end;
   __ Tbz(w16, 0, &bz);
@@ -1856,7 +1856,7 @@ TEST(test_branch) {
 TEST(ldr_str_offset) {
   SETUP();
 
-  uint64_t src[2] = {UINT64_C(0xfedcba9876543210), UINT64_C(0x0123456789abcdef)};
+  uint64_t src[2] = {0xfedcba9876543210UL, 0x0123456789abcdefUL};
   uint64_t dst[5] = {0, 0, 0, 0, 0};
   uintptr_t src_base = reinterpret_cast<uintptr_t>(src);
   uintptr_t dst_base = reinterpret_cast<uintptr_t>(dst);
@@ -1881,9 +1881,9 @@ TEST(ldr_str_offset) {
   ASSERT_EQUAL_64(0x76543210, x0);
   ASSERT_EQUAL_64(0x76543210, dst[0]);
   ASSERT_EQUAL_64(0xfedcba98, x1);
-  ASSERT_EQUAL_64(UINT64_C(0xfedcba9800000000), dst[1]);
-  ASSERT_EQUAL_64(UINT64_C(0x0123456789abcdef), x2);
-  ASSERT_EQUAL_64(UINT64_C(0x0123456789abcdef), dst[2]);
+  ASSERT_EQUAL_64(0xfedcba9800000000UL, dst[1]);
+  ASSERT_EQUAL_64(0x0123456789abcdefUL, x2);
+  ASSERT_EQUAL_64(0x0123456789abcdefUL, dst[2]);
   ASSERT_EQUAL_64(0x32, x3);
   ASSERT_EQUAL_64(0x3200, dst[3]);
   ASSERT_EQUAL_64(0x7654, x4);
@@ -1946,7 +1946,7 @@ TEST(ldr_str_wide) {
 TEST(ldr_str_preindex) {
   SETUP();
 
-  uint64_t src[2] = {UINT64_C(0xfedcba9876543210), UINT64_C(0x0123456789abcdef)};
+  uint64_t src[2] = {0xfedcba9876543210UL, 0x0123456789abcdefUL};
   uint64_t dst[6] = {0, 0, 0, 0, 0, 0};
   uintptr_t src_base = reinterpret_cast<uintptr_t>(src);
   uintptr_t dst_base = reinterpret_cast<uintptr_t>(dst);
@@ -1977,11 +1977,11 @@ TEST(ldr_str_preindex) {
   RUN();
 
   ASSERT_EQUAL_64(0xfedcba98, x0);
-  ASSERT_EQUAL_64(UINT64_C(0xfedcba9800000000), dst[1]);
-  ASSERT_EQUAL_64(UINT64_C(0x0123456789abcdef), x1);
-  ASSERT_EQUAL_64(UINT64_C(0x0123456789abcdef), dst[2]);
+  ASSERT_EQUAL_64(0xfedcba9800000000UL, dst[1]);
+  ASSERT_EQUAL_64(0x0123456789abcdefUL, x1);
+  ASSERT_EQUAL_64(0x0123456789abcdefUL, dst[2]);
   ASSERT_EQUAL_64(0x01234567, x2);
-  ASSERT_EQUAL_64(UINT64_C(0x0123456700000000), dst[4]);
+  ASSERT_EQUAL_64(0x0123456700000000UL, dst[4]);
   ASSERT_EQUAL_64(0x32, x3);
   ASSERT_EQUAL_64(0x3200, dst[3]);
   ASSERT_EQUAL_64(0x9876, x4);
@@ -2004,7 +2004,7 @@ TEST(ldr_str_preindex) {
 TEST(ldr_str_postindex) {
   SETUP();
 
-  uint64_t src[2] = {UINT64_C(0xfedcba9876543210), UINT64_C(0x0123456789abcdef)};
+  uint64_t src[2] = {0xfedcba9876543210UL, 0x0123456789abcdefUL};
   uint64_t dst[6] = {0, 0, 0, 0, 0, 0};
   uintptr_t src_base = reinterpret_cast<uintptr_t>(src);
   uintptr_t dst_base = reinterpret_cast<uintptr_t>(dst);
@@ -2035,11 +2035,11 @@ TEST(ldr_str_postindex) {
   RUN();
 
   ASSERT_EQUAL_64(0xfedcba98, x0);
-  ASSERT_EQUAL_64(UINT64_C(0xfedcba9800000000), dst[1]);
-  ASSERT_EQUAL_64(UINT64_C(0x0123456789abcdef), x1);
-  ASSERT_EQUAL_64(UINT64_C(0x0123456789abcdef), dst[2]);
-  ASSERT_EQUAL_64(UINT64_C(0x0123456789abcdef), x2);
-  ASSERT_EQUAL_64(UINT64_C(0x0123456789abcdef), dst[4]);
+  ASSERT_EQUAL_64(0xfedcba9800000000UL, dst[1]);
+  ASSERT_EQUAL_64(0x0123456789abcdefUL, x1);
+  ASSERT_EQUAL_64(0x0123456789abcdefUL, dst[2]);
+  ASSERT_EQUAL_64(0x0123456789abcdefUL, x2);
+  ASSERT_EQUAL_64(0x0123456789abcdefUL, dst[4]);
   ASSERT_EQUAL_64(0x32, x3);
   ASSERT_EQUAL_64(0x3200, dst[3]);
   ASSERT_EQUAL_64(0x9876, x4);
@@ -2130,12 +2130,12 @@ TEST(load_signed) {
   ASSERT_EQUAL_64(0x0000007f, x1);
   ASSERT_EQUAL_64(0xffff8080, x2);
   ASSERT_EQUAL_64(0x00007f7f, x3);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffffffffff80), x4);
-  ASSERT_EQUAL_64(UINT64_C(0x000000000000007f), x5);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffffffff8080), x6);
-  ASSERT_EQUAL_64(UINT64_C(0x0000000000007f7f), x7);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffff80008080), x8);
-  ASSERT_EQUAL_64(UINT64_C(0x000000007fff7f7f), x9);
+  ASSERT_EQUAL_64(0xffffffffffffff80UL, x4);
+  ASSERT_EQUAL_64(0x000000000000007fUL, x5);
+  ASSERT_EQUAL_64(0xffffffffffff8080UL, x6);
+  ASSERT_EQUAL_64(0x0000000000007f7fUL, x7);
+  ASSERT_EQUAL_64(0xffffffff80008080UL, x8);
+  ASSERT_EQUAL_64(0x000000007fff7f7fUL, x9);
 
   TEARDOWN();
 }
@@ -2175,7 +2175,7 @@ TEST(load_store_regoffset) {
   RUN();
 
   ASSERT_EQUAL_64(1, x0);
-  ASSERT_EQUAL_64(UINT64_C(0x0000000300000002), x1);
+  ASSERT_EQUAL_64(0x0000000300000002UL, x1);
   ASSERT_EQUAL_64(3, x2);
   ASSERT_EQUAL_64(3, x3);
   ASSERT_EQUAL_64(2, x4);
@@ -2333,8 +2333,8 @@ TEST(ldp_stp_double) {
 TEST(ldp_stp_offset) {
   SETUP();
 
-  uint64_t src[3] = {UINT64_C(0x0011223344556677), UINT64_C(0x8899aabbccddeeff),
-                     UINT64_C(0xffeeddccbbaa9988)};
+  uint64_t src[3] = {0x0011223344556677UL, 0x8899aabbccddeeffUL,
+                     0xffeeddccbbaa9988UL};
   uint64_t dst[7] = {0, 0, 0, 0, 0, 0, 0};
   uintptr_t src_base = reinterpret_cast<uintptr_t>(src);
   uintptr_t dst_base = reinterpret_cast<uintptr_t>(dst);
@@ -2360,21 +2360,21 @@ TEST(ldp_stp_offset) {
 
   ASSERT_EQUAL_64(0x44556677, x0);
   ASSERT_EQUAL_64(0x00112233, x1);
-  ASSERT_EQUAL_64(UINT64_C(0x0011223344556677), dst[0]);
+  ASSERT_EQUAL_64(0x0011223344556677UL, dst[0]);
   ASSERT_EQUAL_64(0x00112233, x2);
   ASSERT_EQUAL_64(0xccddeeff, x3);
-  ASSERT_EQUAL_64(UINT64_C(0xccddeeff00112233), dst[1]);
-  ASSERT_EQUAL_64(UINT64_C(0x8899aabbccddeeff), x4);
-  ASSERT_EQUAL_64(UINT64_C(0x8899aabbccddeeff), dst[2]);
-  ASSERT_EQUAL_64(UINT64_C(0xffeeddccbbaa9988), x5);
-  ASSERT_EQUAL_64(UINT64_C(0xffeeddccbbaa9988), dst[3]);
+  ASSERT_EQUAL_64(0xccddeeff00112233UL, dst[1]);
+  ASSERT_EQUAL_64(0x8899aabbccddeeffUL, x4);
+  ASSERT_EQUAL_64(0x8899aabbccddeeffUL, dst[2]);
+  ASSERT_EQUAL_64(0xffeeddccbbaa9988UL, x5);
+  ASSERT_EQUAL_64(0xffeeddccbbaa9988UL, dst[3]);
   ASSERT_EQUAL_64(0x8899aabb, x6);
   ASSERT_EQUAL_64(0xbbaa9988, x7);
-  ASSERT_EQUAL_64(UINT64_C(0xbbaa99888899aabb), dst[4]);
-  ASSERT_EQUAL_64(UINT64_C(0x8899aabbccddeeff), x8);
-  ASSERT_EQUAL_64(UINT64_C(0x8899aabbccddeeff), dst[5]);
-  ASSERT_EQUAL_64(UINT64_C(0xffeeddccbbaa9988), x9);
-  ASSERT_EQUAL_64(UINT64_C(0xffeeddccbbaa9988), dst[6]);
+  ASSERT_EQUAL_64(0xbbaa99888899aabbUL, dst[4]);
+  ASSERT_EQUAL_64(0x8899aabbccddeeffUL, x8);
+  ASSERT_EQUAL_64(0x8899aabbccddeeffUL, dst[5]);
+  ASSERT_EQUAL_64(0xffeeddccbbaa9988UL, x9);
+  ASSERT_EQUAL_64(0xffeeddccbbaa9988UL, dst[6]);
   ASSERT_EQUAL_64(src_base, x16);
   ASSERT_EQUAL_64(dst_base, x17);
   ASSERT_EQUAL_64(src_base + 24, x18);
@@ -2387,8 +2387,8 @@ TEST(ldp_stp_offset) {
 TEST(ldnp_stnp_offset) {
   SETUP();
 
-  uint64_t src[3] = {UINT64_C(0x0011223344556677), UINT64_C(0x8899aabbccddeeff),
-                     UINT64_C(0xffeeddccbbaa9988)};
+  uint64_t src[3] = {0x0011223344556677UL, 0x8899aabbccddeeffUL,
+                     0xffeeddccbbaa9988UL};
   uint64_t dst[7] = {0, 0, 0, 0, 0, 0, 0};
   uintptr_t src_base = reinterpret_cast<uintptr_t>(src);
   uintptr_t dst_base = reinterpret_cast<uintptr_t>(dst);
@@ -2414,21 +2414,21 @@ TEST(ldnp_stnp_offset) {
 
   ASSERT_EQUAL_64(0x44556677, x0);
   ASSERT_EQUAL_64(0x00112233, x1);
-  ASSERT_EQUAL_64(UINT64_C(0x0011223344556677), dst[0]);
+  ASSERT_EQUAL_64(0x0011223344556677UL, dst[0]);
   ASSERT_EQUAL_64(0x00112233, x2);
   ASSERT_EQUAL_64(0xccddeeff, x3);
-  ASSERT_EQUAL_64(UINT64_C(0xccddeeff00112233), dst[1]);
-  ASSERT_EQUAL_64(UINT64_C(0x8899aabbccddeeff), x4);
-  ASSERT_EQUAL_64(UINT64_C(0x8899aabbccddeeff), dst[2]);
-  ASSERT_EQUAL_64(UINT64_C(0xffeeddccbbaa9988), x5);
-  ASSERT_EQUAL_64(UINT64_C(0xffeeddccbbaa9988), dst[3]);
+  ASSERT_EQUAL_64(0xccddeeff00112233UL, dst[1]);
+  ASSERT_EQUAL_64(0x8899aabbccddeeffUL, x4);
+  ASSERT_EQUAL_64(0x8899aabbccddeeffUL, dst[2]);
+  ASSERT_EQUAL_64(0xffeeddccbbaa9988UL, x5);
+  ASSERT_EQUAL_64(0xffeeddccbbaa9988UL, dst[3]);
   ASSERT_EQUAL_64(0x8899aabb, x6);
   ASSERT_EQUAL_64(0xbbaa9988, x7);
-  ASSERT_EQUAL_64(UINT64_C(0xbbaa99888899aabb), dst[4]);
-  ASSERT_EQUAL_64(UINT64_C(0x8899aabbccddeeff), x8);
-  ASSERT_EQUAL_64(UINT64_C(0x8899aabbccddeeff), dst[5]);
-  ASSERT_EQUAL_64(UINT64_C(0xffeeddccbbaa9988), x9);
-  ASSERT_EQUAL_64(UINT64_C(0xffeeddccbbaa9988), dst[6]);
+  ASSERT_EQUAL_64(0xbbaa99888899aabbUL, dst[4]);
+  ASSERT_EQUAL_64(0x8899aabbccddeeffUL, x8);
+  ASSERT_EQUAL_64(0x8899aabbccddeeffUL, dst[5]);
+  ASSERT_EQUAL_64(0xffeeddccbbaa9988UL, x9);
+  ASSERT_EQUAL_64(0xffeeddccbbaa9988UL, dst[6]);
   ASSERT_EQUAL_64(src_base, x16);
   ASSERT_EQUAL_64(dst_base, x17);
   ASSERT_EQUAL_64(src_base + 24, x18);
@@ -2441,8 +2441,8 @@ TEST(ldnp_stnp_offset) {
 TEST(ldp_stp_preindex) {
   SETUP();
 
-  uint64_t src[3] = {UINT64_C(0x0011223344556677), UINT64_C(0x8899aabbccddeeff),
-                     UINT64_C(0xffeeddccbbaa9988)};
+  uint64_t src[3] = {0x0011223344556677UL, 0x8899aabbccddeeffUL,
+                     0xffeeddccbbaa9988UL};
   uint64_t dst[5] = {0, 0, 0, 0, 0};
   uintptr_t src_base = reinterpret_cast<uintptr_t>(src);
   uintptr_t dst_base = reinterpret_cast<uintptr_t>(dst);
@@ -2471,15 +2471,15 @@ TEST(ldp_stp_preindex) {
   ASSERT_EQUAL_64(0xccddeeff, x1);
   ASSERT_EQUAL_64(0x44556677, x2);
   ASSERT_EQUAL_64(0x00112233, x3);
-  ASSERT_EQUAL_64(UINT64_C(0xccddeeff00112233), dst[0]);
-  ASSERT_EQUAL_64(UINT64_C(0x0000000000112233), dst[1]);
-  ASSERT_EQUAL_64(UINT64_C(0x8899aabbccddeeff), x4);
-  ASSERT_EQUAL_64(UINT64_C(0xffeeddccbbaa9988), x5);
-  ASSERT_EQUAL_64(UINT64_C(0x0011223344556677), x6);
-  ASSERT_EQUAL_64(UINT64_C(0x8899aabbccddeeff), x7);
-  ASSERT_EQUAL_64(UINT64_C(0xffeeddccbbaa9988), dst[2]);
-  ASSERT_EQUAL_64(UINT64_C(0x8899aabbccddeeff), dst[3]);
-  ASSERT_EQUAL_64(UINT64_C(0x0011223344556677), dst[4]);
+  ASSERT_EQUAL_64(0xccddeeff00112233UL, dst[0]);
+  ASSERT_EQUAL_64(0x0000000000112233UL, dst[1]);
+  ASSERT_EQUAL_64(0x8899aabbccddeeffUL, x4);
+  ASSERT_EQUAL_64(0xffeeddccbbaa9988UL, x5);
+  ASSERT_EQUAL_64(0x0011223344556677UL, x6);
+  ASSERT_EQUAL_64(0x8899aabbccddeeffUL, x7);
+  ASSERT_EQUAL_64(0xffeeddccbbaa9988UL, dst[2]);
+  ASSERT_EQUAL_64(0x8899aabbccddeeffUL, dst[3]);
+  ASSERT_EQUAL_64(0x0011223344556677UL, dst[4]);
   ASSERT_EQUAL_64(src_base, x16);
   ASSERT_EQUAL_64(dst_base, x17);
   ASSERT_EQUAL_64(dst_base + 16, x18);
@@ -2495,8 +2495,8 @@ TEST(ldp_stp_preindex) {
 TEST(ldp_stp_postindex) {
   SETUP();
 
-  uint64_t src[4] = {UINT64_C(0x0011223344556677), UINT64_C(0x8899aabbccddeeff),
-                     UINT64_C(0xffeeddccbbaa9988), UINT64_C(0x7766554433221100)};
+  uint64_t src[4] = {0x0011223344556677UL, 0x8899aabbccddeeffUL,
+                     0xffeeddccbbaa9988UL, 0x7766554433221100UL};
   uint64_t dst[5] = {0, 0, 0, 0, 0};
   uintptr_t src_base = reinterpret_cast<uintptr_t>(src);
   uintptr_t dst_base = reinterpret_cast<uintptr_t>(dst);
@@ -2525,15 +2525,15 @@ TEST(ldp_stp_postindex) {
   ASSERT_EQUAL_64(0x00112233, x1);
   ASSERT_EQUAL_64(0x00112233, x2);
   ASSERT_EQUAL_64(0xccddeeff, x3);
-  ASSERT_EQUAL_64(UINT64_C(0x4455667700112233), dst[0]);
-  ASSERT_EQUAL_64(UINT64_C(0x0000000000112233), dst[1]);
-  ASSERT_EQUAL_64(UINT64_C(0x0011223344556677), x4);
-  ASSERT_EQUAL_64(UINT64_C(0x8899aabbccddeeff), x5);
-  ASSERT_EQUAL_64(UINT64_C(0x8899aabbccddeeff), x6);
-  ASSERT_EQUAL_64(UINT64_C(0xffeeddccbbaa9988), x7);
-  ASSERT_EQUAL_64(UINT64_C(0xffeeddccbbaa9988), dst[2]);
-  ASSERT_EQUAL_64(UINT64_C(0x8899aabbccddeeff), dst[3]);
-  ASSERT_EQUAL_64(UINT64_C(0x0011223344556677), dst[4]);
+  ASSERT_EQUAL_64(0x4455667700112233UL, dst[0]);
+  ASSERT_EQUAL_64(0x0000000000112233UL, dst[1]);
+  ASSERT_EQUAL_64(0x0011223344556677UL, x4);
+  ASSERT_EQUAL_64(0x8899aabbccddeeffUL, x5);
+  ASSERT_EQUAL_64(0x8899aabbccddeeffUL, x6);
+  ASSERT_EQUAL_64(0xffeeddccbbaa9988UL, x7);
+  ASSERT_EQUAL_64(0xffeeddccbbaa9988UL, dst[2]);
+  ASSERT_EQUAL_64(0x8899aabbccddeeffUL, dst[3]);
+  ASSERT_EQUAL_64(0x0011223344556677UL, dst[4]);
   ASSERT_EQUAL_64(src_base, x16);
   ASSERT_EQUAL_64(dst_base, x17);
   ASSERT_EQUAL_64(dst_base + 16, x18);
@@ -2559,8 +2559,8 @@ TEST(ldp_sign_extend) {
 
   RUN();
 
-  ASSERT_EQUAL_64(UINT64_C(0xffffffff80000000), x0);
-  ASSERT_EQUAL_64(UINT64_C(0x000000007fffffff), x1);
+  ASSERT_EQUAL_64(0xffffffff80000000UL, x0);
+  ASSERT_EQUAL_64(0x000000007fffffffUL, x1);
 
   TEARDOWN();
 }
@@ -2569,7 +2569,7 @@ TEST(ldp_sign_extend) {
 TEST(ldur_stur) {
   SETUP();
 
-  int64_t src[2] = {UINT64_C(0x0123456789abcdef), UINT64_C(0x0123456789abcdef)};
+  int64_t src[2] = {0x0123456789abcdefUL, 0x0123456789abcdefUL};
   int64_t dst[5] = {0, 0, 0, 0, 0};
   uintptr_t src_base = reinterpret_cast<uintptr_t>(src);
   uintptr_t dst_base = reinterpret_cast<uintptr_t>(dst);
@@ -2593,14 +2593,14 @@ TEST(ldur_stur) {
   RUN();
 
   ASSERT_EQUAL_64(0x6789abcd, x0);
-  ASSERT_EQUAL_64(INT64_C(0x6789abcd0000), dst[0]);
-  ASSERT_EQUAL_64(INT64_C(0xabcdef0123456789), x1);
-  ASSERT_EQUAL_64(INT64_C(0xcdef012345678900), dst[1]);
+  ASSERT_EQUAL_64(0x6789abcd0000L, dst[0]);
+  ASSERT_EQUAL_64(0xabcdef0123456789L, x1);
+  ASSERT_EQUAL_64(0xcdef012345678900L, dst[1]);
   ASSERT_EQUAL_64(0x000000ab, dst[2]);
   ASSERT_EQUAL_64(0xabcdef01, x2);
-  ASSERT_EQUAL_64(INT64_C(0x00abcdef01000000), dst[3]);
+  ASSERT_EQUAL_64(0x00abcdef01000000L, dst[3]);
   ASSERT_EQUAL_64(0x00000001, x3);
-  ASSERT_EQUAL_64(INT64_C(0x0100000000000000), dst[4]);
+  ASSERT_EQUAL_64(0x0100000000000000L, dst[4]);
   ASSERT_EQUAL_64(src_base, x17);
   ASSERT_EQUAL_64(dst_base, x18);
   ASSERT_EQUAL_64(src_base + 16, x19);
@@ -2614,7 +2614,7 @@ TEST(ldr_literal) {
   SETUP();
 
   START();
-  __ Ldr(x2, UINT64_C(0x1234567890abcdef));
+  __ Ldr(x2, 0x1234567890abcdefUL);
   __ Ldr(w3, 0xfedcba09);
   __ Ldr(d13, 1.234);
   __ Ldr(s25, 2.5);
@@ -2622,7 +2622,7 @@ TEST(ldr_literal) {
 
   RUN();
 
-  ASSERT_EQUAL_64(UINT64_C(0x1234567890abcdef), x2);
+  ASSERT_EQUAL_64(0x1234567890abcdefUL, x2);
   ASSERT_EQUAL_64(0xfedcba09, x3);
   ASSERT_EQUAL_FP64(1.234, d13);
   ASSERT_EQUAL_FP32(2.5, s25);
@@ -2634,7 +2634,7 @@ TEST(ldr_literal) {
 static void LdrLiteralRangeHelper(ptrdiff_t range_,
                                   LiteralPoolEmitOption option,
                                   bool expect_dump) {
-  VIXL_ASSERT(range_ > 0);
+  ASSERT(range_ > 0);
   SETUP_SIZE(range_ + 1024);
 
   Label label_1, label_2;
@@ -2655,7 +2655,7 @@ static void LdrLiteralRangeHelper(ptrdiff_t range_,
   __ EmitLiteralPool(JumpRequired);
   ASSERT_LITERAL_POOL_SIZE(0);
 
-  __ Ldr(x0, UINT64_C(0x1234567890abcdef));
+  __ Ldr(x0, 0x1234567890abcdefUL);
   __ Ldr(w1, 0xfedcba09);
   __ Ldr(d0, 1.234);
   __ Ldr(s1, 2.5);
@@ -2665,7 +2665,7 @@ static void LdrLiteralRangeHelper(ptrdiff_t range_,
 
   // Check that the requested range (allowing space for a branch over the pool)
   // can be handled by this test.
-  VIXL_ASSERT((code_size + pool_guard_size) <= range);
+  ASSERT((code_size + pool_guard_size) <= range);
 
   // Emit NOPs up to 'range', leaving space for the pool guard.
   while ((code_size + pool_guard_size) < range) {
@@ -2679,7 +2679,7 @@ static void LdrLiteralRangeHelper(ptrdiff_t range_,
     code_size += sizeof(Instr);
   }
 
-  VIXL_ASSERT(code_size == range);
+  ASSERT(code_size == range);
   ASSERT_LITERAL_POOL_SIZE(24);
 
   // Possibly generate a literal pool.
@@ -2696,7 +2696,7 @@ static void LdrLiteralRangeHelper(ptrdiff_t range_,
   ASSERT_LITERAL_POOL_SIZE(0);
 
   // These loads should be after the pool (and will require a new one).
-  __ Ldr(x4, UINT64_C(0x34567890abcdef12));
+  __ Ldr(x4, 0x34567890abcdef12UL);
   __ Ldr(w5, 0xdcba09fe);
   __ Ldr(d4, 123.4);
   __ Ldr(s5, 250.0);
@@ -2706,11 +2706,11 @@ static void LdrLiteralRangeHelper(ptrdiff_t range_,
   RUN();
 
   // Check that the literals loaded correctly.
-  ASSERT_EQUAL_64(UINT64_C(0x1234567890abcdef), x0);
+  ASSERT_EQUAL_64(0x1234567890abcdefUL, x0);
   ASSERT_EQUAL_64(0xfedcba09, x1);
   ASSERT_EQUAL_FP64(1.234, d0);
   ASSERT_EQUAL_FP32(2.5, s1);
-  ASSERT_EQUAL_64(UINT64_C(0x34567890abcdef12), x4);
+  ASSERT_EQUAL_64(0x34567890abcdef12UL, x4);
   ASSERT_EQUAL_64(0xdcba09fe, x5);
   ASSERT_EQUAL_FP64(123.4, d4);
   ASSERT_EQUAL_FP32(250.0, s5);
@@ -2767,8 +2767,8 @@ TEST(add_sub_imm) {
   START();
   __ Mov(x0, 0x0);
   __ Mov(x1, 0x1111);
-  __ Mov(x2, INT64_C(0xffffffffffffffff));
-  __ Mov(x3, INT64_C(0x8000000000000000));
+  __ Mov(x2, 0xffffffffffffffffL);
+  __ Mov(x3, 0x8000000000000000L);
 
   __ Add(x10, x0, Operand(0x123));
   __ Add(x11, x1, Operand(0x122000));
@@ -2803,10 +2803,10 @@ TEST(add_sub_imm) {
   ASSERT_EQUAL_32(0xabc000, w16);
   ASSERT_EQUAL_32(0x0, w17);
 
-  ASSERT_EQUAL_64(INT64_C(0xffffffffffffffff), x20);
+  ASSERT_EQUAL_64(0xffffffffffffffffL, x20);
   ASSERT_EQUAL_64(0x1000, x21);
   ASSERT_EQUAL_64(0x111, x22);
-  ASSERT_EQUAL_64(INT64_C(0x7fffffffffffffff), x23);
+  ASSERT_EQUAL_64(0x7fffffffffffffffL, x23);
 
   ASSERT_EQUAL_32(0xffffffff, w24);
   ASSERT_EQUAL_32(0x1000, w25);
@@ -2824,26 +2824,26 @@ TEST(add_sub_wide_imm) {
   __ Mov(x0, 0x0);
   __ Mov(x1, 0x1);
 
-  __ Add(x10, x0, Operand(UINT64_C(0x1234567890abcdef)));
+  __ Add(x10, x0, Operand(0x1234567890abcdefUL));
   __ Add(x11, x1, Operand(0xffffffff));
 
   __ Add(w12, w0, Operand(0x12345678));
   __ Add(w13, w1, Operand(0xffffffff));
 
-  __ Sub(x20, x0, Operand(UINT64_C(0x1234567890abcdef)));
+  __ Sub(x20, x0, Operand(0x1234567890abcdefUL));
 
   __ Sub(w21, w0, Operand(0x12345678));
   END();
 
   RUN();
 
-  ASSERT_EQUAL_64(UINT64_C(0x1234567890abcdef), x10);
-  ASSERT_EQUAL_64(UINT64_C(0x100000000), x11);
+  ASSERT_EQUAL_64(0x1234567890abcdefUL, x10);
+  ASSERT_EQUAL_64(0x100000000UL, x11);
 
   ASSERT_EQUAL_32(0x12345678, w12);
   ASSERT_EQUAL_64(0x0, x13);
 
-  ASSERT_EQUAL_64(-UINT64_C(0x1234567890abcdef), x20);
+  ASSERT_EQUAL_64(-0x1234567890abcdefUL, x20);
 
   ASSERT_EQUAL_32(-0x12345678, w21);
 
@@ -2856,9 +2856,9 @@ TEST(add_sub_shifted) {
 
   START();
   __ Mov(x0, 0);
-  __ Mov(x1, INT64_C(0x0123456789abcdef));
-  __ Mov(x2, INT64_C(0xfedcba9876543210));
-  __ Mov(x3, INT64_C(0xffffffffffffffff));
+  __ Mov(x1, 0x0123456789abcdefL);
+  __ Mov(x2, 0xfedcba9876543210L);
+  __ Mov(x3, 0xffffffffffffffffL);
 
   __ Add(x10, x1, Operand(x2));
   __ Add(x11, x0, Operand(x1, LSL, 8));
@@ -2881,23 +2881,23 @@ TEST(add_sub_shifted) {
 
   RUN();
 
-  ASSERT_EQUAL_64(INT64_C(0xffffffffffffffff), x10);
-  ASSERT_EQUAL_64(INT64_C(0x23456789abcdef00), x11);
-  ASSERT_EQUAL_64(INT64_C(0x000123456789abcd), x12);
-  ASSERT_EQUAL_64(INT64_C(0x000123456789abcd), x13);
-  ASSERT_EQUAL_64(INT64_C(0xfffedcba98765432), x14);
+  ASSERT_EQUAL_64(0xffffffffffffffffL, x10);
+  ASSERT_EQUAL_64(0x23456789abcdef00L, x11);
+  ASSERT_EQUAL_64(0x000123456789abcdL, x12);
+  ASSERT_EQUAL_64(0x000123456789abcdL, x13);
+  ASSERT_EQUAL_64(0xfffedcba98765432L, x14);
   ASSERT_EQUAL_64(0xff89abcd, x15);
   ASSERT_EQUAL_64(0xef89abcc, x18);
-  ASSERT_EQUAL_64(INT64_C(0xef0123456789abcc), x19);
+  ASSERT_EQUAL_64(0xef0123456789abccL, x19);
 
-  ASSERT_EQUAL_64(INT64_C(0x0123456789abcdef), x20);
-  ASSERT_EQUAL_64(INT64_C(0xdcba9876543210ff), x21);
-  ASSERT_EQUAL_64(INT64_C(0xfffedcba98765432), x22);
-  ASSERT_EQUAL_64(INT64_C(0xfffedcba98765432), x23);
-  ASSERT_EQUAL_64(INT64_C(0x000123456789abcd), x24);
+  ASSERT_EQUAL_64(0x0123456789abcdefL, x20);
+  ASSERT_EQUAL_64(0xdcba9876543210ffL, x21);
+  ASSERT_EQUAL_64(0xfffedcba98765432L, x22);
+  ASSERT_EQUAL_64(0xfffedcba98765432L, x23);
+  ASSERT_EQUAL_64(0x000123456789abcdL, x24);
   ASSERT_EQUAL_64(0x00765432, x25);
   ASSERT_EQUAL_64(0x10765432, x26);
-  ASSERT_EQUAL_64(INT64_C(0x10fedcba98765432), x27);
+  ASSERT_EQUAL_64(0x10fedcba98765432L, x27);
 
   TEARDOWN();
 }
@@ -2908,8 +2908,8 @@ TEST(add_sub_extended) {
 
   START();
   __ Mov(x0, 0);
-  __ Mov(x1, INT64_C(0x0123456789abcdef));
-  __ Mov(x2, INT64_C(0xfedcba9876543210));
+  __ Mov(x1, 0x0123456789abcdefL);
+  __ Mov(x2, 0xfedcba9876543210L);
   __ Mov(w3, 0x80);
 
   __ Add(x10, x0, Operand(x1, UXTB, 0));
@@ -2942,22 +2942,22 @@ TEST(add_sub_extended) {
 
   RUN();
 
-  ASSERT_EQUAL_64(INT64_C(0xef), x10);
-  ASSERT_EQUAL_64(INT64_C(0x1de), x11);
-  ASSERT_EQUAL_64(INT64_C(0x337bc), x12);
-  ASSERT_EQUAL_64(INT64_C(0x89abcdef0), x13);
+  ASSERT_EQUAL_64(0xefL, x10);
+  ASSERT_EQUAL_64(0x1deL, x11);
+  ASSERT_EQUAL_64(0x337bcL, x12);
+  ASSERT_EQUAL_64(0x89abcdef0L, x13);
 
-  ASSERT_EQUAL_64(INT64_C(0xffffffffffffffef), x14);
-  ASSERT_EQUAL_64(INT64_C(0xffffffffffffffde), x15);
-  ASSERT_EQUAL_64(INT64_C(0xffffffffffff37bc), x16);
-  ASSERT_EQUAL_64(INT64_C(0xfffffffc4d5e6f78), x17);
-  ASSERT_EQUAL_64(INT64_C(0x10), x18);
-  ASSERT_EQUAL_64(INT64_C(0x20), x19);
-  ASSERT_EQUAL_64(INT64_C(0xc840), x20);
-  ASSERT_EQUAL_64(INT64_C(0x3b2a19080), x21);
+  ASSERT_EQUAL_64(0xffffffffffffffefL, x14);
+  ASSERT_EQUAL_64(0xffffffffffffffdeL, x15);
+  ASSERT_EQUAL_64(0xffffffffffff37bcL, x16);
+  ASSERT_EQUAL_64(0xfffffffc4d5e6f78L, x17);
+  ASSERT_EQUAL_64(0x10L, x18);
+  ASSERT_EQUAL_64(0x20L, x19);
+  ASSERT_EQUAL_64(0xc840L, x20);
+  ASSERT_EQUAL_64(0x3b2a19080L, x21);
 
-  ASSERT_EQUAL_64(INT64_C(0x0123456789abce0f), x22);
-  ASSERT_EQUAL_64(INT64_C(0x0123456789abcdcf), x23);
+  ASSERT_EQUAL_64(0x0123456789abce0fL, x22);
+  ASSERT_EQUAL_64(0x0123456789abcdcfL, x23);
 
   ASSERT_EQUAL_32(0x89abce2f, w24);
   ASSERT_EQUAL_32(0xffffffef, w25);
@@ -2965,7 +2965,7 @@ TEST(add_sub_extended) {
   ASSERT_EQUAL_32(0xc3b2a188, w27);
 
   ASSERT_EQUAL_32(0x4d5e6f78, w28);
-  ASSERT_EQUAL_64(INT64_C(0xfffffffc4d5e6f78), x29);
+  ASSERT_EQUAL_64(0xfffffffc4d5e6f78L, x29);
 
   ASSERT_EQUAL_64(256, x30);
 
@@ -3031,17 +3031,17 @@ TEST(add_sub_zero) {
   __ Add(x0, x0, 0);
   __ Sub(x1, x1, 0);
   __ Sub(x2, x2, xzr);
-  VIXL_CHECK(__ SizeOfCodeGeneratedSince(&blob1) == 0);
+  CHECK(__ SizeOfCodeGeneratedSince(&blob1) == 0);
 
   Label blob2;
   __ Bind(&blob2);
   __ Add(w3, w3, 0);
-  VIXL_CHECK(__ SizeOfCodeGeneratedSince(&blob2) != 0);
+  CHECK(__ SizeOfCodeGeneratedSince(&blob2) != 0);
 
   Label blob3;
   __ Bind(&blob3);
   __ Sub(w3, w3, wzr);
-  VIXL_CHECK(__ SizeOfCodeGeneratedSince(&blob3) != 0);
+  CHECK(__ SizeOfCodeGeneratedSince(&blob3) != 0);
 
   END();
 
@@ -3066,7 +3066,7 @@ TEST(claim_drop_zero) {
   __ Drop(Operand(0));
   __ Claim(Operand(xzr));
   __ Drop(Operand(xzr));
-  VIXL_CHECK(__ SizeOfCodeGeneratedSince(&start) == 0);
+  CHECK(__ SizeOfCodeGeneratedSince(&start) == 0);
 
   END();
 
@@ -3080,7 +3080,7 @@ TEST(neg) {
   SETUP();
 
   START();
-  __ Mov(x0, INT64_C(0xf123456789abcdef));
+  __ Mov(x0, 0xf123456789abcdefL);
 
   // Immediate.
   __ Neg(x1, 0x123);
@@ -3105,20 +3105,20 @@ TEST(neg) {
 
   RUN();
 
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffffffffedd), x1);
+  ASSERT_EQUAL_64(0xfffffffffffffeddUL, x1);
   ASSERT_EQUAL_64(0xfffffedd, x2);
-  ASSERT_EQUAL_64(UINT64_C(0x1db97530eca86422), x3);
+  ASSERT_EQUAL_64(0x1db97530eca86422UL, x3);
   ASSERT_EQUAL_64(0xd950c844, x4);
-  ASSERT_EQUAL_64(UINT64_C(0xe1db97530eca8643), x5);
+  ASSERT_EQUAL_64(0xe1db97530eca8643UL, x5);
   ASSERT_EQUAL_64(0xf7654322, x6);
-  ASSERT_EQUAL_64(UINT64_C(0x0076e5d4c3b2a191), x7);
+  ASSERT_EQUAL_64(0x0076e5d4c3b2a191UL, x7);
   ASSERT_EQUAL_64(0x01d950c9, x8);
   ASSERT_EQUAL_64(0xffffff11, x9);
-  ASSERT_EQUAL_64(UINT64_C(0x0000000000000022), x10);
+  ASSERT_EQUAL_64(0x0000000000000022UL, x10);
   ASSERT_EQUAL_64(0xfffcc844, x11);
-  ASSERT_EQUAL_64(UINT64_C(0x0000000000019088), x12);
+  ASSERT_EQUAL_64(0x0000000000019088UL, x12);
   ASSERT_EQUAL_64(0x65432110, x13);
-  ASSERT_EQUAL_64(UINT64_C(0x0000000765432110), x14);
+  ASSERT_EQUAL_64(0x0000000765432110UL, x14);
 
   TEARDOWN();
 }
@@ -3130,9 +3130,9 @@ TEST(adc_sbc_shift) {
   START();
   __ Mov(x0, 0);
   __ Mov(x1, 1);
-  __ Mov(x2, INT64_C(0x0123456789abcdef));
-  __ Mov(x3, INT64_C(0xfedcba9876543210));
-  __ Mov(x4, INT64_C(0xffffffffffffffff));
+  __ Mov(x2, 0x0123456789abcdefL);
+  __ Mov(x3, 0xfedcba9876543210L);
+  __ Mov(x4, 0xffffffffffffffffL);
 
   // Clear the C flag.
   __ Adds(x0, x0, Operand(0));
@@ -3167,11 +3167,11 @@ TEST(adc_sbc_shift) {
 
   RUN();
 
-  ASSERT_EQUAL_64(INT64_C(0xffffffffffffffff), x5);
-  ASSERT_EQUAL_64(INT64_C(1) << 60, x6);
-  ASSERT_EQUAL_64(INT64_C(0xf0123456789abcdd), x7);
-  ASSERT_EQUAL_64(INT64_C(0x0111111111111110), x8);
-  ASSERT_EQUAL_64(INT64_C(0x1222222222222221), x9);
+  ASSERT_EQUAL_64(0xffffffffffffffffL, x5);
+  ASSERT_EQUAL_64(1L << 60, x6);
+  ASSERT_EQUAL_64(0xf0123456789abcddL, x7);
+  ASSERT_EQUAL_64(0x0111111111111110L, x8);
+  ASSERT_EQUAL_64(0x1222222222222221L, x9);
 
   ASSERT_EQUAL_32(0xffffffff, w10);
   ASSERT_EQUAL_32(1 << 30, w11);
@@ -3179,11 +3179,11 @@ TEST(adc_sbc_shift) {
   ASSERT_EQUAL_32(0x91111110, w13);
   ASSERT_EQUAL_32(0x9a222221, w14);
 
-  ASSERT_EQUAL_64(INT64_C(0xffffffffffffffff) + 1, x18);
-  ASSERT_EQUAL_64((INT64_C(1) << 60) + 1, x19);
-  ASSERT_EQUAL_64(INT64_C(0xf0123456789abcdd) + 1, x20);
-  ASSERT_EQUAL_64(INT64_C(0x0111111111111110) + 1, x21);
-  ASSERT_EQUAL_64(INT64_C(0x1222222222222221) + 1, x22);
+  ASSERT_EQUAL_64(0xffffffffffffffffL + 1, x18);
+  ASSERT_EQUAL_64((1L << 60) + 1, x19);
+  ASSERT_EQUAL_64(0xf0123456789abcddL + 1, x20);
+  ASSERT_EQUAL_64(0x0111111111111110L + 1, x21);
+  ASSERT_EQUAL_64(0x1222222222222221L + 1, x22);
 
   ASSERT_EQUAL_32(0xffffffff + 1, w23);
   ASSERT_EQUAL_32((1 << 30) + 1, w24);
@@ -3194,7 +3194,7 @@ TEST(adc_sbc_shift) {
   // Check that adc correctly sets the condition flags.
   START();
   __ Mov(x0, 1);
-  __ Mov(x1, INT64_C(0xffffffffffffffff));
+  __ Mov(x1, 0xffffffffffffffffL);
   // Clear the C flag.
   __ Adds(x0, x0, Operand(0));
   __ Adcs(x10, x0, Operand(x1));
@@ -3207,7 +3207,7 @@ TEST(adc_sbc_shift) {
 
   START();
   __ Mov(x0, 1);
-  __ Mov(x1, INT64_C(0x8000000000000000));
+  __ Mov(x1, 0x8000000000000000L);
   // Clear the C flag.
   __ Adds(x0, x0, Operand(0));
   __ Adcs(x10, x0, Operand(x1, ASR, 63));
@@ -3220,7 +3220,7 @@ TEST(adc_sbc_shift) {
 
   START();
   __ Mov(x0, 0x10);
-  __ Mov(x1, INT64_C(0x07ffffffffffffff));
+  __ Mov(x1, 0x07ffffffffffffffL);
   // Clear the C flag.
   __ Adds(x0, x0, Operand(0));
   __ Adcs(x10, x0, Operand(x1, LSL, 4));
@@ -3229,12 +3229,12 @@ TEST(adc_sbc_shift) {
   RUN();
 
   ASSERT_EQUAL_NZCV(NVFlag);
-  ASSERT_EQUAL_64(INT64_C(0x8000000000000000), x10);
+  ASSERT_EQUAL_64(0x8000000000000000L, x10);
 
   // Check that sbc correctly sets the condition flags.
   START();
   __ Mov(x0, 0);
-  __ Mov(x1, INT64_C(0xffffffffffffffff));
+  __ Mov(x1, 0xffffffffffffffffL);
   // Clear the C flag.
   __ Adds(x0, x0, Operand(0));
   __ Sbcs(x10, x0, Operand(x1));
@@ -3247,7 +3247,7 @@ TEST(adc_sbc_shift) {
 
   START();
   __ Mov(x0, 1);
-  __ Mov(x1, INT64_C(0xffffffffffffffff));
+  __ Mov(x1, 0xffffffffffffffffL);
   // Clear the C flag.
   __ Adds(x0, x0, Operand(0));
   __ Sbcs(x10, x0, Operand(x1, LSR, 1));
@@ -3256,13 +3256,13 @@ TEST(adc_sbc_shift) {
   RUN();
 
   ASSERT_EQUAL_NZCV(NFlag);
-  ASSERT_EQUAL_64(INT64_C(0x8000000000000001), x10);
+  ASSERT_EQUAL_64(0x8000000000000001L, x10);
 
   START();
   __ Mov(x0, 0);
   // Clear the C flag.
   __ Adds(x0, x0, Operand(0));
-  __ Sbcs(x10, x0, Operand(INT64_C(0xffffffffffffffff)));
+  __ Sbcs(x10, x0, Operand(0xffffffffffffffffL));
   END();
 
   RUN();
@@ -3285,13 +3285,13 @@ TEST(adc_sbc_shift) {
   START();
   // Clear the C flag.
   __ Adds(x0, x0, Operand(0));
-  __ Ngcs(x10, INT64_C(0x7fffffffffffffff));
+  __ Ngcs(x10, 0x7fffffffffffffffL);
   END();
 
   RUN();
 
   ASSERT_EQUAL_NZCV(NFlag);
-  ASSERT_EQUAL_64(INT64_C(0x8000000000000000), x10);
+  ASSERT_EQUAL_64(0x8000000000000000L, x10);
 
   START()
   __ Mov(x0, 0);
@@ -3303,19 +3303,19 @@ TEST(adc_sbc_shift) {
   RUN();
 
   ASSERT_EQUAL_NZCV(NFlag);
-  ASSERT_EQUAL_64(INT64_C(0xffffffffffffffff), x10);
+  ASSERT_EQUAL_64(0xffffffffffffffffL, x10);
 
   START()
   __ Mov(x0, 0);
   // Set the C flag.
   __ Cmp(x0, Operand(x0));
-  __ Ngcs(x10, INT64_C(0x7fffffffffffffff));
+  __ Ngcs(x10, 0x7fffffffffffffffL);
   END();
 
   RUN();
 
   ASSERT_EQUAL_NZCV(NFlag);
-  ASSERT_EQUAL_64(INT64_C(0x8000000000000001), x10);
+  ASSERT_EQUAL_64(0x8000000000000001L, x10);
 
   TEARDOWN();
 }
@@ -3330,7 +3330,7 @@ TEST(adc_sbc_extend) {
 
   __ Mov(x0, 0);
   __ Mov(x1, 1);
-  __ Mov(x2, INT64_C(0x0123456789abcdef));
+  __ Mov(x2, 0x0123456789abcdefL);
 
   __ Adc(x10, x1, Operand(w2, UXTB, 1));
   __ Adc(x11, x1, Operand(x2, SXTH, 2));
@@ -3357,18 +3357,18 @@ TEST(adc_sbc_extend) {
   RUN();
 
   ASSERT_EQUAL_64(0x1df, x10);
-  ASSERT_EQUAL_64(INT64_C(0xffffffffffff37bd), x11);
-  ASSERT_EQUAL_64(INT64_C(0xfffffff765432110), x12);
-  ASSERT_EQUAL_64(INT64_C(0x123456789abcdef1), x13);
+  ASSERT_EQUAL_64(0xffffffffffff37bdL, x11);
+  ASSERT_EQUAL_64(0xfffffff765432110L, x12);
+  ASSERT_EQUAL_64(0x123456789abcdef1L, x13);
 
   ASSERT_EQUAL_32(0x1df, w14);
   ASSERT_EQUAL_32(0xffff37bd, w15);
   ASSERT_EQUAL_32(0x9abcdef1, w9);
 
   ASSERT_EQUAL_64(0x1df + 1, x20);
-  ASSERT_EQUAL_64(INT64_C(0xffffffffffff37bd) + 1, x21);
-  ASSERT_EQUAL_64(INT64_C(0xfffffff765432110) + 1, x22);
-  ASSERT_EQUAL_64(INT64_C(0x123456789abcdef1) + 1, x23);
+  ASSERT_EQUAL_64(0xffffffffffff37bdL + 1, x21);
+  ASSERT_EQUAL_64(0xfffffff765432110L + 1, x22);
+  ASSERT_EQUAL_64(0x123456789abcdef1L + 1, x23);
 
   ASSERT_EQUAL_32(0x1df + 1, w24);
   ASSERT_EQUAL_32(0xffff37bd + 1, w25);
@@ -3377,7 +3377,7 @@ TEST(adc_sbc_extend) {
   // Check that adc correctly sets the condition flags.
   START();
   __ Mov(x0, 0xff);
-  __ Mov(x1, INT64_C(0xffffffffffffffff));
+  __ Mov(x1, 0xffffffffffffffffL);
   // Clear the C flag.
   __ Adds(x0, x0, Operand(0));
   __ Adcs(x10, x0, Operand(x1, SXTX, 1));
@@ -3388,7 +3388,7 @@ TEST(adc_sbc_extend) {
   ASSERT_EQUAL_NZCV(CFlag);
 
   START();
-  __ Mov(x0, INT64_C(0x7fffffffffffffff));
+  __ Mov(x0, 0x7fffffffffffffffL);
   __ Mov(x1, 1);
   // Clear the C flag.
   __ Adds(x0, x0, Operand(0));
@@ -3400,7 +3400,7 @@ TEST(adc_sbc_extend) {
   ASSERT_EQUAL_NZCV(NVFlag);
 
   START();
-  __ Mov(x0, INT64_C(0x7fffffffffffffff));
+  __ Mov(x0, 0x7fffffffffffffffL);
   // Clear the C flag.
   __ Adds(x0, x0, Operand(0));
   __ Adcs(x10, x0, Operand(1));
@@ -3423,38 +3423,38 @@ TEST(adc_sbc_wide_imm) {
   // Clear the C flag.
   __ Adds(x0, x0, Operand(0));
 
-  __ Adc(x7, x0, Operand(UINT64_C(0x1234567890abcdef)));
+  __ Adc(x7, x0, Operand(0x1234567890abcdefUL));
   __ Adc(w8, w0, Operand(0xffffffff));
-  __ Sbc(x9, x0, Operand(UINT64_C(0x1234567890abcdef)));
+  __ Sbc(x9, x0, Operand(0x1234567890abcdefUL));
   __ Sbc(w10, w0, Operand(0xffffffff));
-  __ Ngc(x11, Operand(UINT64_C(0xffffffff00000000)));
+  __ Ngc(x11, Operand(0xffffffff00000000UL));
   __ Ngc(w12, Operand(0xffff0000));
 
   // Set the C flag.
   __ Cmp(w0, Operand(w0));
 
-  __ Adc(x18, x0, Operand(UINT64_C(0x1234567890abcdef)));
+  __ Adc(x18, x0, Operand(0x1234567890abcdefUL));
   __ Adc(w19, w0, Operand(0xffffffff));
-  __ Sbc(x20, x0, Operand(UINT64_C(0x1234567890abcdef)));
+  __ Sbc(x20, x0, Operand(0x1234567890abcdefUL));
   __ Sbc(w21, w0, Operand(0xffffffff));
-  __ Ngc(x22, Operand(UINT64_C(0xffffffff00000000)));
+  __ Ngc(x22, Operand(0xffffffff00000000UL));
   __ Ngc(w23, Operand(0xffff0000));
   END();
 
   RUN();
 
-  ASSERT_EQUAL_64(UINT64_C(0x1234567890abcdef), x7);
+  ASSERT_EQUAL_64(0x1234567890abcdefUL, x7);
   ASSERT_EQUAL_64(0xffffffff, x8);
-  ASSERT_EQUAL_64(UINT64_C(0xedcba9876f543210), x9);
+  ASSERT_EQUAL_64(0xedcba9876f543210UL, x9);
   ASSERT_EQUAL_64(0, x10);
   ASSERT_EQUAL_64(0xffffffff, x11);
   ASSERT_EQUAL_64(0xffff, x12);
 
-  ASSERT_EQUAL_64(UINT64_C(0x1234567890abcdef) + 1, x18);
+  ASSERT_EQUAL_64(0x1234567890abcdefUL + 1, x18);
   ASSERT_EQUAL_64(0, x19);
-  ASSERT_EQUAL_64(UINT64_C(0xedcba9876f543211), x20);
+  ASSERT_EQUAL_64(0xedcba9876f543211UL, x20);
   ASSERT_EQUAL_64(1, x21);
-  ASSERT_EQUAL_64(UINT64_C(0x100000000), x22);
+  ASSERT_EQUAL_64(0x100000000UL, x22);
   ASSERT_EQUAL_64(0x10000, x23);
 
   TEARDOWN();
@@ -3465,7 +3465,7 @@ TEST(flags) {
 
   START();
   __ Mov(x0, 0);
-  __ Mov(x1, INT64_C(0x1111111111111111));
+  __ Mov(x1, 0x1111111111111111L);
   __ Neg(x10, Operand(x0));
   __ Neg(x11, Operand(x1));
   __ Neg(w12, Operand(w1));
@@ -3480,9 +3480,9 @@ TEST(flags) {
   RUN();
 
   ASSERT_EQUAL_64(0, x10);
-  ASSERT_EQUAL_64(-INT64_C(0x1111111111111111), x11);
+  ASSERT_EQUAL_64(-0x1111111111111111L, x11);
   ASSERT_EQUAL_32(-0x11111111, w12);
-  ASSERT_EQUAL_64(-INT64_C(1), x13);
+  ASSERT_EQUAL_64(-1L, x13);
   ASSERT_EQUAL_32(0, w14);
 
   START();
@@ -3505,7 +3505,7 @@ TEST(flags) {
 
   START();
   __ Mov(x0, 0);
-  __ Mov(x1, INT64_C(0x1111111111111111));
+  __ Mov(x1, 0x1111111111111111L);
   __ Cmp(x0, Operand(x1));
   END();
 
@@ -3524,7 +3524,7 @@ TEST(flags) {
   ASSERT_EQUAL_NZCV(NFlag);
 
   START();
-  __ Mov(x1, INT64_C(0x1111111111111111));
+  __ Mov(x1, 0x1111111111111111L);
   __ Cmp(x1, Operand(0));
   END();
 
@@ -3543,7 +3543,7 @@ TEST(flags) {
 
   START();
   __ Mov(x0, 1);
-  __ Mov(x1, INT64_C(0x7fffffffffffffff));
+  __ Mov(x1, 0x7fffffffffffffffL);
   __ Cmn(x1, Operand(x0));
   END();
 
@@ -3563,7 +3563,7 @@ TEST(flags) {
 
   START();
   __ Mov(x0, 1);
-  __ Mov(x1, INT64_C(0xffffffffffffffff));
+  __ Mov(x1, 0xffffffffffffffffL);
   __ Cmn(x1, Operand(x0));
   END();
 
@@ -3614,14 +3614,14 @@ TEST(cmp_shift) {
 
   START();
   __ Mov(x18, 0xf0000000);
-  __ Mov(x19, UINT64_C(0xf000000010000000));
-  __ Mov(x20, UINT64_C(0xf0000000f0000000));
-  __ Mov(x21, UINT64_C(0x7800000078000000));
-  __ Mov(x22, UINT64_C(0x3c0000003c000000));
-  __ Mov(x23, UINT64_C(0x8000000780000000));
-  __ Mov(x24, UINT64_C(0x0000000f00000000));
-  __ Mov(x25, UINT64_C(0x00000003c0000000));
-  __ Mov(x26, UINT64_C(0x8000000780000000));
+  __ Mov(x19, 0xf000000010000000UL);
+  __ Mov(x20, 0xf0000000f0000000UL);
+  __ Mov(x21, 0x7800000078000000UL);
+  __ Mov(x22, 0x3c0000003c000000UL);
+  __ Mov(x23, 0x8000000780000000UL);
+  __ Mov(x24, 0x0000000f00000000UL);
+  __ Mov(x25, 0x00000003c0000000UL);
+  __ Mov(x26, 0x8000000780000000UL);
   __ Mov(x27, 0xc0000003);
 
   __ Cmp(w20, Operand(w21, LSL, 1));
@@ -3670,9 +3670,9 @@ TEST(cmp_extend) {
   START();
   __ Mov(w20, 0x2);
   __ Mov(w21, 0x1);
-  __ Mov(x22, UINT64_C(0xffffffffffffffff));
+  __ Mov(x22, 0xffffffffffffffffUL);
   __ Mov(x23, 0xff);
-  __ Mov(x24, UINT64_C(0xfffffffffffffffe));
+  __ Mov(x24, 0xfffffffffffffffeUL);
   __ Mov(x25, 0xffff);
   __ Mov(x26, 0xffffffff);
 
@@ -3770,7 +3770,7 @@ TEST(ccmp_wide_imm) {
   __ Mrs(x0, NZCV);
 
   __ Cmp(w20, Operand(w20));
-  __ Ccmp(x20, Operand(UINT64_C(0xffffffffffffffff)), NZCVFlag, eq);
+  __ Ccmp(x20, Operand(0xffffffffffffffffUL), NZCVFlag, eq);
   __ Mrs(x1, NZCV);
   END();
 
@@ -3789,9 +3789,9 @@ TEST(ccmp_shift_extend) {
   START();
   __ Mov(w20, 0x2);
   __ Mov(w21, 0x1);
-  __ Mov(x22, UINT64_C(0xffffffffffffffff));
+  __ Mov(x22, 0xffffffffffffffffUL);
   __ Mov(x23, 0xff);
-  __ Mov(x24, UINT64_C(0xfffffffffffffffe));
+  __ Mov(x24, 0xfffffffffffffffeUL);
 
   __ Cmp(w20, Operand(w20));
   __ Ccmp(w20, Operand(w21, LSL, 1), NZCVFlag, eq);
@@ -3831,8 +3831,8 @@ TEST(csel) {
 
   START();
   __ Mov(x16, 0);
-  __ Mov(x24, UINT64_C(0x0000000f0000000f));
-  __ Mov(x25, UINT64_C(0x0000001f0000001f));
+  __ Mov(x24, 0x0000000f0000000fUL);
+  __ Mov(x25, 0x0000001f0000001fUL);
 
   __ Cmp(w16, Operand(0));
   __ Csel(w0, w24, w25, eq);
@@ -3866,19 +3866,19 @@ TEST(csel) {
   ASSERT_EQUAL_64(0x0000001f, x1);
   ASSERT_EQUAL_64(0x00000020, x2);
   ASSERT_EQUAL_64(0x0000000f, x3);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffe0ffffffe0), x4);
-  ASSERT_EQUAL_64(UINT64_C(0x0000000f0000000f), x5);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffe0ffffffe1), x6);
-  ASSERT_EQUAL_64(UINT64_C(0x0000000f0000000f), x7);
+  ASSERT_EQUAL_64(0xffffffe0ffffffe0UL, x4);
+  ASSERT_EQUAL_64(0x0000000f0000000fUL, x5);
+  ASSERT_EQUAL_64(0xffffffe0ffffffe1UL, x6);
+  ASSERT_EQUAL_64(0x0000000f0000000fUL, x7);
   ASSERT_EQUAL_64(0x00000001, x8);
   ASSERT_EQUAL_64(0xffffffff, x9);
-  ASSERT_EQUAL_64(UINT64_C(0x0000001f00000020), x10);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffff0fffffff0), x11);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffff0fffffff1), x12);
+  ASSERT_EQUAL_64(0x0000001f00000020UL, x10);
+  ASSERT_EQUAL_64(0xfffffff0fffffff0UL, x11);
+  ASSERT_EQUAL_64(0xfffffff0fffffff1UL, x12);
   ASSERT_EQUAL_64(0x0000000f, x13);
-  ASSERT_EQUAL_64(UINT64_C(0x0000000f0000000f), x14);
+  ASSERT_EQUAL_64(0x0000000f0000000fUL, x14);
   ASSERT_EQUAL_64(0x0000000f, x15);
-  ASSERT_EQUAL_64(UINT64_C(0x0000000f0000000f), x17);
+  ASSERT_EQUAL_64(0x0000000f0000000fUL, x17);
 
   TEARDOWN();
 }
@@ -3890,7 +3890,7 @@ TEST(csel_imm) {
   START();
   __ Mov(x18, 0);
   __ Mov(x19, 0x80000000);
-  __ Mov(x20, UINT64_C(0x8000000000000000));
+  __ Mov(x20, 0x8000000000000000UL);
 
   __ Cmp(x18, Operand(0));
   __ Csel(w0, w19, -2, ne);
@@ -3930,8 +3930,8 @@ TEST(csel_imm) {
   ASSERT_EQUAL_64(1, x11);
   ASSERT_EQUAL_64(2, x12);
   ASSERT_EQUAL_64(-1, x13);
-  ASSERT_EQUAL_64(UINT64_C(0x4000000000000000), x14);
-  ASSERT_EQUAL_64(UINT64_C(0x8000000000000000), x15);
+  ASSERT_EQUAL_64(0x4000000000000000UL, x14);
+  ASSERT_EQUAL_64(0x8000000000000000UL, x15);
 
   TEARDOWN();
 }
@@ -3940,7 +3940,7 @@ TEST(csel_imm) {
 TEST(lslv) {
   SETUP();
 
-  uint64_t value = UINT64_C(0x0123456789abcdef);
+  uint64_t value = 0x0123456789abcdefUL;
   int shift[] = {1, 3, 5, 9, 17, 33};
 
   START();
@@ -3992,7 +3992,7 @@ TEST(lslv) {
 TEST(lsrv) {
   SETUP();
 
-  uint64_t value = UINT64_C(0x0123456789abcdef);
+  uint64_t value = 0x0123456789abcdefUL;
   int shift[] = {1, 3, 5, 9, 17, 33};
 
   START();
@@ -4031,7 +4031,7 @@ TEST(lsrv) {
   ASSERT_EQUAL_64(value >> (shift[4] & 63), x20);
   ASSERT_EQUAL_64(value >> (shift[5] & 63), x21);
 
-  value &= UINT64_C(0xffffffff);
+  value &= 0xffffffffUL;
   ASSERT_EQUAL_32(value >> (shift[0] & 31), w22);
   ASSERT_EQUAL_32(value >> (shift[1] & 31), w23);
   ASSERT_EQUAL_32(value >> (shift[2] & 31), w24);
@@ -4046,7 +4046,7 @@ TEST(lsrv) {
 TEST(asrv) {
   SETUP();
 
-  int64_t value = UINT64_C(0xfedcba98fedcba98);
+  int64_t value = 0xfedcba98fedcba98UL;
   int shift[] = {1, 3, 5, 9, 17, 33};
 
   START();
@@ -4085,7 +4085,7 @@ TEST(asrv) {
   ASSERT_EQUAL_64(value >> (shift[4] & 63), x20);
   ASSERT_EQUAL_64(value >> (shift[5] & 63), x21);
 
-  int32_t value32 = static_cast<int32_t>(value & UINT64_C(0xffffffff));
+  int32_t value32 = static_cast<int32_t>(value & 0xffffffffUL);
   ASSERT_EQUAL_32(value32 >> (shift[0] & 31), w22);
   ASSERT_EQUAL_32(value32 >> (shift[1] & 31), w23);
   ASSERT_EQUAL_32(value32 >> (shift[2] & 31), w24);
@@ -4100,7 +4100,7 @@ TEST(asrv) {
 TEST(rorv) {
   SETUP();
 
-  uint64_t value = UINT64_C(0x0123456789abcdef);
+  uint64_t value = 0x0123456789abcdefUL;
   int shift[] = {4, 8, 12, 16, 24, 36};
 
   START();
@@ -4132,12 +4132,12 @@ TEST(rorv) {
   RUN();
 
   ASSERT_EQUAL_64(value, x0);
-  ASSERT_EQUAL_64(UINT64_C(0xf0123456789abcde), x16);
-  ASSERT_EQUAL_64(UINT64_C(0xef0123456789abcd), x17);
-  ASSERT_EQUAL_64(UINT64_C(0xdef0123456789abc), x18);
-  ASSERT_EQUAL_64(UINT64_C(0xcdef0123456789ab), x19);
-  ASSERT_EQUAL_64(UINT64_C(0xabcdef0123456789), x20);
-  ASSERT_EQUAL_64(UINT64_C(0x789abcdef0123456), x21);
+  ASSERT_EQUAL_64(0xf0123456789abcdeUL, x16);
+  ASSERT_EQUAL_64(0xef0123456789abcdUL, x17);
+  ASSERT_EQUAL_64(0xdef0123456789abcUL, x18);
+  ASSERT_EQUAL_64(0xcdef0123456789abUL, x19);
+  ASSERT_EQUAL_64(0xabcdef0123456789UL, x20);
+  ASSERT_EQUAL_64(0x789abcdef0123456UL, x21);
   ASSERT_EQUAL_32(0xf89abcde, w22);
   ASSERT_EQUAL_32(0xef89abcd, w23);
   ASSERT_EQUAL_32(0xdef89abc, w24);
@@ -4153,12 +4153,12 @@ TEST(bfm) {
   SETUP();
 
   START();
-  __ Mov(x1, INT64_C(0x0123456789abcdef));
+  __ Mov(x1, 0x0123456789abcdefL);
 
-  __ Mov(x10, INT64_C(0x8888888888888888));
-  __ Mov(x11, INT64_C(0x8888888888888888));
-  __ Mov(x12, INT64_C(0x8888888888888888));
-  __ Mov(x13, INT64_C(0x8888888888888888));
+  __ Mov(x10, 0x8888888888888888L);
+  __ Mov(x11, 0x8888888888888888L);
+  __ Mov(x12, 0x8888888888888888L);
+  __ Mov(x13, 0x8888888888888888L);
   __ Mov(w20, 0x88888888);
   __ Mov(w21, 0x88888888);
 
@@ -4176,14 +4176,14 @@ TEST(bfm) {
   RUN();
 
 
-  ASSERT_EQUAL_64(INT64_C(0x88888888888889ab), x10);
-  ASSERT_EQUAL_64(INT64_C(0x8888cdef88888888), x11);
+  ASSERT_EQUAL_64(0x88888888888889abL, x10);
+  ASSERT_EQUAL_64(0x8888cdef88888888L, x11);
 
   ASSERT_EQUAL_32(0x888888ab, w20);
   ASSERT_EQUAL_32(0x88cdef88, w21);
 
-  ASSERT_EQUAL_64(INT64_C(0x8888888888ef8888), x12);
-  ASSERT_EQUAL_64(INT64_C(0x88888888888888ab), x13);
+  ASSERT_EQUAL_64(0x8888888888ef8888L, x12);
+  ASSERT_EQUAL_64(0x88888888888888abL, x13);
 
   TEARDOWN();
 }
@@ -4193,8 +4193,8 @@ TEST(sbfm) {
   SETUP();
 
   START();
-  __ Mov(x1, INT64_C(0x0123456789abcdef));
-  __ Mov(x2, INT64_C(0xfedcba9876543210));
+  __ Mov(x1, 0x0123456789abcdefL);
+  __ Mov(x2, 0xfedcba9876543210L);
 
   __ sbfm(x10, x1, 16, 31);
   __ sbfm(x11, x1, 32, 15);
@@ -4224,27 +4224,27 @@ TEST(sbfm) {
   RUN();
 
 
-  ASSERT_EQUAL_64(INT64_C(0xffffffffffff89ab), x10);
-  ASSERT_EQUAL_64(INT64_C(0xffffcdef00000000), x11);
-  ASSERT_EQUAL_64(INT64_C(0x4567), x12);
-  ASSERT_EQUAL_64(INT64_C(0x789abcdef0000), x13);
+  ASSERT_EQUAL_64(0xffffffffffff89abL, x10);
+  ASSERT_EQUAL_64(0xffffcdef00000000L, x11);
+  ASSERT_EQUAL_64(0x4567L, x12);
+  ASSERT_EQUAL_64(0x789abcdef0000L, x13);
 
   ASSERT_EQUAL_32(0xffffffab, w14);
   ASSERT_EQUAL_32(0xffcdef00, w15);
   ASSERT_EQUAL_32(0x54, w16);
   ASSERT_EQUAL_32(0x00321000, w17);
 
-  ASSERT_EQUAL_64(INT64_C(0x01234567), x18);
-  ASSERT_EQUAL_64(INT64_C(0xfffffffffedcba98), x19);
-  ASSERT_EQUAL_64(INT64_C(0xffffffffffcdef00), x20);
-  ASSERT_EQUAL_64(INT64_C(0x321000), x21);
-  ASSERT_EQUAL_64(INT64_C(0xffffffffffffabcd), x22);
-  ASSERT_EQUAL_64(INT64_C(0x5432), x23);
-  ASSERT_EQUAL_64(INT64_C(0xffffffffffffffef), x24);
+  ASSERT_EQUAL_64(0x01234567L, x18);
+  ASSERT_EQUAL_64(0xfffffffffedcba98L, x19);
+  ASSERT_EQUAL_64(0xffffffffffcdef00L, x20);
+  ASSERT_EQUAL_64(0x321000L, x21);
+  ASSERT_EQUAL_64(0xffffffffffffabcdL, x22);
+  ASSERT_EQUAL_64(0x5432L, x23);
+  ASSERT_EQUAL_64(0xffffffffffffffefL, x24);
   ASSERT_EQUAL_64(0x10, x25);
-  ASSERT_EQUAL_64(INT64_C(0xffffffffffffcdef), x26);
+  ASSERT_EQUAL_64(0xffffffffffffcdefL, x26);
   ASSERT_EQUAL_64(0x3210, x27);
-  ASSERT_EQUAL_64(INT64_C(0xffffffff89abcdef), x28);
+  ASSERT_EQUAL_64(0xffffffff89abcdefL, x28);
   ASSERT_EQUAL_64(0x76543210, x29);
 
   TEARDOWN();
@@ -4255,11 +4255,11 @@ TEST(ubfm) {
   SETUP();
 
   START();
-  __ Mov(x1, INT64_C(0x0123456789abcdef));
-  __ Mov(x2, INT64_C(0xfedcba9876543210));
+  __ Mov(x1, 0x0123456789abcdefL);
+  __ Mov(x2, 0xfedcba9876543210L);
 
-  __ Mov(x10, INT64_C(0x8888888888888888));
-  __ Mov(x11, INT64_C(0x8888888888888888));
+  __ Mov(x10, 0x8888888888888888L);
+  __ Mov(x11, 0x8888888888888888L);
 
   __ ubfm(x10, x1, 16, 31);
   __ ubfm(x11, x1, 32, 15);
@@ -4284,24 +4284,24 @@ TEST(ubfm) {
 
   RUN();
 
-  ASSERT_EQUAL_64(INT64_C(0x00000000000089ab), x10);
-  ASSERT_EQUAL_64(INT64_C(0x0000cdef00000000), x11);
-  ASSERT_EQUAL_64(INT64_C(0x4567), x12);
-  ASSERT_EQUAL_64(INT64_C(0x789abcdef0000), x13);
+  ASSERT_EQUAL_64(0x00000000000089abL, x10);
+  ASSERT_EQUAL_64(0x0000cdef00000000L, x11);
+  ASSERT_EQUAL_64(0x4567L, x12);
+  ASSERT_EQUAL_64(0x789abcdef0000L, x13);
 
   ASSERT_EQUAL_32(0x000000ab, w25);
   ASSERT_EQUAL_32(0x00cdef00, w26);
   ASSERT_EQUAL_32(0x54, w27);
   ASSERT_EQUAL_32(0x00321000, w28);
 
-  ASSERT_EQUAL_64(INT64_C(0x8000000000000000), x15);
-  ASSERT_EQUAL_64(INT64_C(0x0123456789abcdef), x16);
-  ASSERT_EQUAL_64(INT64_C(0x01234567), x17);
-  ASSERT_EQUAL_64(INT64_C(0xcdef00), x18);
-  ASSERT_EQUAL_64(INT64_C(0xabcd), x19);
-  ASSERT_EQUAL_64(INT64_C(0xef), x20);
-  ASSERT_EQUAL_64(INT64_C(0xcdef), x21);
-  ASSERT_EQUAL_64(INT64_C(0x89abcdef), x22);
+  ASSERT_EQUAL_64(0x8000000000000000L, x15);
+  ASSERT_EQUAL_64(0x0123456789abcdefL, x16);
+  ASSERT_EQUAL_64(0x01234567L, x17);
+  ASSERT_EQUAL_64(0xcdef00L, x18);
+  ASSERT_EQUAL_64(0xabcdL, x19);
+  ASSERT_EQUAL_64(0xefL, x20);
+  ASSERT_EQUAL_64(0xcdefL, x21);
+  ASSERT_EQUAL_64(0x89abcdefL, x22);
 
   TEARDOWN();
 }
@@ -4311,8 +4311,8 @@ TEST(extr) {
   SETUP();
 
   START();
-  __ Mov(x1, INT64_C(0x0123456789abcdef));
-  __ Mov(x2, INT64_C(0xfedcba9876543210));
+  __ Mov(x1, 0x0123456789abcdefL);
+  __ Mov(x2, 0xfedcba9876543210L);
 
   __ Extr(w10, w1, w2, 0);
   __ Extr(w11, w1, w2, 1);
@@ -4329,12 +4329,12 @@ TEST(extr) {
 
   ASSERT_EQUAL_64(0x76543210, x10);
   ASSERT_EQUAL_64(0xbb2a1908, x11);
-  ASSERT_EQUAL_64(UINT64_C(0x0048d159e26af37b), x12);
+  ASSERT_EQUAL_64(0x0048d159e26af37bUL, x12);
   ASSERT_EQUAL_64(0x89abcdef, x13);
   ASSERT_EQUAL_64(0x19083b2a, x14);
   ASSERT_EQUAL_64(0x13579bdf, x15);
-  ASSERT_EQUAL_64(UINT64_C(0x7f6e5d4c3b2a1908), x18);
-  ASSERT_EQUAL_64(UINT64_C(0x02468acf13579bde), x19);
+  ASSERT_EQUAL_64(0x7f6e5d4c3b2a1908UL, x18);
+  ASSERT_EQUAL_64(0x02468acf13579bdeUL, x19);
 
   TEARDOWN();
 }
@@ -4381,7 +4381,7 @@ TEST(fmov_reg) {
   __ Fmov(x1, d1);
   __ Fmov(d2, x1);
   __ Fmov(d4, d1);
-  __ Fmov(d6, rawbits_to_double(INT64_C(0x0123456789abcdef)));
+  __ Fmov(d6, rawbits_to_double(0x0123456789abcdefL));
   __ Fmov(s6, s6);
   END();
 
@@ -4618,7 +4618,7 @@ TEST(fmadd_fmsub_double_rounding) {
   while ((count_fmadd < limit) || (count_fmsub < limit)) {
     double n, m, a;
     uint32_t r[2];
-    VIXL_ASSERT(sizeof(r) == sizeof(n));
+    ASSERT(sizeof(r) == sizeof(n));
 
     r[0] = mrand48();
     r[1] = mrand48();
@@ -4722,7 +4722,7 @@ TEST(fmadd_fmsub_float_rounding) {
   while ((count_fmadd < limit) || (count_fmsub < limit)) {
     float n, m, a;
     uint32_t r;
-    VIXL_ASSERT(sizeof(r) == sizeof(n));
+    ASSERT(sizeof(r) == sizeof(n));
 
     r = mrand48();
     memcpy(&n, &r, sizeof(r));
@@ -4805,7 +4805,7 @@ static float MinMaxHelper(float n,
                           float m,
                           bool min,
                           float quiet_nan_substitute = 0.0) {
-  const uint64_t kFP32QuietNaNMask = UINT64_C(0x00400000);
+  const uint64_t kFP32QuietNaNMask = 0x00400000UL;
   uint32_t raw_n = float_to_rawbits(n);
   uint32_t raw_m = float_to_rawbits(m);
 
@@ -4847,7 +4847,7 @@ static double MinMaxHelper(double n,
                            double m,
                            bool min,
                            double quiet_nan_substitute = 0.0) {
-  const uint64_t kFP64QuietNaNMask = UINT64_C(0x0008000000000000);
+  const uint64_t kFP64QuietNaNMask = 0x0008000000000000UL;
   uint64_t raw_n = double_to_rawbits(n);
   uint64_t raw_m = double_to_rawbits(m);
 
@@ -5116,7 +5116,7 @@ TEST(fcmp) {
 
   __ Fmov(d19, 0.0);
   __ Fmov(d20, 0.5);
-  __ Mov(x21, UINT64_C(0x7ff0000000000001));  // Double precision NaN.
+  __ Mov(x21, 0x7ff0000000000001UL);  // Double precision NaN.
   __ Fmov(d21, x21);
 
   __ Fcmp(d19, d19);
@@ -5724,8 +5724,8 @@ TEST(fcvt_sd) {
     float expected = test[i].expected;
 
     // We only expect positive input.
-    VIXL_ASSERT(signbit(in) == 0);
-    VIXL_ASSERT(signbit(expected) == 0);
+    ASSERT(signbit(in) == 0);
+    ASSERT(signbit(expected) == 0);
 
     SETUP();
     START();
@@ -5770,14 +5770,14 @@ TEST(fcvtas) {
   __ Fmov(s19, -2.5);
   __ Fmov(s20, kFP32PositiveInfinity);
   __ Fmov(s21, kFP32NegativeInfinity);
-  __ Fmov(s22, UINT64_C(0x7fffff8000000000));   // Largest float < INT64_MAX.
+  __ Fmov(s22, 0x7fffff8000000000UL);   // Largest float < INT64_MAX.
   __ Fneg(s23, s22);                    // Smallest float > INT64_MIN.
   __ Fmov(d24, 1.1);
   __ Fmov(d25, 2.5);
   __ Fmov(d26, -2.5);
   __ Fmov(d27, kFP64PositiveInfinity);
   __ Fmov(d28, kFP64NegativeInfinity);
-  __ Fmov(d29, UINT64_C(0x7ffffffffffffc00));   // Largest double < INT64_MAX.
+  __ Fmov(d29, 0x7ffffffffffffc00UL);   // Largest double < INT64_MAX.
   __ Fneg(d30, d29);                    // Smallest double > INT64_MIN.
 
   __ Fcvtas(w0, s0);
@@ -5832,18 +5832,18 @@ TEST(fcvtas) {
   ASSERT_EQUAL_64(0x80000001, x15);
   ASSERT_EQUAL_64(1, x17);
   ASSERT_EQUAL_64(3, x18);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffffffffffd), x19);
-  ASSERT_EQUAL_64(UINT64_C(0x7fffffffffffffff), x20);
-  ASSERT_EQUAL_64(UINT64_C(0x8000000000000000), x21);
-  ASSERT_EQUAL_64(UINT64_C(0x7fffff8000000000), x22);
-  ASSERT_EQUAL_64(UINT64_C(0x8000008000000000), x23);
+  ASSERT_EQUAL_64(0xfffffffffffffffdUL, x19);
+  ASSERT_EQUAL_64(0x7fffffffffffffffUL, x20);
+  ASSERT_EQUAL_64(0x8000000000000000UL, x21);
+  ASSERT_EQUAL_64(0x7fffff8000000000UL, x22);
+  ASSERT_EQUAL_64(0x8000008000000000UL, x23);
   ASSERT_EQUAL_64(1, x24);
   ASSERT_EQUAL_64(3, x25);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffffffffffd), x26);
-  ASSERT_EQUAL_64(UINT64_C(0x7fffffffffffffff), x27);
-  ASSERT_EQUAL_64(UINT64_C(0x8000000000000000), x28);
-  ASSERT_EQUAL_64(UINT64_C(0x7ffffffffffffc00), x29);
-  ASSERT_EQUAL_64(UINT64_C(0x8000000000000400), x30);
+  ASSERT_EQUAL_64(0xfffffffffffffffdUL, x26);
+  ASSERT_EQUAL_64(0x7fffffffffffffffUL, x27);
+  ASSERT_EQUAL_64(0x8000000000000000UL, x28);
+  ASSERT_EQUAL_64(0x7ffffffffffffc00UL, x29);
+  ASSERT_EQUAL_64(0x8000000000000400UL, x30);
 
   TEARDOWN();
 }
@@ -5873,14 +5873,14 @@ TEST(fcvtau) {
   __ Fmov(s19, -2.5);
   __ Fmov(s20, kFP32PositiveInfinity);
   __ Fmov(s21, kFP32NegativeInfinity);
-  __ Fmov(s22, UINT64_C(0xffffff0000000000));  // Largest float < UINT64_MAX.
+  __ Fmov(s22, 0xffffff0000000000UL);  // Largest float < UINT64_MAX.
   __ Fmov(d24, 1.1);
   __ Fmov(d25, 2.5);
   __ Fmov(d26, -2.5);
   __ Fmov(d27, kFP64PositiveInfinity);
   __ Fmov(d28, kFP64NegativeInfinity);
-  __ Fmov(d29, UINT64_C(0xfffffffffffff800));  // Largest double < UINT64_MAX.
-  __ Fmov(s30, UINT64_C(0x100000000));
+  __ Fmov(d29, 0xfffffffffffff800UL);  // Largest double < UINT64_MAX.
+  __ Fmov(s30, 0x100000000UL);
 
   __ Fcvtau(w0, s0);
   __ Fcvtau(w1, s1);
@@ -5933,15 +5933,15 @@ TEST(fcvtau) {
   ASSERT_EQUAL_64(1, x17);
   ASSERT_EQUAL_64(3, x18);
   ASSERT_EQUAL_64(0, x19);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffffffffffff), x20);
+  ASSERT_EQUAL_64(0xffffffffffffffffUL, x20);
   ASSERT_EQUAL_64(0, x21);
-  ASSERT_EQUAL_64(UINT64_C(0xffffff0000000000), x22);
+  ASSERT_EQUAL_64(0xffffff0000000000UL, x22);
   ASSERT_EQUAL_64(1, x24);
   ASSERT_EQUAL_64(3, x25);
   ASSERT_EQUAL_64(0, x26);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffffffffffff), x27);
+  ASSERT_EQUAL_64(0xffffffffffffffffUL, x27);
   ASSERT_EQUAL_64(0, x28);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffffffff800), x29);
+  ASSERT_EQUAL_64(0xfffffffffffff800UL, x29);
   ASSERT_EQUAL_64(0xffffffff, x30);
 
   TEARDOWN();
@@ -5973,14 +5973,14 @@ TEST(fcvtms) {
   __ Fmov(s19, -1.5);
   __ Fmov(s20, kFP32PositiveInfinity);
   __ Fmov(s21, kFP32NegativeInfinity);
-  __ Fmov(s22, UINT64_C(0x7fffff8000000000));  // Largest float < INT64_MAX.
+  __ Fmov(s22, 0x7fffff8000000000UL);  // Largest float < INT64_MAX.
   __ Fneg(s23, s22);                    // Smallest float > INT64_MIN.
   __ Fmov(d24, 1.1);
   __ Fmov(d25, 1.5);
   __ Fmov(d26, -1.5);
   __ Fmov(d27, kFP64PositiveInfinity);
   __ Fmov(d28, kFP64NegativeInfinity);
-  __ Fmov(d29, UINT64_C(0x7ffffffffffffc00));  // Largest double < INT64_MAX.
+  __ Fmov(d29, 0x7ffffffffffffc00UL);  // Largest double < INT64_MAX.
   __ Fneg(d30, d29);                    // Smallest double > INT64_MIN.
 
   __ Fcvtms(w0, s0);
@@ -6035,18 +6035,18 @@ TEST(fcvtms) {
   ASSERT_EQUAL_64(0x80000001, x15);
   ASSERT_EQUAL_64(1, x17);
   ASSERT_EQUAL_64(1, x18);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffffffffffe), x19);
-  ASSERT_EQUAL_64(UINT64_C(0x7fffffffffffffff), x20);
-  ASSERT_EQUAL_64(UINT64_C(0x8000000000000000), x21);
-  ASSERT_EQUAL_64(UINT64_C(0x7fffff8000000000), x22);
-  ASSERT_EQUAL_64(UINT64_C(0x8000008000000000), x23);
+  ASSERT_EQUAL_64(0xfffffffffffffffeUL, x19);
+  ASSERT_EQUAL_64(0x7fffffffffffffffUL, x20);
+  ASSERT_EQUAL_64(0x8000000000000000UL, x21);
+  ASSERT_EQUAL_64(0x7fffff8000000000UL, x22);
+  ASSERT_EQUAL_64(0x8000008000000000UL, x23);
   ASSERT_EQUAL_64(1, x24);
   ASSERT_EQUAL_64(1, x25);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffffffffffe), x26);
-  ASSERT_EQUAL_64(UINT64_C(0x7fffffffffffffff), x27);
-  ASSERT_EQUAL_64(UINT64_C(0x8000000000000000), x28);
-  ASSERT_EQUAL_64(UINT64_C(0x7ffffffffffffc00), x29);
-  ASSERT_EQUAL_64(UINT64_C(0x8000000000000400), x30);
+  ASSERT_EQUAL_64(0xfffffffffffffffeUL, x26);
+  ASSERT_EQUAL_64(0x7fffffffffffffffUL, x27);
+  ASSERT_EQUAL_64(0x8000000000000000UL, x28);
+  ASSERT_EQUAL_64(0x7ffffffffffffc00UL, x29);
+  ASSERT_EQUAL_64(0x8000000000000400UL, x30);
 
   TEARDOWN();
 }
@@ -6077,14 +6077,14 @@ TEST(fcvtmu) {
   __ Fmov(s19, -1.5);
   __ Fmov(s20, kFP32PositiveInfinity);
   __ Fmov(s21, kFP32NegativeInfinity);
-  __ Fmov(s22, UINT64_C(0x7fffff8000000000));  // Largest float < INT64_MAX.
+  __ Fmov(s22, 0x7fffff8000000000UL);  // Largest float < INT64_MAX.
   __ Fneg(s23, s22);                    // Smallest float > INT64_MIN.
   __ Fmov(d24, 1.1);
   __ Fmov(d25, 1.5);
   __ Fmov(d26, -1.5);
   __ Fmov(d27, kFP64PositiveInfinity);
   __ Fmov(d28, kFP64NegativeInfinity);
-  __ Fmov(d29, UINT64_C(0x7ffffffffffffc00));  // Largest double < INT64_MAX.
+  __ Fmov(d29, 0x7ffffffffffffc00UL);  // Largest double < INT64_MAX.
   __ Fneg(d30, d29);                    // Smallest double > INT64_MIN.
 
   __ Fcvtmu(w0, s0);
@@ -6137,18 +6137,18 @@ TEST(fcvtmu) {
   ASSERT_EQUAL_64(0x7ffffffe, x14);
   ASSERT_EQUAL_64(1, x17);
   ASSERT_EQUAL_64(1, x18);
-  ASSERT_EQUAL_64(UINT64_C(0x0), x19);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffffffffffff), x20);
-  ASSERT_EQUAL_64(UINT64_C(0x0), x21);
-  ASSERT_EQUAL_64(UINT64_C(0x7fffff8000000000), x22);
-  ASSERT_EQUAL_64(UINT64_C(0x0), x23);
+  ASSERT_EQUAL_64(0x0UL, x19);
+  ASSERT_EQUAL_64(0xffffffffffffffffUL, x20);
+  ASSERT_EQUAL_64(0x0UL, x21);
+  ASSERT_EQUAL_64(0x7fffff8000000000UL, x22);
+  ASSERT_EQUAL_64(0x0UL, x23);
   ASSERT_EQUAL_64(1, x24);
   ASSERT_EQUAL_64(1, x25);
-  ASSERT_EQUAL_64(UINT64_C(0x0), x26);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffffffffffff), x27);
-  ASSERT_EQUAL_64(UINT64_C(0x0), x28);
-  ASSERT_EQUAL_64(UINT64_C(0x7ffffffffffffc00), x29);
-  ASSERT_EQUAL_64(UINT64_C(0x0), x30);
+  ASSERT_EQUAL_64(0x0UL, x26);
+  ASSERT_EQUAL_64(0xffffffffffffffffUL, x27);
+  ASSERT_EQUAL_64(0x0UL, x28);
+  ASSERT_EQUAL_64(0x7ffffffffffffc00UL, x29);
+  ASSERT_EQUAL_64(0x0UL, x30);
 
   TEARDOWN();
 }
@@ -6179,14 +6179,14 @@ TEST(fcvtns) {
   __ Fmov(s19, -1.5);
   __ Fmov(s20, kFP32PositiveInfinity);
   __ Fmov(s21, kFP32NegativeInfinity);
-  __ Fmov(s22, UINT64_C(0x7fffff8000000000));   // Largest float < INT64_MAX.
+  __ Fmov(s22, 0x7fffff8000000000UL);   // Largest float < INT64_MAX.
   __ Fneg(s23, s22);                    // Smallest float > INT64_MIN.
   __ Fmov(d24, 1.1);
   __ Fmov(d25, 1.5);
   __ Fmov(d26, -1.5);
   __ Fmov(d27, kFP64PositiveInfinity);
   __ Fmov(d28, kFP64NegativeInfinity);
-  __ Fmov(d29, UINT64_C(0x7ffffffffffffc00));   // Largest double < INT64_MAX.
+  __ Fmov(d29, 0x7ffffffffffffc00UL);   // Largest double < INT64_MAX.
   __ Fneg(d30, d29);                    // Smallest double > INT64_MIN.
 
   __ Fcvtns(w0, s0);
@@ -6241,18 +6241,18 @@ TEST(fcvtns) {
   ASSERT_EQUAL_64(0x80000001, x15);
   ASSERT_EQUAL_64(1, x17);
   ASSERT_EQUAL_64(2, x18);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffffffffffe), x19);
-  ASSERT_EQUAL_64(UINT64_C(0x7fffffffffffffff), x20);
-  ASSERT_EQUAL_64(UINT64_C(0x8000000000000000), x21);
-  ASSERT_EQUAL_64(UINT64_C(0x7fffff8000000000), x22);
-  ASSERT_EQUAL_64(UINT64_C(0x8000008000000000), x23);
+  ASSERT_EQUAL_64(0xfffffffffffffffeUL, x19);
+  ASSERT_EQUAL_64(0x7fffffffffffffffUL, x20);
+  ASSERT_EQUAL_64(0x8000000000000000UL, x21);
+  ASSERT_EQUAL_64(0x7fffff8000000000UL, x22);
+  ASSERT_EQUAL_64(0x8000008000000000UL, x23);
   ASSERT_EQUAL_64(1, x24);
   ASSERT_EQUAL_64(2, x25);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffffffffffe), x26);
-  ASSERT_EQUAL_64(UINT64_C(0x7fffffffffffffff), x27);
-  ASSERT_EQUAL_64(UINT64_C(0x8000000000000000), x28);
-  ASSERT_EQUAL_64(UINT64_C(0x7ffffffffffffc00), x29);
-  ASSERT_EQUAL_64(UINT64_C(0x8000000000000400), x30);
+  ASSERT_EQUAL_64(0xfffffffffffffffeUL, x26);
+  ASSERT_EQUAL_64(0x7fffffffffffffffUL, x27);
+  ASSERT_EQUAL_64(0x8000000000000000UL, x28);
+  ASSERT_EQUAL_64(0x7ffffffffffffc00UL, x29);
+  ASSERT_EQUAL_64(0x8000000000000400UL, x30);
 
   TEARDOWN();
 }
@@ -6282,14 +6282,14 @@ TEST(fcvtnu) {
   __ Fmov(s19, -1.5);
   __ Fmov(s20, kFP32PositiveInfinity);
   __ Fmov(s21, kFP32NegativeInfinity);
-  __ Fmov(s22, UINT64_C(0xffffff0000000000));  // Largest float < UINT64_MAX.
+  __ Fmov(s22, 0xffffff0000000000UL);  // Largest float < UINT64_MAX.
   __ Fmov(d24, 1.1);
   __ Fmov(d25, 1.5);
   __ Fmov(d26, -1.5);
   __ Fmov(d27, kFP64PositiveInfinity);
   __ Fmov(d28, kFP64NegativeInfinity);
-  __ Fmov(d29, UINT64_C(0xfffffffffffff800));  // Largest double < UINT64_MAX.
-  __ Fmov(s30, UINT64_C(0x100000000));
+  __ Fmov(d29, 0xfffffffffffff800UL);  // Largest double < UINT64_MAX.
+  __ Fmov(s30, 0x100000000UL);
 
   __ Fcvtnu(w0, s0);
   __ Fcvtnu(w1, s1);
@@ -6342,15 +6342,15 @@ TEST(fcvtnu) {
   ASSERT_EQUAL_64(1, x17);
   ASSERT_EQUAL_64(2, x18);
   ASSERT_EQUAL_64(0, x19);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffffffffffff), x20);
+  ASSERT_EQUAL_64(0xffffffffffffffffUL, x20);
   ASSERT_EQUAL_64(0, x21);
-  ASSERT_EQUAL_64(UINT64_C(0xffffff0000000000), x22);
+  ASSERT_EQUAL_64(0xffffff0000000000UL, x22);
   ASSERT_EQUAL_64(1, x24);
   ASSERT_EQUAL_64(2, x25);
   ASSERT_EQUAL_64(0, x26);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffffffffffff), x27);
+  ASSERT_EQUAL_64(0xffffffffffffffffUL, x27);
   ASSERT_EQUAL_64(0, x28);
-  ASSERT_EQUAL_64(UINT64_C(0xfffffffffffff800), x29);
+  ASSERT_EQUAL_64(0xfffffffffffff800UL, x29);
   ASSERT_EQUAL_64(0xffffffff, x30);
 
   TEARDOWN();
@@ -6382,14 +6382,14 @@ TEST(fcvtzs) {
   __ Fmov(s19, -1.5);
   __ Fmov(s20, kFP32PositiveInfinity);
   __ Fmov(s21, kFP32NegativeInfinity);
-  __ Fmov(s22, UINT64_C(0x7fffff8000000000));   // Largest float < INT64_MAX.
+  __ Fmov(s22, 0x7fffff8000000000UL);   // Largest float < INT64_MAX.
   __ Fneg(s23, s22);                    // Smallest float > INT64_MIN.
   __ Fmov(d24, 1.1);
   __ Fmov(d25, 1.5);
   __ Fmov(d26, -1.5);
   __ Fmov(d27, kFP64PositiveInfinity);
   __ Fmov(d28, kFP64NegativeInfinity);
-  __ Fmov(d29, UINT64_C(0x7ffffffffffffc00));   // Largest double < INT64_MAX.
+  __ Fmov(d29, 0x7ffffffffffffc00UL);   // Largest double < INT64_MAX.
   __ Fneg(d30, d29);                    // Smallest double > INT64_MIN.
 
   __ Fcvtzs(w0, s0);
@@ -6444,18 +6444,18 @@ TEST(fcvtzs) {
   ASSERT_EQUAL_64(0x80000001, x15);
   ASSERT_EQUAL_64(1, x17);
   ASSERT_EQUAL_64(1, x18);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffffffffffff), x19);
-  ASSERT_EQUAL_64(UINT64_C(0x7fffffffffffffff), x20);
-  ASSERT_EQUAL_64(UINT64_C(0x8000000000000000), x21);
-  ASSERT_EQUAL_64(UINT64_C(0x7fffff8000000000), x22);
-  ASSERT_EQUAL_64(UINT64_C(0x8000008000000000), x23);
+  ASSERT_EQUAL_64(0xffffffffffffffffUL, x19);
+  ASSERT_EQUAL_64(0x7fffffffffffffffUL, x20);
+  ASSERT_EQUAL_64(0x8000000000000000UL, x21);
+  ASSERT_EQUAL_64(0x7fffff8000000000UL, x22);
+  ASSERT_EQUAL_64(0x8000008000000000UL, x23);
   ASSERT_EQUAL_64(1, x24);
   ASSERT_EQUAL_64(1, x25);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffffffffffff), x26);
-  ASSERT_EQUAL_64(UINT64_C(0x7fffffffffffffff), x27);
-  ASSERT_EQUAL_64(UINT64_C(0x8000000000000000), x28);
-  ASSERT_EQUAL_64(UINT64_C(0x7ffffffffffffc00), x29);
-  ASSERT_EQUAL_64(UINT64_C(0x8000000000000400), x30);
+  ASSERT_EQUAL_64(0xffffffffffffffffUL, x26);
+  ASSERT_EQUAL_64(0x7fffffffffffffffUL, x27);
+  ASSERT_EQUAL_64(0x8000000000000000UL, x28);
+  ASSERT_EQUAL_64(0x7ffffffffffffc00UL, x29);
+  ASSERT_EQUAL_64(0x8000000000000400UL, x30);
 
   TEARDOWN();
 }
@@ -6485,14 +6485,14 @@ TEST(fcvtzu) {
   __ Fmov(s19, -1.5);
   __ Fmov(s20, kFP32PositiveInfinity);
   __ Fmov(s21, kFP32NegativeInfinity);
-  __ Fmov(s22, UINT64_C(0x7fffff8000000000));  // Largest float < INT64_MAX.
+  __ Fmov(s22, 0x7fffff8000000000UL);  // Largest float < INT64_MAX.
   __ Fneg(s23, s22);                    // Smallest float > INT64_MIN.
   __ Fmov(d24, 1.1);
   __ Fmov(d25, 1.5);
   __ Fmov(d26, -1.5);
   __ Fmov(d27, kFP64PositiveInfinity);
   __ Fmov(d28, kFP64NegativeInfinity);
-  __ Fmov(d29, UINT64_C(0x7ffffffffffffc00));  // Largest double < INT64_MAX.
+  __ Fmov(d29, 0x7ffffffffffffc00UL);  // Largest double < INT64_MAX.
   __ Fneg(d30, d29);                    // Smallest double > INT64_MIN.
 
   __ Fcvtzu(w0, s0);
@@ -6545,18 +6545,18 @@ TEST(fcvtzu) {
   ASSERT_EQUAL_64(0x7ffffffe, x14);
   ASSERT_EQUAL_64(1, x17);
   ASSERT_EQUAL_64(1, x18);
-  ASSERT_EQUAL_64(UINT64_C(0x0), x19);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffffffffffff), x20);
-  ASSERT_EQUAL_64(UINT64_C(0x0), x21);
-  ASSERT_EQUAL_64(UINT64_C(0x7fffff8000000000), x22);
-  ASSERT_EQUAL_64(UINT64_C(0x0), x23);
+  ASSERT_EQUAL_64(0x0UL, x19);
+  ASSERT_EQUAL_64(0xffffffffffffffffUL, x20);
+  ASSERT_EQUAL_64(0x0UL, x21);
+  ASSERT_EQUAL_64(0x7fffff8000000000UL, x22);
+  ASSERT_EQUAL_64(0x0UL, x23);
   ASSERT_EQUAL_64(1, x24);
   ASSERT_EQUAL_64(1, x25);
-  ASSERT_EQUAL_64(UINT64_C(0x0), x26);
-  ASSERT_EQUAL_64(UINT64_C(0xffffffffffffffff), x27);
-  ASSERT_EQUAL_64(UINT64_C(0x0), x28);
-  ASSERT_EQUAL_64(UINT64_C(0x7ffffffffffffc00), x29);
-  ASSERT_EQUAL_64(UINT64_C(0x0), x30);
+  ASSERT_EQUAL_64(0x0UL, x26);
+  ASSERT_EQUAL_64(0xffffffffffffffffUL, x27);
+  ASSERT_EQUAL_64(0x0UL, x28);
+  ASSERT_EQUAL_64(0x7ffffffffffffc00UL, x29);
+  ASSERT_EQUAL_64(0x0UL, x30);
 
   TEARDOWN();
 }
@@ -7020,7 +7020,7 @@ TEST(zero_dest) {
   // Preserve the stack pointer, in case we clobber it.
   __ Mov(x30, sp);
   // Initialize the other registers used in this test.
-  uint64_t literal_base = UINT64_C(0x0100001000100101);
+  uint64_t literal_base = 0x0100001000100101UL;
   __ Mov(x0, 0);
   __ Mov(x1, literal_base);
   for (unsigned i = 2; i < x30.code(); i++) {
@@ -7086,7 +7086,7 @@ TEST(zero_dest_setflags) {
   // Preserve the stack pointer, in case we clobber it.
   __ Mov(x30, sp);
   // Initialize the other registers used in this test.
-  uint64_t literal_base = UINT64_C(0x0100001000100101);
+  uint64_t literal_base = 0x0100001000100101UL;
   __ Mov(x0, 0);
   __ Mov(x1, literal_base);
   for (int i = 2; i < 30; i++) {
@@ -7146,18 +7146,18 @@ TEST(register_bit) {
   // teardown.
 
   // Simple tests.
-  assert(x0.Bit() == (UINT64_C(1) << 0));
-  assert(x1.Bit() == (UINT64_C(1) << 1));
-  assert(x10.Bit() == (UINT64_C(1) << 10));
+  assert(x0.Bit() == (1UL << 0));
+  assert(x1.Bit() == (1UL << 1));
+  assert(x10.Bit() == (1UL << 10));
 
   // AAPCS64 definitions.
-  assert(lr.Bit() == (UINT64_C(1) << kLinkRegCode));
+  assert(lr.Bit() == (1UL << kLinkRegCode));
 
   // Fixed (hardware) definitions.
-  assert(xzr.Bit() == (UINT64_C(1) << kZeroRegCode));
+  assert(xzr.Bit() == (1UL << kZeroRegCode));
 
   // Internal ABI definitions.
-  assert(sp.Bit() == (UINT64_C(1) << kSPRegInternalCode));
+  assert(sp.Bit() == (1UL << kSPRegInternalCode));
   assert(sp.Bit() != xzr.Bit());
 
   // xn.Bit() == wn.Bit() at all times, for the same n.
@@ -7203,7 +7203,7 @@ TEST(peek_poke_simple) {
   //    is clearly readable in the result.
   //  * The value is not formed from repeating fixed-size smaller values, so it
   //    can be used to detect endianness-related errors.
-  uint64_t literal_base = UINT64_C(0x0100001000100101);
+  uint64_t literal_base = 0x0100001000100101UL;
 
   // Initialize the registers.
   __ Mov(x0, literal_base);
@@ -7265,7 +7265,7 @@ TEST(peek_poke_unaligned) {
   //    is clearly readable in the result.
   //  * The value is not formed from repeating fixed-size smaller values, so it
   //    can be used to detect endianness-related errors.
-  uint64_t literal_base = UINT64_C(0x0100001000100101);
+  uint64_t literal_base = 0x0100001000100101UL;
 
   // Initialize the registers.
   __ Mov(x0, literal_base);
@@ -7344,7 +7344,7 @@ TEST(peek_poke_endianness) {
   //    is clearly readable in the result.
   //  * The value is not formed from repeating fixed-size smaller values, so it
   //    can be used to detect endianness-related errors.
-  uint64_t literal_base = UINT64_C(0x0100001000100101);
+  uint64_t literal_base = 0x0100001000100101UL;
 
   // Initialize the registers.
   __ Mov(x0, literal_base);
@@ -7393,7 +7393,7 @@ TEST(peek_poke_mixed) {
   //    is clearly readable in the result.
   //  * The value is not formed from repeating fixed-size smaller values, so it
   //    can be used to detect endianness-related errors.
-  uint64_t literal_base = UINT64_C(0x0100001000100101);
+  uint64_t literal_base = 0x0100001000100101UL;
 
   // Initialize the registers.
   __ Mov(x0, literal_base);
@@ -7411,7 +7411,7 @@ TEST(peek_poke_mixed) {
   __ Poke(x1, 8);
   __ Poke(x0, 0);
   {
-    VIXL_ASSERT(__ StackPointer().Is(sp));
+    ASSERT(__ StackPointer().Is(sp));
     __ Mov(x4, __ StackPointer());
     __ SetStackPointer(x4);
 
@@ -7504,10 +7504,10 @@ static void PushPopXRegSimpleHelper(int reg_count,
   //    is clearly readable in the result.
   //  * The value is not formed from repeating fixed-size smaller values, so it
   //    can be used to detect endianness-related errors.
-  uint64_t literal_base = UINT64_C(0x0100001000100101);
+  uint64_t literal_base = 0x0100001000100101UL;
 
   {
-    VIXL_ASSERT(__ StackPointer().Is(sp));
+    ASSERT(__ StackPointer().Is(sp));
     __ Mov(stack_pointer, __ StackPointer());
     __ SetStackPointer(stack_pointer);
 
@@ -7534,7 +7534,7 @@ static void PushPopXRegSimpleHelper(int reg_count,
           case 3:  __ Push(r[2], r[1], r[0]); break;
           case 2:  __ Push(r[1], r[0]);       break;
           case 1:  __ Push(r[0]);             break;
-          default: VIXL_ASSERT(i == 0);            break;
+          default: ASSERT(i == 0);            break;
         }
         break;
       case PushPopRegList:
@@ -7556,7 +7556,7 @@ static void PushPopXRegSimpleHelper(int reg_count,
           case 3:  __ Pop(r[i], r[i+1], r[i+2]); break;
           case 2:  __ Pop(r[i], r[i+1]);         break;
           case 1:  __ Pop(r[i]);                 break;
-          default: VIXL_ASSERT(i == reg_count);       break;
+          default: ASSERT(i == reg_count);       break;
         }
         break;
       case PushPopRegList:
@@ -7578,7 +7578,7 @@ static void PushPopXRegSimpleHelper(int reg_count,
   // Check that the register contents were preserved.
   // Always use ASSERT_EQUAL_64, even when testing W registers, so we can test
   // that the upper word was properly cleared by Pop.
-  literal_base &= (UINT64_C(0xffffffffffffffff) >> (64-reg_size));
+  literal_base &= (0xffffffffffffffffUL >> (64-reg_size));
   for (int i = 0; i < reg_count; i++) {
     if (x[i].Is(xzr)) {
       ASSERT_EQUAL_64(0, x[i]);
@@ -7685,10 +7685,10 @@ static void PushPopFPXRegSimpleHelper(int reg_count,
   //    can be used to detect endianness-related errors.
   //  * It is never a floating-point NaN, and will therefore always compare
   //    equal to itself.
-  uint64_t literal_base = UINT64_C(0x0100001000100101);
+  uint64_t literal_base = 0x0100001000100101UL;
 
   {
-    VIXL_ASSERT(__ StackPointer().Is(sp));
+    ASSERT(__ StackPointer().Is(sp));
     __ Mov(stack_pointer, __ StackPointer());
     __ SetStackPointer(stack_pointer);
 
@@ -7719,7 +7719,7 @@ static void PushPopFPXRegSimpleHelper(int reg_count,
           case 3:  __ Push(v[2], v[1], v[0]); break;
           case 2:  __ Push(v[1], v[0]);       break;
           case 1:  __ Push(v[0]);             break;
-          default: VIXL_ASSERT(i == 0);            break;
+          default: ASSERT(i == 0);            break;
         }
         break;
       case PushPopRegList:
@@ -7741,7 +7741,7 @@ static void PushPopFPXRegSimpleHelper(int reg_count,
           case 3:  __ Pop(v[i], v[i+1], v[i+2]); break;
           case 2:  __ Pop(v[i], v[i+1]);         break;
           case 1:  __ Pop(v[i]);                 break;
-          default: VIXL_ASSERT(i == reg_count);       break;
+          default: ASSERT(i == reg_count);       break;
         }
         break;
       case PushPopRegList:
@@ -7763,7 +7763,7 @@ static void PushPopFPXRegSimpleHelper(int reg_count,
   // Check that the register contents were preserved.
   // Always use ASSERT_EQUAL_FP64, even when testing S registers, so we can
   // test that the upper word was properly cleared by Pop.
-  literal_base &= (UINT64_C(0xffffffffffffffff) >> (64-reg_size));
+  literal_base &= (0xffffffffffffffffUL >> (64-reg_size));
   for (int i = 0; i < reg_count; i++) {
     uint64_t literal = literal_base * i;
     double expected;
@@ -7857,11 +7857,11 @@ static void PushPopXRegMixedMethodsHelper(int claim, int reg_size) {
   //    is clearly readable in the result.
   //  * The value is not formed from repeating fixed-size smaller values, so it
   //    can be used to detect endianness-related errors.
-  uint64_t literal_base = UINT64_C(0x0100001000100101);
+  uint64_t literal_base = 0x0100001000100101UL;
 
   START();
   {
-    VIXL_ASSERT(__ StackPointer().Is(sp));
+    ASSERT(__ StackPointer().Is(sp));
     __ Mov(stack_pointer, __ StackPointer());
     __ SetStackPointer(stack_pointer);
 
@@ -7899,7 +7899,7 @@ static void PushPopXRegMixedMethodsHelper(int claim, int reg_size) {
 
   // Always use ASSERT_EQUAL_64, even when testing W registers, so we can test
   // that the upper word was properly cleared by Pop.
-  literal_base &= (UINT64_C(0xffffffffffffffff) >> (64-reg_size));
+  literal_base &= (0xffffffffffffffffUL >> (64-reg_size));
 
   ASSERT_EQUAL_64(literal_base * 3, x[9]);
   ASSERT_EQUAL_64(literal_base * 2, x[8]);
@@ -7957,14 +7957,14 @@ static void PushPopXRegWXOverlapHelper(int reg_count, int claim) {
   //    is clearly readable in the result.
   //  * The value is not formed from repeating fixed-size smaller values, so it
   //    can be used to detect endianness-related errors.
-  static uint64_t const literal_base = UINT64_C(0x0100001000100101);
+  static uint64_t const literal_base = 0x0100001000100101UL;
   static uint64_t const literal_base_hi = literal_base >> 32;
   static uint64_t const literal_base_lo = literal_base & 0xffffffff;
   static uint64_t const literal_base_w = literal_base & 0xffffffff;
 
   START();
   {
-    VIXL_ASSERT(__ StackPointer().Is(sp));
+    ASSERT(__ StackPointer().Is(sp));
     __ Mov(stack_pointer, __ StackPointer());
     __ SetStackPointer(stack_pointer);
 
@@ -8010,7 +8010,7 @@ static void PushPopXRegWXOverlapHelper(int reg_count, int claim) {
 
     int active_w_slots = 0;
     for (int i = 0; active_w_slots < requested_w_slots; i++) {
-      VIXL_ASSERT(i < reg_count);
+      ASSERT(i < reg_count);
       // In order to test various arguments to PushMultipleTimes, and to try to
       // exercise different alignment and overlap effects, we push each
       // register a different number of times.
@@ -8071,7 +8071,7 @@ static void PushPopXRegWXOverlapHelper(int reg_count, int claim) {
       }
       next_is_64 = !next_is_64;
     }
-    VIXL_ASSERT(active_w_slots == 0);
+    ASSERT(active_w_slots == 0);
 
     // Drop memory to restore stack_pointer.
     __ Drop(claim);
@@ -8107,7 +8107,7 @@ static void PushPopXRegWXOverlapHelper(int reg_count, int claim) {
       ASSERT_EQUAL_64(expected, x[i]);
     }
   }
-  VIXL_ASSERT(slot == requested_w_slots);
+  ASSERT(slot == requested_w_slots);
 
   TEARDOWN();
 }
@@ -8129,12 +8129,12 @@ TEST(push_pop_sp) {
 
   START();
 
-  VIXL_ASSERT(sp.Is(__ StackPointer()));
+  ASSERT(sp.Is(__ StackPointer()));
 
-  __ Mov(x3, UINT64_C(0x3333333333333333));
-  __ Mov(x2, UINT64_C(0x2222222222222222));
-  __ Mov(x1, UINT64_C(0x1111111111111111));
-  __ Mov(x0, UINT64_C(0x0000000000000000));
+  __ Mov(x3, 0x3333333333333333UL);
+  __ Mov(x2, 0x2222222222222222UL);
+  __ Mov(x1, 0x1111111111111111UL);
+  __ Mov(x0, 0x0000000000000000UL);
   __ Claim(2 * kXRegSizeInBytes);
   __ PushXRegList(x0.Bit() | x1.Bit() | x2.Bit() | x3.Bit());
   __ Push(x3, x2);
@@ -8173,16 +8173,16 @@ TEST(push_pop_sp) {
 
   RUN();
 
-  ASSERT_EQUAL_64(UINT64_C(0x1111111111111111), x3);
-  ASSERT_EQUAL_64(UINT64_C(0x0000000000000000), x2);
-  ASSERT_EQUAL_64(UINT64_C(0x3333333333333333), x1);
-  ASSERT_EQUAL_64(UINT64_C(0x2222222222222222), x0);
-  ASSERT_EQUAL_64(UINT64_C(0x3333333333333333), x9);
-  ASSERT_EQUAL_64(UINT64_C(0x2222222222222222), x8);
-  ASSERT_EQUAL_64(UINT64_C(0x0000000000000000), x7);
-  ASSERT_EQUAL_64(UINT64_C(0x3333333333333333), x6);
-  ASSERT_EQUAL_64(UINT64_C(0x1111111111111111), x5);
-  ASSERT_EQUAL_64(UINT64_C(0x2222222222222222), x4);
+  ASSERT_EQUAL_64(0x1111111111111111UL, x3);
+  ASSERT_EQUAL_64(0x0000000000000000UL, x2);
+  ASSERT_EQUAL_64(0x3333333333333333UL, x1);
+  ASSERT_EQUAL_64(0x2222222222222222UL, x0);
+  ASSERT_EQUAL_64(0x3333333333333333UL, x9);
+  ASSERT_EQUAL_64(0x2222222222222222UL, x8);
+  ASSERT_EQUAL_64(0x0000000000000000UL, x7);
+  ASSERT_EQUAL_64(0x3333333333333333UL, x6);
+  ASSERT_EQUAL_64(0x1111111111111111UL, x5);
+  ASSERT_EQUAL_64(0x2222222222222222UL, x4);
 
   ASSERT_EQUAL_32(0x11111111U, w13);
   ASSERT_EQUAL_32(0x33333333U, w12);
@@ -8197,11 +8197,11 @@ TEST(push_pop_sp) {
   ASSERT_EQUAL_32(0x11111111U, w19);
   ASSERT_EQUAL_32(0x11111111U, w20);
   ASSERT_EQUAL_32(0x11111111U, w21);
-  ASSERT_EQUAL_64(UINT64_C(0x3333333333333333), x22);
-  ASSERT_EQUAL_64(UINT64_C(0x0000000000000000), x23);
+  ASSERT_EQUAL_64(0x3333333333333333UL, x22);
+  ASSERT_EQUAL_64(0x0000000000000000UL, x23);
 
-  ASSERT_EQUAL_64(UINT64_C(0x3333333333333333), x24);
-  ASSERT_EQUAL_64(UINT64_C(0x3333333333333333), x26);
+  ASSERT_EQUAL_64(0x3333333333333333UL, x24);
+  ASSERT_EQUAL_64(0x3333333333333333UL, x26);
 
   ASSERT_EQUAL_32(0x33333333U, w25);
   ASSERT_EQUAL_32(0x00000000U, w27);
@@ -8214,93 +8214,93 @@ TEST(push_pop_sp) {
 TEST(noreg) {
   // This test doesn't generate any code, but it verifies some invariants
   // related to NoReg.
-  VIXL_CHECK(NoReg.Is(NoFPReg));
-  VIXL_CHECK(NoFPReg.Is(NoReg));
-  VIXL_CHECK(NoReg.Is(NoCPUReg));
-  VIXL_CHECK(NoCPUReg.Is(NoReg));
-  VIXL_CHECK(NoFPReg.Is(NoCPUReg));
-  VIXL_CHECK(NoCPUReg.Is(NoFPReg));
+  CHECK(NoReg.Is(NoFPReg));
+  CHECK(NoFPReg.Is(NoReg));
+  CHECK(NoReg.Is(NoCPUReg));
+  CHECK(NoCPUReg.Is(NoReg));
+  CHECK(NoFPReg.Is(NoCPUReg));
+  CHECK(NoCPUReg.Is(NoFPReg));
 
-  VIXL_CHECK(NoReg.IsNone());
-  VIXL_CHECK(NoFPReg.IsNone());
-  VIXL_CHECK(NoCPUReg.IsNone());
+  CHECK(NoReg.IsNone());
+  CHECK(NoFPReg.IsNone());
+  CHECK(NoCPUReg.IsNone());
 }
 
 
 TEST(isvalid) {
   // This test doesn't generate any code, but it verifies some invariants
   // related to IsValid().
-  VIXL_CHECK(!NoReg.IsValid());
-  VIXL_CHECK(!NoFPReg.IsValid());
-  VIXL_CHECK(!NoCPUReg.IsValid());
+  CHECK(!NoReg.IsValid());
+  CHECK(!NoFPReg.IsValid());
+  CHECK(!NoCPUReg.IsValid());
 
-  VIXL_CHECK(x0.IsValid());
-  VIXL_CHECK(w0.IsValid());
-  VIXL_CHECK(x30.IsValid());
-  VIXL_CHECK(w30.IsValid());
-  VIXL_CHECK(xzr.IsValid());
-  VIXL_CHECK(wzr.IsValid());
+  CHECK(x0.IsValid());
+  CHECK(w0.IsValid());
+  CHECK(x30.IsValid());
+  CHECK(w30.IsValid());
+  CHECK(xzr.IsValid());
+  CHECK(wzr.IsValid());
 
-  VIXL_CHECK(sp.IsValid());
-  VIXL_CHECK(wsp.IsValid());
+  CHECK(sp.IsValid());
+  CHECK(wsp.IsValid());
 
-  VIXL_CHECK(d0.IsValid());
-  VIXL_CHECK(s0.IsValid());
-  VIXL_CHECK(d31.IsValid());
-  VIXL_CHECK(s31.IsValid());
+  CHECK(d0.IsValid());
+  CHECK(s0.IsValid());
+  CHECK(d31.IsValid());
+  CHECK(s31.IsValid());
 
-  VIXL_CHECK(x0.IsValidRegister());
-  VIXL_CHECK(w0.IsValidRegister());
-  VIXL_CHECK(xzr.IsValidRegister());
-  VIXL_CHECK(wzr.IsValidRegister());
-  VIXL_CHECK(sp.IsValidRegister());
-  VIXL_CHECK(wsp.IsValidRegister());
-  VIXL_CHECK(!x0.IsValidFPRegister());
-  VIXL_CHECK(!w0.IsValidFPRegister());
-  VIXL_CHECK(!xzr.IsValidFPRegister());
-  VIXL_CHECK(!wzr.IsValidFPRegister());
-  VIXL_CHECK(!sp.IsValidFPRegister());
-  VIXL_CHECK(!wsp.IsValidFPRegister());
+  CHECK(x0.IsValidRegister());
+  CHECK(w0.IsValidRegister());
+  CHECK(xzr.IsValidRegister());
+  CHECK(wzr.IsValidRegister());
+  CHECK(sp.IsValidRegister());
+  CHECK(wsp.IsValidRegister());
+  CHECK(!x0.IsValidFPRegister());
+  CHECK(!w0.IsValidFPRegister());
+  CHECK(!xzr.IsValidFPRegister());
+  CHECK(!wzr.IsValidFPRegister());
+  CHECK(!sp.IsValidFPRegister());
+  CHECK(!wsp.IsValidFPRegister());
 
-  VIXL_CHECK(d0.IsValidFPRegister());
-  VIXL_CHECK(s0.IsValidFPRegister());
-  VIXL_CHECK(!d0.IsValidRegister());
-  VIXL_CHECK(!s0.IsValidRegister());
+  CHECK(d0.IsValidFPRegister());
+  CHECK(s0.IsValidFPRegister());
+  CHECK(!d0.IsValidRegister());
+  CHECK(!s0.IsValidRegister());
 
   // Test the same as before, but using CPURegister types. This shouldn't make
   // any difference.
-  VIXL_CHECK(static_cast<CPURegister>(x0).IsValid());
-  VIXL_CHECK(static_cast<CPURegister>(w0).IsValid());
-  VIXL_CHECK(static_cast<CPURegister>(x30).IsValid());
-  VIXL_CHECK(static_cast<CPURegister>(w30).IsValid());
-  VIXL_CHECK(static_cast<CPURegister>(xzr).IsValid());
-  VIXL_CHECK(static_cast<CPURegister>(wzr).IsValid());
+  CHECK(static_cast<CPURegister>(x0).IsValid());
+  CHECK(static_cast<CPURegister>(w0).IsValid());
+  CHECK(static_cast<CPURegister>(x30).IsValid());
+  CHECK(static_cast<CPURegister>(w30).IsValid());
+  CHECK(static_cast<CPURegister>(xzr).IsValid());
+  CHECK(static_cast<CPURegister>(wzr).IsValid());
 
-  VIXL_CHECK(static_cast<CPURegister>(sp).IsValid());
-  VIXL_CHECK(static_cast<CPURegister>(wsp).IsValid());
+  CHECK(static_cast<CPURegister>(sp).IsValid());
+  CHECK(static_cast<CPURegister>(wsp).IsValid());
 
-  VIXL_CHECK(static_cast<CPURegister>(d0).IsValid());
-  VIXL_CHECK(static_cast<CPURegister>(s0).IsValid());
-  VIXL_CHECK(static_cast<CPURegister>(d31).IsValid());
-  VIXL_CHECK(static_cast<CPURegister>(s31).IsValid());
+  CHECK(static_cast<CPURegister>(d0).IsValid());
+  CHECK(static_cast<CPURegister>(s0).IsValid());
+  CHECK(static_cast<CPURegister>(d31).IsValid());
+  CHECK(static_cast<CPURegister>(s31).IsValid());
 
-  VIXL_CHECK(static_cast<CPURegister>(x0).IsValidRegister());
-  VIXL_CHECK(static_cast<CPURegister>(w0).IsValidRegister());
-  VIXL_CHECK(static_cast<CPURegister>(xzr).IsValidRegister());
-  VIXL_CHECK(static_cast<CPURegister>(wzr).IsValidRegister());
-  VIXL_CHECK(static_cast<CPURegister>(sp).IsValidRegister());
-  VIXL_CHECK(static_cast<CPURegister>(wsp).IsValidRegister());
-  VIXL_CHECK(!static_cast<CPURegister>(x0).IsValidFPRegister());
-  VIXL_CHECK(!static_cast<CPURegister>(w0).IsValidFPRegister());
-  VIXL_CHECK(!static_cast<CPURegister>(xzr).IsValidFPRegister());
-  VIXL_CHECK(!static_cast<CPURegister>(wzr).IsValidFPRegister());
-  VIXL_CHECK(!static_cast<CPURegister>(sp).IsValidFPRegister());
-  VIXL_CHECK(!static_cast<CPURegister>(wsp).IsValidFPRegister());
+  CHECK(static_cast<CPURegister>(x0).IsValidRegister());
+  CHECK(static_cast<CPURegister>(w0).IsValidRegister());
+  CHECK(static_cast<CPURegister>(xzr).IsValidRegister());
+  CHECK(static_cast<CPURegister>(wzr).IsValidRegister());
+  CHECK(static_cast<CPURegister>(sp).IsValidRegister());
+  CHECK(static_cast<CPURegister>(wsp).IsValidRegister());
+  CHECK(!static_cast<CPURegister>(x0).IsValidFPRegister());
+  CHECK(!static_cast<CPURegister>(w0).IsValidFPRegister());
+  CHECK(!static_cast<CPURegister>(xzr).IsValidFPRegister());
+  CHECK(!static_cast<CPURegister>(wzr).IsValidFPRegister());
+  CHECK(!static_cast<CPURegister>(sp).IsValidFPRegister());
+  CHECK(!static_cast<CPURegister>(wsp).IsValidFPRegister());
 
-  VIXL_CHECK(static_cast<CPURegister>(d0).IsValidFPRegister());
-  VIXL_CHECK(static_cast<CPURegister>(s0).IsValidFPRegister());
-  VIXL_CHECK(!static_cast<CPURegister>(d0).IsValidRegister());
-  VIXL_CHECK(!static_cast<CPURegister>(s0).IsValidRegister());
+  CHECK(static_cast<CPURegister>(d0).IsValidFPRegister());
+  CHECK(static_cast<CPURegister>(s0).IsValidFPRegister());
+  CHECK(!static_cast<CPURegister>(d0).IsValidRegister());
+  CHECK(!static_cast<CPURegister>(s0).IsValidRegister());
 }
 
 
@@ -8519,7 +8519,7 @@ TEST(trace) {
   __ Bind(&start);
   __ Trace(LOG_ALL, TRACE_ENABLE);
   __ Trace(LOG_ALL, TRACE_DISABLE);
-  VIXL_CHECK(__ SizeOfCodeGeneratedSince(&start) == 0);
+  CHECK(__ SizeOfCodeGeneratedSince(&start) == 0);
 
   END();
   TEARDOWN();
@@ -8537,7 +8537,7 @@ TEST(log) {
   Label start;
   __ Bind(&start);
   __ Log(LOG_ALL);
-  VIXL_CHECK(__ SizeOfCodeGeneratedSince(&start) == 0);
+  CHECK(__ SizeOfCodeGeneratedSince(&start) == 0);
 
   END();
   TEARDOWN();
@@ -8550,17 +8550,17 @@ TEST(instruction_accurate_scope) {
   START();
 
   // By default macro instructions are allowed.
-  VIXL_ASSERT(masm.AllowMacroInstructions());
+  ASSERT(masm.AllowMacroInstructions());
   {
     InstructionAccurateScope scope1(&masm);
-    VIXL_ASSERT(!masm.AllowMacroInstructions());
+    ASSERT(!masm.AllowMacroInstructions());
     {
       InstructionAccurateScope scope2(&masm);
-      VIXL_ASSERT(!masm.AllowMacroInstructions());
+      ASSERT(!masm.AllowMacroInstructions());
     }
-    VIXL_ASSERT(!masm.AllowMacroInstructions());
+    ASSERT(!masm.AllowMacroInstructions());
   }
-  VIXL_ASSERT(masm.AllowMacroInstructions());
+  ASSERT(masm.AllowMacroInstructions());
 
   {
     InstructionAccurateScope scope(&masm, 2);

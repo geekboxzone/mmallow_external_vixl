@@ -24,20 +24,43 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef PLATFORM_H
-#define PLATFORM_H
+#ifndef VIXL_GLOBALS_H
+#define VIXL_GLOBALS_H
 
-// Define platform specific functionalities.
+// Get the standard printf format macros for C99 stdint types.
+#define __STDC_FORMAT_MACROS
+#include <inttypes.h>
 
-namespace vixl {
-#if defined(USE_SIMULATOR)
-// Currently we assume running the simulator implies running on x86 hardware.
-inline void HostBreakpoint() { asm("int3"); }
+#include <assert.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <stddef.h>
+#include "platform.h"
+
+
+typedef uint8_t byte;
+
+const int KBytes = 1024;
+const int MBytes = 1024 * KBytes;
+const int GBytes = 1024 * MBytes;
+
+  #define ABORT() printf("in %s, line %i", __FILE__, __LINE__); abort()
+#ifdef DEBUG
+  #define ASSERT(condition) assert(condition)
+  #define CHECK(condition) ASSERT(condition)
+  #define UNIMPLEMENTED() printf("UNIMPLEMENTED\t"); ABORT()
+  #define UNREACHABLE() printf("UNREACHABLE\t"); ABORT()
 #else
-inline void HostBreakpoint() {
-  // TODO: Implement HostBreakpoint on a64.
-}
+  #define ASSERT(condition) ((void) 0)
+  #define CHECK(condition) assert(condition)
+  #define UNIMPLEMENTED() ((void) 0)
+  #define UNREACHABLE() ((void) 0)
 #endif
-}  // namespace vixl
 
-#endif
+template <typename T> inline void USE(T) {}
+
+#define ALIGNMENT_EXCEPTION() printf("ALIGNMENT EXCEPTION\t"); ABORT()
+
+#endif  // VIXL_GLOBALS_H

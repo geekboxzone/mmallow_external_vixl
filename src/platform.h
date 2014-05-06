@@ -24,61 +24,20 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef VIXL_GLOBALS_H
-#define VIXL_GLOBALS_H
+#ifndef PLATFORM_H
+#define PLATFORM_H
 
-#ifndef __STDC_CONSTANT_MACROS
-#define __STDC_CONSTANT_MACROS
-#endif
-#include <stdint.h>
-#include <inttypes.h>
+// Define platform specific functionalities.
 
-#include <assert.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <stddef.h>
-#include "platform-vixl.h"
-
-#ifdef __ANDROID__
-#ifndef LOG_TAG
-#define LOG_TAG "VIXL"
-#endif
-#include <cutils/log.h>
-#endif
-
-typedef uint8_t byte;
-
-const int KBytes = 1024;
-const int MBytes = 1024 * KBytes;
-const int GBytes = 1024 * MBytes;
-
-#ifdef __ANDROID__
-  #define VIXL_ABORT() ALOGE("in %s, line %i", __FILE__, __LINE__); abort()
+namespace vixl {
+#ifdef USE_SIMULATOR
+// Currently we assume running the simulator implies running on x86 hardware.
+inline void HostBreakpoint() { asm("int3"); }
 #else
-  #define VIXL_ABORT() printf("in %s, line %i", __FILE__, __LINE__); abort()
+inline void HostBreakpoint() {
+  // TODO: Implement HostBreakpoint on a64.
+}
 #endif
+}  // namespace vixl
 
-#ifdef DEBUG
-  #define VIXL_ASSERT(condition) assert(condition)
-  #define VIXL_CHECK(condition) VIXL_ASSERT(condition)
-#ifdef __ANDROID__
-  #define VIXL_UNIMPLEMENTED() ALOGD("UNIMPLEMENTED @%s:%d\t", __FILE__, __LINE__); VIXL_ABORT()
-  #define VIXL_UNREACHABLE() printf("UNREACHABLE @%s:%d\t", __FILE__, __LINE__); VIXL_ABORT()
-#else
-  #define VIXL_UNIMPLEMENTED() printf("UNIMPLEMENTED\t"); VIXL_ABORT()
-  #define VIXL_UNREACHABLE() printf("UNREACHABLE\t"); VIXL_ABORT()
 #endif
-#else
-  #define VIXL_ASSERT(condition) ((void) 0)
-  #define VIXL_CHECK(condition) assert(condition)
-  #define VIXL_UNIMPLEMENTED() ((void) 0)
-  #define VIXL_UNREACHABLE() ((void) 0)
-#endif
-
-template <typename T> inline void USE(T) {}
-
-#define VIXL_ALIGNMENT_EXCEPTION() printf("ALIGNMENT EXCEPTION\t"); VIXL_ABORT()
-
-#endif  // VIXL_GLOBALS_H
