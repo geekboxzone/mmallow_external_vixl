@@ -40,6 +40,13 @@
 #define __STDC_FORMAT_MACROS
 #endif
 
+#ifdef __ANDROID__
+#ifndef LOG_TAG
+#define LOG_TAG   "VIXL"
+#endif
+#include <cutils/log.h>
+#endif
+
 #include <stdint.h>
 #include <inttypes.h>
 
@@ -57,12 +64,22 @@ typedef uint8_t byte;
 const int KBytes = 1024;
 const int MBytes = 1024 * KBytes;
 
-#define VIXL_ABORT() printf("in %s, line %i", __FILE__, __LINE__); abort()
+#ifdef __ANDROID__
+  #define VIXL_ABORT() ALOGE("in %s, line %i", __FILE__, __LINE__); abort()
+#else
+  #define VIXL_ABORT() printf("in %s, line %i", __FILE__, __LINE__); abort()
+#endif
+
 #ifdef DEBUG
   #define VIXL_ASSERT(condition) assert(condition)
   #define VIXL_CHECK(condition) VIXL_ASSERT(condition)
+#ifdef __ANDROID__
+  #define VIXL_UNIMPLEMENTED() ALOGD("UNIMPLEMENTED\t"); VIXL_ABORT()
+  #define VIXL_UNREACHABLE() ALOGD("UNREACHABLE\t"); VIXL_ABORT()
+#else
   #define VIXL_UNIMPLEMENTED() printf("UNIMPLEMENTED\t"); VIXL_ABORT()
   #define VIXL_UNREACHABLE() printf("UNREACHABLE\t"); VIXL_ABORT()
+#endif
 #else
   #define VIXL_ASSERT(condition) ((void) 0)
   #define VIXL_CHECK(condition) assert(condition)
@@ -80,6 +97,10 @@ const int MBytes = 1024 * KBytes;
 
 template <typename T> inline void USE(T) {}
 
-#define VIXL_ALIGNMENT_EXCEPTION() printf("ALIGNMENT EXCEPTION\t"); VIXL_ABORT()
+#ifdef __ANDROID__
+  #define VIXL_ALIGNMENT_EXCEPTION() ALOGD("ALIGNMENT EXCEPTION\t"); VIXL_ABORT()   //NOLINT
+#else
+  #define VIXL_ALIGNMENT_EXCEPTION() printf("ALIGNMENT EXCEPTION\t"); VIXL_ABORT()  //NOLINT
+#endif
 
 #endif  // VIXL_GLOBALS_H
