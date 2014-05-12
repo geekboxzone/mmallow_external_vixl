@@ -86,7 +86,7 @@ class RegisterToken : public ValueToken<const Register> {
 
   static Token* Tokenize(const char* arg);
   static RegisterToken* Cast(Token* tok) {
-    VIXL_ASSERT(tok->IsRegister());
+    ASSERT(tok->IsRegister());
     return reinterpret_cast<RegisterToken*>(tok);
   }
 
@@ -108,7 +108,7 @@ class FPRegisterToken : public ValueToken<const FPRegister> {
 
   static Token* Tokenize(const char* arg);
   static FPRegisterToken* Cast(Token* tok) {
-    VIXL_ASSERT(tok->IsFPRegister());
+    ASSERT(tok->IsFPRegister());
     return reinterpret_cast<FPRegisterToken*>(tok);
   }
 };
@@ -132,7 +132,7 @@ class IdentifierToken : public ValueToken<char*> {
 
   static Token* Tokenize(const char* arg);
   static IdentifierToken* Cast(Token* tok) {
-    VIXL_ASSERT(tok->IsIdentifier());
+    ASSERT(tok->IsIdentifier());
     return reinterpret_cast<IdentifierToken*>(tok);
   }
 };
@@ -150,7 +150,7 @@ class AddressToken : public ValueToken<uint8_t*> {
 
   static Token* Tokenize(const char* arg);
   static AddressToken* Cast(Token* tok) {
-    VIXL_ASSERT(tok->IsAddress());
+    ASSERT(tok->IsAddress());
     return reinterpret_cast<AddressToken*>(tok);
   }
 };
@@ -167,7 +167,7 @@ class IntegerToken : public ValueToken<int64_t> {
 
   static Token* Tokenize(const char* arg);
   static IntegerToken* Cast(Token* tok) {
-    VIXL_ASSERT(tok->IsInteger());
+    ASSERT(tok->IsInteger());
     return reinterpret_cast<IntegerToken*>(tok);
   }
 };
@@ -194,7 +194,7 @@ class FormatToken : public Token {
 
   static Token* Tokenize(const char* arg);
   static FormatToken* Cast(Token* tok) {
-    VIXL_ASSERT(tok->IsFormat());
+    ASSERT(tok->IsFormat());
     return reinterpret_cast<FormatToken*>(tok);
   }
 };
@@ -604,7 +604,7 @@ void Debugger::PrintRegister(const Register& target_reg,
   const uint64_t reg_value = reg<uint64_t>(reg_size,
                                            target_reg.code(),
                                            Reg31IsStackPointer);
-  VIXL_ASSERT(count > 0);
+  ASSERT(count > 0);
 
   printf("%s = ", name);
   for (uint64_t i = 1; i <= count; i++) {
@@ -625,7 +625,7 @@ void Debugger::PrintFPRegister(const FPRegister& target_fpreg,
   const uint64_t mask = 0xffffffffffffffff >> (64 - format_size);
   const uint64_t fpreg_value = fpreg<uint64_t>(fpreg_size,
                                                target_fpreg.code());
-  VIXL_ASSERT(count > 0);
+  ASSERT(count > 0);
 
   if (target_fpreg.Is32Bits()) {
     printf("s%u = ", target_fpreg.code());
@@ -713,8 +713,8 @@ char* Debugger::ReadCommandLine(const char* prompt, char* buffer, int length) {
   }
 
   // Remove the newline from the end of the command.
-  VIXL_ASSERT(end[1] == '\0');
-  VIXL_ASSERT((end - buffer) < (length - 1));
+  ASSERT(end[1] == '\0');
+  ASSERT((end - buffer) < (length - 1));
   end[0] = '\0';
 
   return buffer;
@@ -760,7 +760,7 @@ void Debugger::RunDebuggerShell() {
 
 
 void Debugger::DoBreakpoint(Instruction* instr) {
-  VIXL_ASSERT(instr->Mask(ExceptionMask) == BRK);
+  ASSERT(instr->Mask(ExceptionMask) == BRK);
 
   printf("Hit breakpoint at pc=%p.\n", reinterpret_cast<void*>(instr));
   set_debug_parameters(debug_parameters() | DBG_BREAK | DBG_ACTIVE);
@@ -770,24 +770,24 @@ void Debugger::DoBreakpoint(Instruction* instr) {
 
 
 void Debugger::DoUnreachable(Instruction* instr) {
-  VIXL_ASSERT((instr->Mask(ExceptionMask) == HLT) &&
+  ASSERT((instr->Mask(ExceptionMask) == HLT) &&
          (instr->ImmException() == kUnreachableOpcode));
 
-  fprintf(stream_, "Hit VIXL_UNREACHABLE marker at pc=%p.\n",
+  fprintf(stream_, "Hit UNREACHABLE marker at pc=%p.\n",
           reinterpret_cast<void*>(instr));
   abort();
 }
 
 
 void Debugger::DoTrace(Instruction* instr) {
-  VIXL_ASSERT((instr->Mask(ExceptionMask) == HLT) &&
+  ASSERT((instr->Mask(ExceptionMask) == HLT) &&
          (instr->ImmException() == kTraceOpcode));
 
   // Read the arguments encoded inline in the instruction stream.
   uint32_t parameters;
   uint32_t command;
 
-  VIXL_ASSERT(sizeof(*instr) == 1);
+  ASSERT(sizeof(*instr) == 1);
   memcpy(&parameters, instr + kTraceParamsOffset, sizeof(parameters));
   memcpy(&command, instr + kTraceCommandOffset, sizeof(command));
 
@@ -799,7 +799,7 @@ void Debugger::DoTrace(Instruction* instr) {
       set_log_parameters(log_parameters() & ~parameters);
       break;
     default:
-      VIXL_UNREACHABLE();
+      UNREACHABLE();
   }
 
   set_pc(instr->InstructionAtOffset(kTraceLength));
@@ -807,17 +807,17 @@ void Debugger::DoTrace(Instruction* instr) {
 
 
 void Debugger::DoLog(Instruction* instr) {
-  VIXL_ASSERT((instr->Mask(ExceptionMask) == HLT) &&
+  ASSERT((instr->Mask(ExceptionMask) == HLT) &&
          (instr->ImmException() == kLogOpcode));
 
   // Read the arguments encoded inline in the instruction stream.
   uint32_t parameters;
 
-  VIXL_ASSERT(sizeof(*instr) == 1);
+  ASSERT(sizeof(*instr) == 1);
   memcpy(&parameters, instr + kTraceParamsOffset, sizeof(parameters));
 
   // We don't support a one-shot LOG_DISASM.
-  VIXL_ASSERT((parameters & LOG_DISASM) == 0);
+  ASSERT((parameters & LOG_DISASM) == 0);
   // Print the requested information.
   if (parameters & LOG_SYS_REGS) PrintSystemRegisters(true);
   if (parameters & LOG_REGS) PrintRegisters(true);
@@ -879,7 +879,7 @@ static bool StringToInt64(int64_t* value, const char* line, int base = 10) {
 
 uint8_t* Token::ToAddress(Debugger* debugger) const {
   USE(debugger);
-  VIXL_UNREACHABLE();
+  UNREACHABLE();
   return NULL;
 }
 
@@ -922,7 +922,7 @@ Token* Token::Tokenize(const char* arg) {
 
 
 uint8_t* RegisterToken::ToAddress(Debugger* debugger) const {
-  VIXL_ASSERT(CanAddressMemory());
+  ASSERT(CanAddressMemory());
   uint64_t reg_value = debugger->xreg(value().code(), Reg31IsStackPointer);
   uint8_t* address = NULL;
   memcpy(&address, &reg_value, sizeof(address));
@@ -931,7 +931,7 @@ uint8_t* RegisterToken::ToAddress(Debugger* debugger) const {
 
 
 void RegisterToken::Print(FILE* out) const {
-  VIXL_ASSERT(value().IsValid());
+  ASSERT(value().IsValid());
   fprintf(out, "[Register %s]", Name());
 }
 
@@ -967,7 +967,7 @@ Token* RegisterToken::Tokenize(const char* arg) {
 
 
 void FPRegisterToken::Print(FILE* out) const {
-  VIXL_ASSERT(value().IsValid());
+  ASSERT(value().IsValid());
   char prefix = value().Is32Bits() ? 's' : 'd';
   fprintf(out, "[FPRegister %c%" PRIu32 "]", prefix, value().code());
 }
@@ -995,7 +995,7 @@ Token* FPRegisterToken::Tokenize(const char* arg) {
       switch (*arg) {
         case 's': fpreg = FPRegister::SRegFromCode(code); break;
         case 'd': fpreg = FPRegister::DRegFromCode(code); break;
-        default: VIXL_UNREACHABLE();
+        default: UNREACHABLE();
       }
 
       return new FPRegisterToken(fpreg);
@@ -1006,7 +1006,7 @@ Token* FPRegisterToken::Tokenize(const char* arg) {
 
 
 uint8_t* IdentifierToken::ToAddress(Debugger* debugger) const {
-  VIXL_ASSERT(CanAddressMemory());
+  ASSERT(CanAddressMemory());
   Instruction* pc_value = debugger->pc();
   uint8_t* address = NULL;
   memcpy(&address, &pc_value, sizeof(address));
@@ -1142,7 +1142,7 @@ Token* FormatToken::Tokenize(const char* arg) {
         default: return NULL;
       }
     default:
-      VIXL_UNREACHABLE();
+      UNREACHABLE();
       return NULL;
   }
 }
@@ -1150,8 +1150,7 @@ Token* FormatToken::Tokenize(const char* arg) {
 
 template<typename T>
 void Format<T>::Print(FILE* out) const {
-  fprintf(out, "[Format %c%u - %s]", type_code_,
-          (unsigned) (sizeof(T) * 8), fmt_);
+  fprintf(out, "[Format %c%lu - %s]", type_code_, sizeof(T) * 8, fmt_);
 }
 
 
@@ -1223,8 +1222,8 @@ DebugCommand* DebugCommand::Parse(char* line) {
 void DebugCommand::PrintHelp(const char** aliases,
                              const char* args,
                              const char* help) {
-  VIXL_ASSERT(aliases[0] != NULL);
-  VIXL_ASSERT(help != NULL);
+  ASSERT(aliases[0] != NULL);
+  ASSERT(help != NULL);
 
   printf("\n----\n\n");
   for (const char** current = aliases; *current != NULL; current++) {
@@ -1239,7 +1238,7 @@ void DebugCommand::PrintHelp(const char** aliases,
 
 
 bool HelpCommand::Run(Debugger* debugger) {
-  VIXL_ASSERT(debugger->IsDebuggerRunning());
+  ASSERT(debugger->IsDebuggerRunning());
   USE(debugger);
 
   #define PRINT_HELP(Command)                     \
@@ -1264,7 +1263,7 @@ DebugCommand* HelpCommand::Build(std::vector<Token*> args) {
 
 
 bool ContinueCommand::Run(Debugger* debugger) {
-  VIXL_ASSERT(debugger->IsDebuggerRunning());
+  ASSERT(debugger->IsDebuggerRunning());
 
   debugger->set_debug_parameters(debugger->debug_parameters() & ~DBG_ACTIVE);
   return true;
@@ -1281,7 +1280,7 @@ DebugCommand* ContinueCommand::Build(std::vector<Token*> args) {
 
 
 bool StepCommand::Run(Debugger* debugger) {
-  VIXL_ASSERT(debugger->IsDebuggerRunning());
+  ASSERT(debugger->IsDebuggerRunning());
 
   int64_t steps = count();
   if (steps < 0) {
@@ -1356,7 +1355,7 @@ void PrintCommand::Print(FILE* out) {
 
 
 bool PrintCommand::Run(Debugger* debugger) {
-  VIXL_ASSERT(debugger->IsDebuggerRunning());
+  ASSERT(debugger->IsDebuggerRunning());
 
   Token* tok = target();
   if (tok->IsIdentifier()) {
@@ -1377,7 +1376,7 @@ bool PrintCommand::Run(Debugger* debugger) {
   }
 
   FormatToken* format_tok = format();
-  VIXL_ASSERT(format_tok != NULL);
+  ASSERT(format_tok != NULL);
   if (format_tok->type_code() == 'i') {
     // TODO(all): Add support for instruction disassembly.
     printf(" ** unsupported format: instructions **\n");
@@ -1397,7 +1396,7 @@ bool PrintCommand::Run(Debugger* debugger) {
     return false;
   }
 
-  VIXL_UNREACHABLE();
+  UNREACHABLE();
   return false;
 }
 
@@ -1432,13 +1431,13 @@ DebugCommand* PrintCommand::Build(std::vector<Token*> args) {
         switch (target_size) {
           case 4: format = new Format<uint32_t>("%08" PRIx32, 'x'); break;
           case 8: format = new Format<uint64_t>("%016" PRIx64, 'x'); break;
-          default: VIXL_UNREACHABLE();
+          default: UNREACHABLE();
         }
       } else if (target->IsFPRegister()) {
         switch (target_size) {
           case 4: format = new Format<float>("%8g", 'f'); break;
           case 8: format = new Format<double>("%8g", 'f'); break;
-          default: VIXL_UNREACHABLE();
+          default: UNREACHABLE();
         }
       }
       break;
@@ -1470,7 +1469,7 @@ DebugCommand* PrintCommand::Build(std::vector<Token*> args) {
 
 
 bool ExamineCommand::Run(Debugger* debugger) {
-  VIXL_ASSERT(debugger->IsDebuggerRunning());
+  ASSERT(debugger->IsDebuggerRunning());
 
   uint8_t* address = target()->ToAddress(debugger);
   int64_t  amount = count()->value();
@@ -1523,7 +1522,7 @@ DebugCommand* ExamineCommand::Build(std::vector<Token*> args) {
       } else {
         return new InvalidCommand(args, 2, "expects format or integer");
       }
-      VIXL_UNREACHABLE();
+      UNREACHABLE();
       break;
     }
     case 4: {  // mem addr.format n
@@ -1553,7 +1552,7 @@ UnknownCommand::~UnknownCommand() {
 
 
 bool UnknownCommand::Run(Debugger* debugger) {
-  VIXL_ASSERT(debugger->IsDebuggerRunning());
+  ASSERT(debugger->IsDebuggerRunning());
   USE(debugger);
 
   printf(" ** Unknown Command:");
@@ -1577,7 +1576,7 @@ InvalidCommand::~InvalidCommand() {
 
 
 bool InvalidCommand::Run(Debugger* debugger) {
-  VIXL_ASSERT(debugger->IsDebuggerRunning());
+  ASSERT(debugger->IsDebuggerRunning());
   USE(debugger);
 
   printf(" ** Invalid Command:");

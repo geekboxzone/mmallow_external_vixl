@@ -27,7 +27,7 @@
 #ifndef TEST_CCTEST_H_
 #define TEST_CCTEST_H_
 
-#include "utils-vixl.h"
+#include "utils.h"
 
 namespace vixl {
 

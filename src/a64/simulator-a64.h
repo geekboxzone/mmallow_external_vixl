@@ -27,8 +27,8 @@
 #ifndef VIXL_A64_SIMULATOR_A64_H_
 #define VIXL_A64_SIMULATOR_A64_H_
 
-#include "globals-vixl.h"
-#include "utils-vixl.h"
+#include "globals.h"
+#include "utils.h"
 #include "a64/instructions-a64.h"
 #include "a64/assembler-a64.h"
 #include "a64/disasm-a64.h"
@@ -121,8 +121,8 @@ class SimRegisterBase {
  public:
   template<typename T>
   void Set(T new_value, unsigned size = sizeof(T)) {
-    VIXL_ASSERT(size <= kSizeInBytes);
-    VIXL_ASSERT(size <= sizeof(new_value));
+    ASSERT(size <= kSizeInBytes);
+    ASSERT(size <= sizeof(new_value));
     // All AArch64 registers are zero-extending; Writing a W register clears the
     // top bits of the corresponding X register.
     memset(value_, 0, kSizeInBytes);
@@ -133,7 +133,7 @@ class SimRegisterBase {
   // the result.
   template<typename T>
   T Get(unsigned size = sizeof(T)) const {
-    VIXL_ASSERT(size <= kSizeInBytes);
+    ASSERT(size <= kSizeInBytes);
     T result;
     memset(&result, 0, sizeof(result));
     memcpy(&result, value_, size);
@@ -175,7 +175,7 @@ class Simulator : public DecoderVisitor {
 
   inline void ExecuteInstruction() {
     // The program counter should always be aligned.
-    VIXL_ASSERT(IsWordAligned(pc_));
+    ASSERT(IsWordAligned(pc_));
     decoder_->Decode(pc_);
     increment_pc();
   }
@@ -195,9 +195,9 @@ class Simulator : public DecoderVisitor {
   inline T reg(unsigned size, unsigned code,
                Reg31Mode r31mode = Reg31IsZeroRegister) const {
     unsigned size_in_bytes = size / 8;
-    VIXL_ASSERT(size_in_bytes <= sizeof(T));
-    VIXL_ASSERT((size == kXRegSize) || (size == kWRegSize));
-    VIXL_ASSERT(code < kNumberOfRegisters);
+    ASSERT(size_in_bytes <= sizeof(T));
+    ASSERT((size == kXRegSize) || (size == kWRegSize));
+    ASSERT(code < kNumberOfRegisters);
 
     if ((code == 31) && (r31mode == Reg31IsZeroRegister)) {
       T result;
@@ -237,9 +237,9 @@ class Simulator : public DecoderVisitor {
   inline void set_reg(unsigned size, unsigned code, T value,
                       Reg31Mode r31mode = Reg31IsZeroRegister) {
     unsigned size_in_bytes = size / 8;
-    VIXL_ASSERT(size_in_bytes <= sizeof(T));
-    VIXL_ASSERT((size == kXRegSize) || (size == kWRegSize));
-    VIXL_ASSERT(code < kNumberOfRegisters);
+    ASSERT(size_in_bytes <= sizeof(T));
+    ASSERT((size == kXRegSize) || (size == kWRegSize));
+    ASSERT(code < kNumberOfRegisters);
 
     if ((code == 31) && (r31mode == Reg31IsZeroRegister)) {
       return;
@@ -273,7 +273,7 @@ class Simulator : public DecoderVisitor {
 
   template<typename T>
   inline void set_sp(T value) {
-    set_reg(sizeof(value) * 8, 31, value, Reg31IsStackPointer);
+    set_reg(31, value, Reg31IsStackPointer);
   }
 
   // Return 'size' bits of the value of a floating-point register, as the
@@ -283,9 +283,9 @@ class Simulator : public DecoderVisitor {
   template<typename T>
   inline T fpreg(unsigned size, unsigned code) const {
     unsigned size_in_bytes = size / 8;
-    VIXL_ASSERT(size_in_bytes <= sizeof(T));
-    VIXL_ASSERT((size == kDRegSize) || (size == kSRegSize));
-    VIXL_ASSERT(code < kNumberOfFPRegisters);
+    ASSERT(size_in_bytes <= sizeof(T));
+    ASSERT((size == kDRegSize) || (size == kSRegSize));
+    ASSERT(code < kNumberOfFPRegisters);
     return fpregisters_[code].Get<T>(size_in_bytes);
   }
 
@@ -317,7 +317,7 @@ class Simulator : public DecoderVisitor {
       case kSRegSize: return sreg(code);
       case kDRegSize: return dreg(code);
       default:
-        VIXL_UNREACHABLE();
+        UNREACHABLE();
         return 0.0;
     }
   }
@@ -326,9 +326,9 @@ class Simulator : public DecoderVisitor {
   // This behaviour matches AArch64 register writes.
   template<typename T>
   inline void set_fpreg(unsigned code, T value) {
-    VIXL_ASSERT((sizeof(value) == kDRegSizeInBytes) ||
+    ASSERT((sizeof(value) == kDRegSizeInBytes) ||
            (sizeof(value) == kSRegSizeInBytes));
-    VIXL_ASSERT(code < kNumberOfFPRegisters);
+    ASSERT(code < kNumberOfFPRegisters);
     fpregisters_[code].Set(value, sizeof(value));
   }
 
@@ -435,7 +435,7 @@ class Simulator : public DecoderVisitor {
       case al:
         return true;
       default:
-        VIXL_UNREACHABLE();
+        UNREACHABLE();
         return false;
     }
   }
@@ -549,9 +549,9 @@ class Simulator : public DecoderVisitor {
   // functions, or to save and restore it when entering and leaving generated
   // code.
   void AssertSupportedFPCR() {
-    VIXL_ASSERT(fpcr().DN() == 0);             // No default-NaN support.
-    VIXL_ASSERT(fpcr().FZ() == 0);             // No flush-to-zero support.
-    VIXL_ASSERT(fpcr().RMode() == FPTieEven);  // Ties-to-even rounding only.
+    ASSERT(fpcr().DN() == 0);             // No default-NaN support.
+    ASSERT(fpcr().FZ() == 0);             // No flush-to-zero support.
+    ASSERT(fpcr().RMode() == FPTieEven);  // Ties-to-even rounding only.
 
     // The simulator does not support half-precision operations so fpcr().AHP()
     // is irrelevant, and is not checked here.

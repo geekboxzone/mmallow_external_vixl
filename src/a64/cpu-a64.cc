@@ -24,7 +24,7 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "utils-vixl.h"
+#include "utils.h"
 #include "a64/cpu-a64.h"
 
 namespace vixl {
@@ -86,8 +86,8 @@ void CPU::EnsureIAndDCacheCoherency(void *address, size_t length) {
   uintptr_t dsize = static_cast<uintptr_t>(dcache_line_size_);
   uintptr_t isize = static_cast<uintptr_t>(icache_line_size_);
   // Cache line sizes are always a power of 2.
-  VIXL_ASSERT(CountSetBits(dsize, 64) == 1);
-  VIXL_ASSERT(CountSetBits(isize, 64) == 1);
+  ASSERT(CountSetBits(dsize, 64) == 1);
+  ASSERT(CountSetBits(isize, 64) == 1);
   uintptr_t dstart = start & ~(dsize - 1);
   uintptr_t istart = start & ~(isize - 1);
   uintptr_t end = start + length;
