@@ -115,6 +115,7 @@ include $(BUILD_HOST_STATIC_LIBRARY)
 #
 # We only support 64bit host builds of cctest. For this we hardcode -m64 to the
 # compiler/linker flags.
+ifneq ($(BUILD_HOST_64bit),)
 include $(CLEAR_VARS)
 LOCAL_CPP_EXTENSION := .cc
 LOCAL_CPPFLAGS := -O2 -Wall -Wextra -DUSE_SIMULATOR -DDEBUG=1 -UNDEBUG -m64
@@ -125,4 +126,5 @@ LOCAL_LDFLAGS := -m64
 LOCAL_FORCE_STATIC_EXECUTABLE := true
 LOCAL_MODULE := cctest_vixl
 include $(BUILD_HOST_EXECUTABLE)
+endif
 endif
