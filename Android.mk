@@ -113,18 +113,15 @@ include $(BUILD_HOST_STATIC_LIBRARY)
 
 # cctest_vixl: VIXL native tests (to run all tests execute ./cctest_vixl --run_all)
 #
-# We only support 64bit host builds of cctest. For this we hardcode -m64 to the
-# compiler/linker flags.
-ifneq ($(BUILD_HOST_64bit),)
+# We only support 64bit host builds of cctest.
 include $(CLEAR_VARS)
 LOCAL_CPP_EXTENSION := .cc
-LOCAL_CPPFLAGS := -O2 -Wall -Wextra -DUSE_SIMULATOR -DDEBUG=1 -UNDEBUG -m64
+LOCAL_CPPFLAGS := -O2 -Wall -Wextra -DUSE_SIMULATOR -DDEBUG=1 -UNDEBUG
 LOCAL_C_INCLUDES := $(vixl_include_files)
 LOCAL_SRC_FILES :=  $(vixl_test_files) $(vixl_src_files)
 LOCAL_MODULE_TAGS := optional
-LOCAL_LDFLAGS := -m64
+LOCAL_MODULE_HOST_ARCH := x86_64
 LOCAL_FORCE_STATIC_EXECUTABLE := true
 LOCAL_MODULE := cctest_vixl
 include $(BUILD_HOST_EXECUTABLE)
-endif
 endif
