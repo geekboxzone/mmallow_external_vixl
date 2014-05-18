@@ -124,4 +124,9 @@ LOCAL_MODULE_HOST_ARCH := x86_64
 LOCAL_FORCE_STATIC_EXECUTABLE := true
 LOCAL_MODULE := cctest_vixl
 include $(BUILD_HOST_EXECUTABLE)
+
+.PHONY: run-vixl-tests
+run-vixl-tests:
+	$(ANDROID_HOST_OUT)/bin/cctest_vixl --run_all
+	@echo vixl tests PASSED
 endif
