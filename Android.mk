@@ -126,7 +126,7 @@ LOCAL_MODULE := cctest_vixl
 include $(BUILD_HOST_EXECUTABLE)
 
 .PHONY: run-vixl-tests
-run-vixl-tests:
+run-vixl-tests: cctest_vixl
 	$(ANDROID_HOST_OUT)/bin/cctest_vixl --run_all
 	@echo vixl tests PASSED
 endif
