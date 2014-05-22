@@ -110,6 +110,7 @@ LOCAL_SRC_FILES :=  $(vixl_src_files)
 LOCAL_STATIC_LIBRARIES := liblog
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libvixl
+include external/libcxx/libcxx.mk
 include $(BUILD_HOST_STATIC_LIBRARY)
 
 # cctest_vixl: VIXL native tests (to run all tests execute ./cctest_vixl --run_all)
@@ -125,6 +126,7 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_HOST_ARCH := x86_64
 LOCAL_FORCE_STATIC_EXECUTABLE := true
 LOCAL_MODULE := cctest_vixl
+include external/libcxx/libcxx.mk
 include $(BUILD_HOST_EXECUTABLE)
 
 .PHONY: run-vixl-tests
