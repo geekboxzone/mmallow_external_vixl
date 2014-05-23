@@ -100,7 +100,6 @@ LOCAL_MODULE := libvixlg
 include external/libcxx/libcxx.mk
 include $(BUILD_SHARED_LIBRARY)
 
-ifeq ($(WITH_HOST_DALVIK),true)
 include $(CLEAR_VARS)
 LOCAL_CLANG := true
 LOCAL_CPP_EXTENSION := .cc
@@ -133,4 +132,3 @@ include $(BUILD_HOST_EXECUTABLE)
 run-vixl-tests: cctest_vixl
 	$(HOST_OUT)/bin/cctest_vixl --run_all
 	@echo vixl tests PASSED
-endif
