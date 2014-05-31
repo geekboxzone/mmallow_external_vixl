@@ -239,7 +239,7 @@ void Disassembler::VisitLogicalImmediate(Instruction* instr) {
     case ORR_w_imm:
     case ORR_x_imm: {
       mnemonic = "orr";
-      unsigned reg_size = (instr->SixtyFourBits() == 1) ? kXRegSize
+      unsigned reg_size = (instr->SixtyFourBits() != 0) ? kXRegSize
                                                         : kWRegSize;
       if (rn_is_zr && !IsMovzMovnImm(reg_size, instr->ImmLogical())) {
         mnemonic = "mov";
@@ -431,7 +431,7 @@ void Disassembler::VisitBitfield(Instruction* instr) {
   unsigned s = instr->ImmS();
   unsigned r = instr->ImmR();
   unsigned rd_size_minus_1 =
-    ((instr->SixtyFourBits() == 1) ? kXRegSize : kWRegSize) - 1;
+    ((instr->SixtyFourBits() != 0) ? kXRegSize : kWRegSize) - 1;
   const char *mnemonic = "";
   const char *form = "";
   const char *form_shift_right = "'Rd, 'Rn, 'IBr";
@@ -451,7 +451,7 @@ void Disassembler::VisitBitfield(Instruction* instr) {
           mnemonic = "sxtb";
         } else if (s == 15) {
           mnemonic = "sxth";
-        } else if ((s == 31) && (instr->SixtyFourBits() == 1)) {
+        } else if ((s == 31) && (instr->SixtyFourBits() != 0)) {
           mnemonic = "sxtw";
         } else {
           form = form_bfx;
@@ -1489,7 +1489,7 @@ int Disassembler::SubstituteBitfieldImmediateField(Instruction* instr,
     }
     case 'Z': {  // IBZ-r.
       VIXL_ASSERT((format[3] == '-') && (format[4] == 'r'));
-      unsigned reg_size = (instr->SixtyFourBits() == 1) ? kXRegSize : kWRegSize;
+      unsigned reg_size = (instr->SixtyFourBits() != 0) ? kXRegSize : kWRegSize;
       AppendToOutput("#%d", reg_size - r);
       return 5;
     }
