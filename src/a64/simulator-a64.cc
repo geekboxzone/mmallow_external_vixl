@@ -1016,7 +1016,7 @@ void Simulator::VisitMoveWideImmediate(Instruction* instr) {
     static_cast<MoveWideImmediateOp>(instr->Mask(MoveWideImmediateMask));
   int64_t new_xn_val = 0;
 
-  bool is_64_bits = instr->SixtyFourBits() == 1;
+  bool is_64_bits = instr->SixtyFourBits() != 0;
   // Shift is limited for W operations.
   VIXL_ASSERT(is_64_bits || (instr->ShiftMoveWide() < 2));
 
@@ -1209,7 +1209,7 @@ void Simulator::VisitDataProcessing2Source(Instruction* instr) {
   if (shift_op != NO_SHIFT) {
     // Shift distance encoded in the least-significant five/six bits of the
     // register.
-    int mask = (instr->SixtyFourBits() == 1) ? 0x3f : 0x1f;
+    int mask = (instr->SixtyFourBits() != 0) ? 0x3f : 0x1f;
     unsigned shift = wreg(instr->Rm()) & mask;
     result = ShiftOperand(reg_size, reg(reg_size, instr->Rn()), shift_op,
                           shift);
@@ -1326,7 +1326,7 @@ void Simulator::VisitBitfield(Instruction* instr) {
 
 void Simulator::VisitExtract(Instruction* instr) {
   unsigned lsb = instr->ImmS();
-  unsigned reg_size = (instr->SixtyFourBits() == 1) ? kXRegSize
+  unsigned reg_size = (instr->SixtyFourBits() != 0) ? kXRegSize
                                                     : kWRegSize;
   set_reg(reg_size,
           instr->Rd(),
