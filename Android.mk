@@ -85,6 +85,7 @@ LOCAL_SRC_FILES :=  $(vixl_src_files)
 LOCAL_SHARED_LIBRARIES := liblog
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libvixl
+LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
 include external/libcxx/libcxx.mk
 include $(BUILD_SHARED_LIBRARY)
 
@@ -97,6 +98,7 @@ LOCAL_SRC_FILES :=  $(vixl_src_files)
 LOCAL_SHARED_LIBRARIES := liblog
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libvixlg
+LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
 include external/libcxx/libcxx.mk
 include $(BUILD_SHARED_LIBRARY)
 
@@ -110,6 +112,7 @@ LOCAL_SRC_FILES :=  $(vixl_src_files)
 LOCAL_STATIC_LIBRARIES := liblog
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libvixl
+LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
 include external/libcxx/libcxx.mk
 include $(BUILD_HOST_STATIC_LIBRARY)
 
@@ -126,6 +129,7 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_HOST_ARCH := x86_64
 LOCAL_FORCE_STATIC_EXECUTABLE := true
 LOCAL_MODULE := cctest_vixl
+LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
 include external/libcxx/libcxx.mk
 include $(BUILD_HOST_EXECUTABLE)
 
