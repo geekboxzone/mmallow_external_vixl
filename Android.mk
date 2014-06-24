@@ -112,6 +112,7 @@ LOCAL_STATIC_LIBRARIES := liblog
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libvixl
 LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
+LOCAL_MULTILIB := both
 include external/libcxx/libcxx.mk
 include $(BUILD_HOST_STATIC_LIBRARY)
 
