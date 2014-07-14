@@ -32,7 +32,6 @@
 
 namespace vixl {
 inline void HostBreakpoint() { raise(SIGINT); }
-
 }  // namespace vixl
 
 #endif
