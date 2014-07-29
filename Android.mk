@@ -78,7 +78,7 @@ vixl_test_files := \
 
 include $(CLEAR_VARS)
 LOCAL_CPP_EXTENSION := .cc
-LOCAL_CPPFLAGS := -O2 -Wall -Wextra -DUSE_SIMULATOR
+LOCAL_CPPFLAGS := -O2 -Wall -Wextra -DUSE_SIMULATOR -std=c++11
 LOCAL_CPPFLAGS_arm64 := -UUSE_SIMULATOR
 LOCAL_C_INCLUDES := $(vixl_include_files)
 LOCAL_SRC_FILES :=  $(vixl_src_files)
@@ -91,7 +91,7 @@ include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_CPP_EXTENSION := .cc
-LOCAL_CPPFLAGS := -O2 -Wall -Wextra -DDEBUG=1  -DUSE_SIMULATOR
+LOCAL_CPPFLAGS := -O2 -Wall -Wextra -DDEBUG=1  -DUSE_SIMULATOR -std=c++11
 LOCAL_CPPFLAGS_arm64 := -UUSE_SIMULATOR
 LOCAL_C_INCLUDES := $(vixl_include_files)
 LOCAL_SRC_FILES :=  $(vixl_src_files)
@@ -105,7 +105,7 @@ include $(BUILD_SHARED_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_CLANG := true
 LOCAL_CPP_EXTENSION := .cc
-LOCAL_CPPFLAGS := -O2 -Wall -Wextra -DUSE_SIMULATOR
+LOCAL_CPPFLAGS := -O2 -Wall -Wextra -DUSE_SIMULATOR -std=c++11
 LOCAL_C_INCLUDES := $(vixl_include_files)
 LOCAL_SRC_FILES :=  $(vixl_src_files)
 LOCAL_STATIC_LIBRARIES := liblog
@@ -122,7 +122,7 @@ include $(BUILD_HOST_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_CLANG := true
 LOCAL_CPP_EXTENSION := .cc
-LOCAL_CPPFLAGS := -O2 -Wall -Wextra -DUSE_SIMULATOR -DDEBUG=1 -UNDEBUG
+LOCAL_CPPFLAGS := -O2 -Wall -Wextra -DUSE_SIMULATOR -DDEBUG=1 -UNDEBUG -std=c++11
 LOCAL_C_INCLUDES := $(vixl_include_files)
 LOCAL_SRC_FILES :=  $(vixl_test_files) $(vixl_src_files)
 LOCAL_MODULE_TAGS := optional
