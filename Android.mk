@@ -58,6 +58,7 @@ vixl_include_files := $(LOCAL_PATH)/src/ \
 
 vixl_src_files := \
 	src/a64/assembler-a64.cc \
+	src/code-buffer.cc  \
 	src/a64/cpu-a64.cc \
 	src/a64/debugger-a64.cc \
 	src/a64/decoder-a64.cc \
