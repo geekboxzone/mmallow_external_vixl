@@ -590,6 +590,8 @@ class Label {
   inline bool IsBound() const { return location_ >= 0; }
   inline bool IsLinked() const { return !links_.empty(); }
 
+  inline ptrdiff_t location() const { return location_; }
+
  private:
   // The list of linked instructions is stored in a stack-like structure. We
   // don't use std::stack directly because it's slow for the common case where
@@ -646,8 +648,6 @@ class Label {
     ptrdiff_t links_[kPreallocatedLinks];
     std::stack<ptrdiff_t> * links_extended_;
   };
-
-  inline ptrdiff_t location() const { return location_; }
 
   inline void Bind(ptrdiff_t location) {
     // Labels can only be bound once.
