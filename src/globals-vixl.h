@@ -70,7 +70,7 @@ const int MBytes = 1024 * KBytes;
   #define VIXL_ABORT() printf("in %s, line %i", __FILE__, __LINE__); abort()
 #endif
 
-#ifdef DEBUG
+#ifdef VIXL_DEBUG
   #define VIXL_ASSERT(condition) assert(condition)
   #define VIXL_CHECK(condition) VIXL_ASSERT(condition)
 #ifdef __ANDROID__
