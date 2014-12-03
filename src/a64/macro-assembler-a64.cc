@@ -856,7 +856,7 @@ Operand MacroAssembler::MoveImmediateForShiftedOp(const Register& dst,
     // Pre-shift the immediate to the most-significant bits of the register,
     // inserting set bits in the least-significant bits.
     int shift_high = CountLeadingZeros(imm, reg_size);
-    int64_t imm_high = (imm << shift_high) | ((1 << shift_high) - 1);
+    int64_t imm_high = (imm << shift_high) | ((INT64_C(1) << shift_high) - 1);
 
     if (TryOneInstrMoveImmediate(dst, imm_low)) {
       // The new immediate has been moved into the destination's low bits:
