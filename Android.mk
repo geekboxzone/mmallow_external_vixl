@@ -115,7 +115,6 @@ LOCAL_SHARED_LIBRARIES := liblog
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libvixl
 LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
-include external/libcxx/libcxx.mk
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
@@ -129,7 +128,6 @@ LOCAL_SHARED_LIBRARIES := liblog
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libvixld
 LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
-include external/libcxx/libcxx.mk
 include $(BUILD_SHARED_LIBRARY)
 
 
@@ -144,7 +142,6 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libvixl
 LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
 LOCAL_MULTILIB := both
-include external/libcxx/libcxx.mk
 include $(BUILD_HOST_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
@@ -158,7 +155,6 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libvixld
 LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
 LOCAL_MULTILIB := both
-include external/libcxx/libcxx.mk
 include $(BUILD_HOST_SHARED_LIBRARY)
 
 
@@ -178,7 +174,6 @@ LOCAL_MODULE_HOST_ARCH := x86_64
 LOCAL_FORCE_STATIC_EXECUTABLE := true
 LOCAL_MODULE := vixl-test-runner
 LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
-include external/libcxx/libcxx.mk
 include $(BUILD_HOST_EXECUTABLE)
 
 .PHONY: run-vixl-tests
