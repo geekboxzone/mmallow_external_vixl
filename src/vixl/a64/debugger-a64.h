@@ -54,6 +54,7 @@ class FormatToken;
 class Debugger : public Simulator {
  public:
   explicit Debugger(Decoder* decoder, FILE* stream = stdout);
+  ~Debugger();
 
   virtual void Run();
   virtual void VisitException(const Instruction* instr);

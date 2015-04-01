@@ -533,6 +533,11 @@ Debugger::Debugger(Decoder* decoder, FILE* stream)
   printer_->AppendVisitor(disasm_);
 }
 
+Debugger::~Debugger() {
+  delete disasm_;
+  delete printer_;
+}
+
 
 void Debugger::Run() {
   pc_modified_ = false;

@@ -60,7 +60,8 @@ class UseScratchRegisterScope;
 
 class Pool {
  public:
-  explicit Pool(MacroAssembler* masm) : masm_(masm) {
+  explicit Pool(MacroAssembler* masm)
+      : checkpoint_(kNoCheckpointRequired), masm_(masm) {
     Reset();
   }
 

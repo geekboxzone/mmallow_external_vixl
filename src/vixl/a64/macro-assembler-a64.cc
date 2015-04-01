@@ -44,7 +44,8 @@ void Pool::SetNextCheckpoint(ptrdiff_t checkpoint) {
 
 
 LiteralPool::LiteralPool(MacroAssembler* masm)
-  : Pool(masm), size_(0), first_use_(-1) {
+    : Pool(masm), size_(0), first_use_(-1),
+      recommended_checkpoint_(kNoCheckpointRequired) {
 }
 
 
@@ -277,7 +278,8 @@ MacroAssembler::MacroAssembler(size_t capacity,
       tmp_list_(ip0, ip1),
       fptmp_list_(d31),
       literal_pool_(this),
-      veneer_pool_(this) {
+      veneer_pool_(this),
+      recommended_checkpoint_(Pool::kNoCheckpointRequired) {
   checkpoint_ = NextCheckPoint();
 }
 
@@ -293,7 +295,8 @@ MacroAssembler::MacroAssembler(byte * buffer,
       tmp_list_(ip0, ip1),
       fptmp_list_(d31),
       literal_pool_(this),
-      veneer_pool_(this) {
+      veneer_pool_(this),
+      recommended_checkpoint_(Pool::kNoCheckpointRequired) {
   checkpoint_ = NextCheckPoint();
 }
 

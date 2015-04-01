@@ -15134,6 +15134,8 @@ TEST(clrex) {
   ASSERT_EQUAL_64(0, data[0]);
   ASSERT_EQUAL_64(0, data[1]);
   ASSERT_EQUAL_64(0, data[2]);
+
+  TEARDOWN();
 }
 
 
@@ -15215,6 +15217,8 @@ TEST(ldxr_stxr_fail) {
 
   // Check that the watchdog counter didn't run out.
   ASSERT_EQUAL_64(0, x12);
+
+  TEARDOWN();
 }
 #endif
 
@@ -15297,6 +15301,8 @@ TEST(ldaxr_stlxr_fail) {
 
   // Check that the watchdog counter didn't run out.
   ASSERT_EQUAL_64(0, x12);
+
+  TEARDOWN();
 }
 #endif
 
@@ -15937,7 +15943,7 @@ TEST(branch_tagged_and_adr_adrp) {
 
   ASSERT_EQUAL_64(1 << kAddressTagWidth, x1);
 
-  TEARDOWN();
+  TEARDOWN_CUSTOM();
 }
 
 TEST(neon_3same_addp) {

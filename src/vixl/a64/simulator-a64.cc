@@ -64,6 +64,8 @@ Simulator::Simulator(Decoder* decoder, FILE* stream) {
   VIXL_ASSERT((static_cast<int32_t>(-1) >> 1) == -1);
   VIXL_ASSERT((static_cast<uint32_t>(-1) >> 1) == 0x7fffffff);
 
+  instruction_stats_ = false;
+
   // Set up the decoder.
   decoder_ = decoder;
   decoder_->AppendVisitor(this);
@@ -121,7 +123,7 @@ void Simulator::ResetState() {
 
 
 Simulator::~Simulator() {
-  delete [] stack_;
+  delete[] stack_;
   // The decoder may outlive the simulator.
   decoder_->RemoveVisitor(print_disasm_);
   delete print_disasm_;

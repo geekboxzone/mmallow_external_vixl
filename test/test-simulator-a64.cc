@@ -2484,6 +2484,11 @@ static void TestOpImmOpImmNEON(const char * name,
       CALL_TEST_FP_HELPER(mnemonic, s, type, kInputFloat##input);   \
     }
 
+// TODO: Test with a newer version of valgrind.
+//
+// Note: valgrind-3.10.0 does not properly interpret libm's fma() on x86_64.
+// Therefore this test will be exiting though an ASSERT and thus leaking
+// memory.
 DEFINE_TEST_FP(fmadd, 3Op, Basic)
 DEFINE_TEST_FP(fmsub, 3Op, Basic)
 DEFINE_TEST_FP(fnmadd, 3Op, Basic)
